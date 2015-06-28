@@ -1,0 +1,17 @@
+; BIND version in.named LOCAL-981006.08/27/98M42 Tue Oct  6 00:52:42 PDT 1998
+; BIND version Generic-5.7-October 1998
+; zone 'named.local'   last serial 1
+$TTL	86400 ; 24 hours could have been written as 24h
+$ORIGIN localhost.
+localhost.           IN    SOA       caspersb-psrv1pri.caspersbox.com. hostmaster.caspersb-psrv1pri.caspersbox.com. (
+            2010052300      ; serial number of this zone file
+            10800           ; slave refresh (15 minutes)
+            3600            ; slave retry time in case of a problem (1 hour)
+            604800          ; slave expiration time (1 week)
+            86400           ; minimum caching time in case of failed lookups (1 hour)
+            )
+
+             IN    NS    caspersb-psrv1pri.caspersbox.com.
+
+localhost    IN    A     127.0.0.1
+

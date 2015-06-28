@@ -1,0 +1,399 @@
+- name: Create ~/.log
+  file: path={{remote_home}}/.log state=directory
+        owner={{username}} group={{groupname}} mode=0755
+
+- name: Create ~/.log/archive
+  file: path={{remote_home}}/.log/archive state=directory
+        owner={{username}} group={{groupname}} mode=0755
+
+- name: Create ~/.bin
+  file: path={{remote_home}}/.bin state=directory
+        owner={{username}} group={{groupname}} mode=0755
+
+- name: Copy file bin/jad to .bin/jad
+  copy: src={{dotfiles}}/bin/jad dest={{remote_home}}/.bin/jad
+        owner={{username}} group={{groupname}} mode=0755
+
+- name: Copy file bin/watchdog to .bin/watchdog
+  copy: src={{dotfiles}}/bin/watchdog dest={{remote_home}}/.bin/watchdog
+        owner={{username}} group={{groupname}} mode=0755
+
+- name: Create ~/.functions.d
+  file: path={{remote_home}}/.functions.d state=directory
+        owner={{username}} group={{groupname}} mode=0755
+
+- name: Copy file functions.d/F00-logging to .functions.d/F00-logging
+  copy: src={{dotfiles}}/functions.d/F00-logging dest={{remote_home}}/.functions.d/F00-logging
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/F01-userProfile to .functions.d/F01-userProfile
+  copy: src={{dotfiles}}/functions.d/F01-userProfile dest={{remote_home}}/.functions.d/F01-userProfile
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/F02-ssh to .functions.d/F02-ssh
+  copy: src={{dotfiles}}/functions.d/F02-ssh dest={{remote_home}}/.functions.d/F02-ssh
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/F03-rsync to .functions.d/F03-rsync
+  copy: src={{dotfiles}}/functions.d/F03-rsync dest={{remote_home}}/.functions.d/F03-rsync
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/F04-misc to .functions.d/F04-misc
+  copy: src={{dotfiles}}/functions.d/F04-misc dest={{remote_home}}/.functions.d/F04-misc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/F05-controlServer to .functions.d/F05-controlServer
+  copy: src={{dotfiles}}/functions.d/F05-controlServer dest={{remote_home}}/.functions.d/F05-controlServer
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/F06-security to .functions.d/F06-security
+  copy: src={{dotfiles}}/functions.d/F06-security dest={{remote_home}}/.functions.d/F06-security
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/F07-mysql to .functions.d/F07-mysql
+  copy: src={{dotfiles}}/functions.d/F07-mysql dest={{remote_home}}/.functions.d/F07-mysql
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/F08-installBuild to .functions.d/F08-installBuild
+  copy: src={{dotfiles}}/functions.d/F08-installBuild dest={{remote_home}}/.functions.d/F08-installBuild
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/F09-network to .functions.d/F09-network
+  copy: src={{dotfiles}}/functions.d/F09-network dest={{remote_home}}/.functions.d/F09-network
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/F10-zimbra to .functions.d/F10-zimbra
+  copy: src={{dotfiles}}/functions.d/F10-zimbra dest={{remote_home}}/.functions.d/F10-zimbra
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/system to .functions.d/system
+  copy: src={{dotfiles}}/functions.d/system dest={{remote_home}}/.functions.d/system
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions.d/system/F01-userManager to .functions.d/system/F01-userManager
+  copy: src={{dotfiles}}/functions.d/system/F01-userManager dest={{remote_home}}/.functions.d/system/F01-userManager
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Create ~/.alias.d
+  file: path={{remote_home}}/.alias.d state=directory
+        owner={{username}} group={{groupname}} mode=0755
+
+- name: Copy file alias.d/A00-defaults to .alias.d/A00-defaults
+  copy: src={{dotfiles}}/alias.d/A00-defaults dest={{remote_home}}/.alias.d/A00-defaults
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A01-meminfo to .alias.d/A01-meminfo
+  copy: src={{dotfiles}}/alias.d/A01-meminfo dest={{remote_home}}/.alias.d/A01-meminfo
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A02-git to .alias.d/A02-git
+  copy: src={{dotfiles}}/alias.d/A02-git dest={{remote_home}}/.alias.d/A02-git
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A03-java to .alias.d/A03-java
+  copy: src={{dotfiles}}/alias.d/A03-java dest={{remote_home}}/.alias.d/A03-java
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A04-safety to .alias.d/A04-safety
+  copy: src={{dotfiles}}/alias.d/A04-safety dest={{remote_home}}/.alias.d/A04-safety
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A05-sudo to .alias.d/A05-sudo
+  copy: src={{dotfiles}}/alias.d/A05-sudo dest={{remote_home}}/.alias.d/A05-sudo
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A06-xwin to .alias.d/A06-xwin
+  copy: src={{dotfiles}}/alias.d/A06-xwin dest={{remote_home}}/.alias.d/A06-xwin
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A07-custom to .alias.d/A07-custom
+  copy: src={{dotfiles}}/alias.d/A07-custom dest={{remote_home}}/.alias.d/A07-custom
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A08-maven to .alias.d/A08-maven
+  copy: src={{dotfiles}}/alias.d/A08-maven dest={{remote_home}}/.alias.d/A08-maven
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A09-webAdmin to .alias.d/A09-webAdmin
+  copy: src={{dotfiles}}/alias.d/A09-webAdmin dest={{remote_home}}/.alias.d/A09-webAdmin
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A10-dnsAdmin to .alias.d/A10-dnsAdmin
+  copy: src={{dotfiles}}/alias.d/A10-dnsAdmin dest={{remote_home}}/.alias.d/A10-dnsAdmin
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A11-ihs to .alias.d/A11-ihs
+  copy: src={{dotfiles}}/alias.d/A11-ihs dest={{remote_home}}/.alias.d/A11-ihs
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A12-weblogic to .alias.d/A12-weblogic
+  copy: src={{dotfiles}}/alias.d/A12-weblogic dest={{remote_home}}/.alias.d/A12-weblogic
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A13-websphere to .alias.d/A13-websphere
+  copy: src={{dotfiles}}/alias.d/A13-websphere dest={{remote_home}}/.alias.d/A13-websphere
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A14-catalina to .alias.d/A14-catalina
+  copy: src={{dotfiles}}/alias.d/A14-catalina dest={{remote_home}}/.alias.d/A14-catalina
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A16-vbox to .alias.d/A16-vbox
+  copy: src={{dotfiles}}/alias.d/A16-vbox dest={{remote_home}}/.alias.d/A16-vbox
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/A17-zimbra to .alias.d/A17-zimbra
+  copy: src={{dotfiles}}/alias.d/A17-zimbra dest={{remote_home}}/.alias.d/A17-zimbra
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/Arch to .alias.d/Arch
+  copy: src={{dotfiles}}/alias.d/Arch dest={{remote_home}}/.alias.d/Arch
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias.d/Arch/A01-pacman to .alias.d/Arch/A01-pacman
+  copy: src={{dotfiles}}/alias.d/Arch/A01-pacman dest={{remote_home}}/.alias.d/Arch/A01-pacman
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Create ~/.profile.d
+  file: path={{remote_home}}/.profile.d state=directory
+        owner={{username}} group={{groupname}} mode=0755
+
+- name: Copy file profile.d/P00-path to .profile.d/P00-path
+  copy: src={{dotfiles}}/profile.d/P00-path dest={{remote_home}}/.profile.d/P00-path
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P01-set to .profile.d/P01-set
+  copy: src={{dotfiles}}/profile.d/P01-set dest={{remote_home}}/.profile.d/P01-set
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P02-stty to .profile.d/P02-stty
+  copy: src={{dotfiles}}/profile.d/P02-stty dest={{remote_home}}/.profile.d/P02-stty
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P03-completion to .profile.d/P03-completion
+  copy: src={{dotfiles}}/profile.d/P03-completion dest={{remote_home}}/.profile.d/P03-completion
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P04-shopt to .profile.d/P04-shopt
+  copy: src={{dotfiles}}/profile.d/P04-shopt dest={{remote_home}}/.profile.d/P04-shopt
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P05-prompt to .profile.d/P05-prompt
+  copy: src={{dotfiles}}/profile.d/P05-prompt dest={{remote_home}}/.profile.d/P05-prompt
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P06-ulimit to .profile.d/P06-ulimit
+  copy: src={{dotfiles}}/profile.d/P06-ulimit dest={{remote_home}}/.profile.d/P06-ulimit
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P07-history to .profile.d/P07-history
+  copy: src={{dotfiles}}/profile.d/P07-history dest={{remote_home}}/.profile.d/P07-history
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P08-defaults to .profile.d/P08-defaults
+  copy: src={{dotfiles}}/profile.d/P08-defaults dest={{remote_home}}/.profile.d/P08-defaults
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P09-mail to .profile.d/P09-mail
+  copy: src={{dotfiles}}/profile.d/P09-mail dest={{remote_home}}/.profile.d/P09-mail
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P10-ansible to .profile.d/P10-ansible
+  copy: src={{dotfiles}}/profile.d/P10-ansible dest={{remote_home}}/.profile.d/P10-ansible
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P11-apache to .profile.d/P11-apache
+  copy: src={{dotfiles}}/profile.d/P11-apache dest={{remote_home}}/.profile.d/P11-apache
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P12-oracle to .profile.d/P12-oracle
+  copy: src={{dotfiles}}/profile.d/P12-oracle dest={{remote_home}}/.profile.d/P12-oracle
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P13-java to .profile.d/P13-java
+  copy: src={{dotfiles}}/profile.d/P13-java dest={{remote_home}}/.profile.d/P13-java
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P14-proxy to .profile.d/P14-proxy
+  copy: src={{dotfiles}}/profile.d/P14-proxy dest={{remote_home}}/.profile.d/P14-proxy
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P15-weblogic to .profile.d/P15-weblogic
+  copy: src={{dotfiles}}/profile.d/P15-weblogic dest={{remote_home}}/.profile.d/P15-weblogic
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P16-netbackup to .profile.d/P16-netbackup
+  copy: src={{dotfiles}}/profile.d/P16-netbackup dest={{remote_home}}/.profile.d/P16-netbackup
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P17-iplanet to .profile.d/P17-iplanet
+  copy: src={{dotfiles}}/profile.d/P17-iplanet dest={{remote_home}}/.profile.d/P17-iplanet
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile.d/P18-keychain to .profile.d/P18-keychain
+  copy: src={{dotfiles}}/profile.d/P18-keychain dest={{remote_home}}/.profile.d/P18-keychain
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Create ~/.lib
+  file: path={{remote_home}}/.lib state=directory
+        owner={{username}} group={{groupname}} mode=0755
+
+- name: Copy file lib/configureDMGR.py to .lib/configureDMGR.py
+  copy: src={{dotfiles}}/lib/configureDMGR.py dest={{remote_home}}/.lib/configureDMGR.py
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/configureMailSession.py to .lib/configureMailSession.py
+  copy: src={{dotfiles}}/lib/configureMailSession.py dest={{remote_home}}/.lib/configureMailSession.py
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/configureNodeAgent.py to .lib/configureNodeAgent.py
+  copy: src={{dotfiles}}/lib/configureNodeAgent.py dest={{remote_home}}/.lib/configureNodeAgent.py
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/configureSessionDatabase.py to .lib/configureSessionDatabase.py
+  copy: src={{dotfiles}}/lib/configureSessionDatabase.py dest={{remote_home}}/.lib/configureSessionDatabase.py
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/configureTargetServer.py to .lib/configureTargetServer.py
+  copy: src={{dotfiles}}/lib/configureTargetServer.py dest={{remote_home}}/.lib/configureTargetServer.py
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/ha456.jar to .lib/ha456.jar
+  copy: src={{dotfiles}}/lib/ha456.jar dest={{remote_home}}/.lib/ha456.jar
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/installApp.py to .lib/installApp.py
+  copy: src={{dotfiles}}/lib/installApp.py dest={{remote_home}}/.lib/installApp.py
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/jca457.jar to .lib/jca457.jar
+  copy: src={{dotfiles}}/lib/jca457.jar dest={{remote_home}}/.lib/jca457.jar
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/misc.tcl to .lib/misc.tcl
+  copy: src={{dotfiles}}/lib/misc.tcl dest={{remote_home}}/.lib/misc.tcl
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/parseConfigurationFile.py to .lib/parseConfigurationFile.py
+  copy: src={{dotfiles}}/lib/parseConfigurationFile.py dest={{remote_home}}/.lib/parseConfigurationFile.py
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/restartCluster.py to .lib/restartCluster.py
+  copy: src={{dotfiles}}/lib/restartCluster.py dest={{remote_home}}/.lib/restartCluster.py
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/rsync.exp to .lib/rsync.exp
+  copy: src={{dotfiles}}/lib/rsync.exp dest={{remote_home}}/.lib/rsync.exp
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/scp.exp to .lib/scp.exp
+  copy: src={{dotfiles}}/lib/scp.exp dest={{remote_home}}/.lib/scp.exp
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/security.tcl to .lib/security.tcl
+  copy: src={{dotfiles}}/lib/security.tcl dest={{remote_home}}/.lib/security.tcl
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/ssh-add.exp to .lib/ssh-add.exp
+  copy: src={{dotfiles}}/lib/ssh-add.exp dest={{remote_home}}/.lib/ssh-add.exp
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/sshCopyIdentity.exp to .lib/sshCopyIdentity.exp
+  copy: src={{dotfiles}}/lib/sshCopyIdentity.exp dest={{remote_home}}/.lib/sshCopyIdentity.exp
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/ssh.exp to .lib/ssh.exp
+  copy: src={{dotfiles}}/lib/ssh.exp dest={{remote_home}}/.lib/ssh.exp
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file lib/sudo.exp to .lib/sudo.exp
+  copy: src={{dotfiles}}/lib/sudo.exp dest={{remote_home}}/.lib/sudo.exp
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file inputrc to .inputrc
+  copy: src={{dotfiles}}/inputrc dest={{remote_home}}/.inputrc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file my.cnf to .my.cnf
+  copy: src={{dotfiles}}/my.cnf dest={{remote_home}}/.my.cnf
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file xlaunch to .xlaunch
+  copy: src={{dotfiles}}/xlaunch dest={{remote_home}}/.xlaunch
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file screenrc to .screenrc
+  copy: src={{dotfiles}}/screenrc dest={{remote_home}}/.screenrc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file vimrc to .vimrc
+  copy: src={{dotfiles}}/vimrc dest={{remote_home}}/.vimrc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file wgetrc to .wgetrc
+  copy: src={{dotfiles}}/wgetrc dest={{remote_home}}/.wgetrc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file mailrc to .mailrc
+  copy: src={{dotfiles}}/mailrc dest={{remote_home}}/.mailrc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file digrc to .digrc
+  copy: src={{dotfiles}}/digrc dest={{remote_home}}/.digrc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file profile to .profile
+  copy: src={{dotfiles}}/profile dest={{remote_home}}/.profile
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file kshrc to .kshrc
+  copy: src={{dotfiles}}/kshrc dest={{remote_home}}/.kshrc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file alias to .alias
+  copy: src={{dotfiles}}/alias dest={{remote_home}}/.alias
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file functions to .functions
+  copy: src={{dotfiles}}/functions dest={{remote_home}}/.functions
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file bashrc to .bashrc
+  copy: src={{dotfiles}}/bashrc dest={{remote_home}}/.bashrc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file bash_profile to .bash_profile
+  copy: src={{dotfiles}}/bash_profile dest={{remote_home}}/.bash_profile
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file etc/logging.properties to .etc/logging.properties
+  copy: src={{dotfiles}}/etc/logging.properties dest={{remote_home}}/.etc/logging.properties
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file curlrc to .curlrc
+  copy: src={{dotfiles}}/curlrc dest={{remote_home}}/.curlrc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file colordiffrc to .colordiffrc
+  copy: src={{dotfiles}}/colordiffrc dest={{remote_home}}/.colordiffrc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Copy file pythonrc to .pythonrc
+  copy: src={{dotfiles}}/pythonrc dest={{remote_home}}/.pythonrc
+        owner={{username}} group={{groupname}} mode=0644
+
+- name: Create ~/.m2
+  file: path={{remote_home}}/.m2 state=directory
+        owner={{username}} group={{groupname}} mode=0755
+
+- name: Copy file m2/settings.xml to .m2/settings.xml
+  copy: src={{dotfiles}}/m2/settings.xml dest={{remote_home}}/.m2/settings.xml
+        owner={{username}} group={{groupname}} mode=0600
+
+- name: Create ~/.etc
+  file: path={{remote_home}}/.etc state=directory
+        owner={{username}} group={{groupname}} mode=0755
+
+- name: Copy/create files
+  copy: src=etc/sudo dest={{remote_home}}/.etc/sudo
+        owner={{username}} group={{groupname}} mode=0600

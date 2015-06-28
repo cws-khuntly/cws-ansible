@@ -1,0 +1,15 @@
+mail.debug = {{ debug_mail }}
+mail.from = {{ mail_from }}
+mail.transport.protocol = smtp
+
+## smtp props
+mail.smtp.connectiontimeout = 30000
+mail.smtp.timeout = 30000
+mail.smtp.host = {{ smtp_host }}
+mail.smtp.user = {{ smtp_auth_user }}
+
+## is auth required ?
+mail.smtp.auth = {{ smtp_auth_required }}
+
+## tls
+mail.smtp.starttls.enable = {{ smtp_starttls }}

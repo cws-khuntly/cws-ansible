@@ -1,0 +1,11 @@
+---
+- name: check out current repository
+  git:
+    clone=yes
+    dest="{{ ansible_env.HOME }}/.dotfiles"
+    key_file="{{ ssh_key }}"
+    recursive=yes
+    repo="{{ dotfiles_repo }}"
+    track_submodules=yes
+    update=yes
+    version="{{ version }}"

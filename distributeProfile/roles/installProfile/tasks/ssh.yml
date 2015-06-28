@@ -1,0 +1,24 @@
+
+#======  ANSIBLE  ============================================================
+#          NAME:  ssh.yml
+#   DESCRIPTION:  Rotates log files based on size or time.
+#==============================================================================
+---
+##
+## Send public keys
+##
+- name: Set up authorized_keys
+  authorized_key:
+    key="{{ item }}"
+    key_options='host="10.0.1.1"'
+    state=present
+  with_file:
+    - "{{ ansible_env.HOME }}/.ssh/id_rsa.pub"
+
+- name: update ssh config
+  template:
+    src=ssh/config.j2
+    dest="{{ remote_home }}/.ssh/config"
+    owner="{{ remote_user }}"
+    group="{{ remote_group }}"
+    mode=0644

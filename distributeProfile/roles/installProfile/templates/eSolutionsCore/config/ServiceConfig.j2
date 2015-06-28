@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <system-config>
+        <encoding>UTF-8</encoding>
+    </system-config>
+
+    <application-config>
+        <appName>eSolutionsCore</appName>
+        <serviceRootDirectory />
+        <archiveRootDirectory />
+        <fileRepositoryRoot />
+        <dateFormat />
+        <connectTimeout>15000</connectTimeout>
+        <scriptTimeout>30000</scriptTimeout>
+        <messageIdLength />
+        <virtualManagerClass />
+        <agentBundleSource />
+        <serviceAccount />
+    </application-config>
+
+    <mail-config>
+        <mailFrom>"{{ mail_address }}"</mailFrom>
+        <propertyFile>"{{ remote_home }}/.etc/eSolutionsCore/config/mail/MailConfig.properties"</propertyFile>
+    </mail-config>
+
+    <!-- how do we talk to the agent? -->
+    <agent-config />
+
+    <!-- do we need a proxy for internet access? -->
+    <proxy-config>
+        <proxyServiceRequired>"{{ proxy_required }}"</proxyServiceRequired>
+        <proxyServerName>"{{ proxy_host }}"</proxyServerName>
+        <proxyServerPort>"{{ proxy_port }}"</proxyServerPort>
+        <proxyAuthRequired>"{{ proxy_auth_required }}"</proxy authorized>
+        <proxyAuthType>"{{ proxy_auth_type }}"</proxyAuthType>
+        <proxyAuthDomain>"{{ proxy_auth_domain }}"</proxyAuthDomain>
+        <proxyServerRealm>"{{ proxy_auth_realm }}"</proxyServerRealm>
+        <proxyUserId>"{{ proxy_auth_user }}"</proxyUserId>
+        <proxyPwdSalt>"{{ proxy_auth_salt }}"</proxyPwdSalt>
+        <proxyPassword>"{{ proxy_auth_pass }}"</proxyPassword>
+    </proxy-config>
+
+    <http-config>
+        <soTimeout>30</soTimeout>
+        <socketLinger>1</socketLinger>
+        <connTimeout>30</connTimeout>
+        <socketTimeout>30</socketTimeout>
+        <connMgrTimeout>30</connMgrTimeout>
+        <httpVersion>HTTP/1.0</httpVersion>
+        <staleCheck>true</staleCheck>
+        <keyStoreType />
+        <keyStoreFile />
+        <keyStorePass />
+        <keyStoreSalt />
+        <trustStoreType />
+        <trustStoreFile />
+        <trustStorePass />
+        <trustStoreSalt />
+    </http-config>
+
+    <dns-config />
+
+    <ssh-config>
+        <timeout>15</timeout> <!-- connect timeout in seconds (defaults to 10 if not set here) -->
+        <sshProperties>"{{ ssh_properties }}"</sshProperties> <!-- full path to properties file containing ssh props (like StrictHostKeyChecking, etc) -->
+        <sshAccount>"{{ ssh_user }}"</sshAccount> <!-- username to use for authentication -->
+        <sshKey>"{{ ssh_key }}"</sshKey> <!-- path to the ssh private key -->
+        <sshSalt>"{{ ssh_salt }}"</sshSalt>
+        <sshPassword>"{{ ssh_pass }}"</sshPassword>
+    </ssh-config>
+
+    <ftp-config>
+        <timeout>15</timeout> <!-- connect timeout in seconds (defaults to 10 if not set here) -->
+        <ftpAccount>"{{ ftp_account }}"</ftpAccount> <!-- username to use for authentication -->
+        <ftpSalt />
+        <ftpPassword />
+    </ftp-config>
+
+    <exception-config />
+
+    <resource-config />
+</configuration>

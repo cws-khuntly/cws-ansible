@@ -1,0 +1,17 @@
+
+#======  ANSIBLE  ============================================================
+#          NAME:  rotateLogsByTime
+#   DESCRIPTION:  Rotates log files based on size or time.
+#==============================================================================
+---
+- name: Include github checkout
+  include: checkout.yml
+
+- name: Set up SSH
+  include: ssh.yml
+
+- name: Include sync
+  include: sync.yml
+
+- name: Set up configuration files for Java apps
+  include: update-config.yml
