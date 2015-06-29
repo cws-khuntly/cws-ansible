@@ -16,3 +16,4 @@ setup_stores: true
 use_scality: true
 use_reverse_proxy: false
 do_create_domain: no
+install_packages: zimbra-core zimbra-apache zimbra-spell zimbra-store

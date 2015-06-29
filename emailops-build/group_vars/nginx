@@ -13,3 +13,4 @@ nginx_conf: /etc/nginx/nginx.conf
 pkg_version: 1.2.7-2
 dhparam_keysize: 2048
 dhparam_output: /etc/nginx/ssl/dhparams-nginx.pem
+install_packages: zimbra-core zimbra-memcached zimbra-proxy
