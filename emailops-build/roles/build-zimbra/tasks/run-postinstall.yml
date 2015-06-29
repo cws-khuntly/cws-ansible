@@ -37,17 +37,20 @@
     state=directory
 
 ## if this is an LDAP master turn that shit on
-- include: ldap/tasks/replica.yml
+- name: Include LDAP replication tasks
+  include: ldap/tasks/replica.yml
   when: is_master_ldap
 
 ## if multi-master is enabled, set it up
-- include: ldap/tasks/multimaster.yml
+- name: Include LDAP multi-master tasks
+  include: ldap/tasks/multimaster.yml
   when: is_multimaster
 
 ##
 ## apply LDAP config
 ##
-- include: common/localconfig.yml
+- name: Include Zimbra local configuration tasks
+  include: common/localconfig.yml
 
 ##
 ## Start services so things actually fucking work
@@ -60,11 +63,14 @@
     prompt="Pause for 30 seconds to allow LDAP shutdown"
     seconds=30
 
-- include: common/globalconfig.yml
+- name: Include Zimbra global configuration tasks
+  include: common/globalconfig.yml
 
-- include: common/serverconfig.yml
+- name: Include Zimbra server configuration tasks
+  include: common/serverconfig.yml
 
-- include: common/cos.yml
+- name: Include Zimbra CoS tasks
+  include: common/cos.yml
 
 - name: (POSTINSTALL) Turn off Zimbra backups
   command: "{{ install_dir }}/bin/zmschedulebackup -F"
@@ -79,22 +85,28 @@
   become_user: zimbra
   become_method: sudo
 
-- include: pop/tasks/proxy.yml
+- name: Include reverse proxy configuration tasks
+  include: pop/tasks/proxy.yml
   when: use_reverse_proxy
 
-- include: maildrop/tasks/storeconfig.yml
+- name: Include maildrop store configuration tasks
+  include: maildrop/tasks/storeconfig.yml
   when: is_maildrop and setup_stores
 
-- include: maildrop/tasks/createaccounts.yml
+- name: Include monitoring account creation
+  include: maildrop/tasks/createaccounts.yml
   when: is_maildrop and create_maildrop_accounts
 
-- include: maildrop/tasks/webapp.yml
+- name: Include Zimbra webapp modifications
+  include: maildrop/tasks/webapp.yml
   when: is_maildrop
 
-- include: maildrop/tasks/zimlets.yml
+- name: Include Zimbra zimlet installations
+  include: maildrop/tasks/zimlets.yml
   when: is_maildrop and install_synacor_skins_zimlets
 
-- include: maildrop/tasks/scality.yml
+- name: Include Scality installation/configuration tasks
+  include: maildrop/tasks/scality.yml
   when: is_maildrop and use_scality
 
 ## shut down

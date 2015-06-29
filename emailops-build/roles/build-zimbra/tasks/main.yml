@@ -3,8 +3,8 @@
 #   DESCRIPTION:  Entry point for the Zimbra build play
 #==============================================================================
 ---
-- name: (INSTALL) Run Zimbra installation steps
-  include: run-installation.yml
+#- name: (INSTALL) Run Zimbra installation steps
+#  include: run-installation.yml
 
 - name: (POSTINSTALL) Run Zimbra post-installation steps (ldap)
   include: run-postinstall.yml

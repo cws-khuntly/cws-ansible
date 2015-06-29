@@ -46,17 +46,20 @@
     name="meta-zimbra-baseline-1.0.3-1.noarch"
     state=present
 
-- include: ldap/tasks/install.yml
+- name: Include LDAP installation tasks
+  include: ldap/tasks/install.yml
   vars_files:
     - ldap/vars/main.yml
   when: is_ldap
 
-- include: maildrop/tasks/install.yml
+- name: Include maildrop installation tasks
+  include: maildrop/tasks/install.yml
   vars_files:
     - maildrop/vars/main.yml
   when: is_maildrop
 
-- include: pop/tasks/install.yml
+- name: Include POP installation tasks
+  include: pop/tasks/install.yml
   vars_files:
     - pop/vars/main.yml
   when: is_pop
@@ -69,7 +72,8 @@
     group="{{ group_owner }}"
     mode=0644
 
-- include: run-zmsetup.yml
+- name: Run zmsetup with unattended file
+  include: run-zmsetup.yml
 
 ##
 ## Restart services
