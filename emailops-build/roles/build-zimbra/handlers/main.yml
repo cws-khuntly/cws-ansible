@@ -8,3 +8,30 @@
 
 - name: Synchronize with puppet master
   command: /usr/bin/puppet agent -t
+
+- name: ldap-build-complete
+  jabber:
+    user="{{ jabber_user }}"
+    host="{{ jabber_host }}"
+    port="{{ jabber_port }}"
+    password="{{ jabber_pass }}"
+    to="{{ jabber_to }}"
+    msg="{{ build_type }} build complete for {{ client }} on {{ hostvars['{{ inventory_hostname }}'] }}"
+
+- name: maildrop-build-complete
+  jabber:
+    user="{{ jabber_user }}"
+    host="{{ jabber_host }}"
+    port="{{ jabber_port }}"
+    password="{{ jabber_pass }}"
+    to="{{ jabber_to }}"
+    msg="{{ build_type }} build complete for {{ client }} on {{ hostvars['{{ inventory_hostname }}'] }}"
+
+- name: pop-build-complete
+  jabber:
+    user="{{ jabber_user }}"
+    host="{{ jabber_host }}"
+    port="{{ jabber_port }}"
+    password="{{ jabber_pass }}"
+    to="{{ jabber_to }}"
+    msg="{{ build_type }} build complete for {{ client }} on {{ hostvars['{{ inventory_hostname }}'] }}"

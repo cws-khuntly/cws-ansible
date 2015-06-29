@@ -1,0 +1,18 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  vars/maildrop.yml
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
+#==============================================================================
+---
+## These variables will be used to generate the unattended installation options file
+## Change to suit environment
+build_type: Zimbra Maildrop
+is_ldap: false
+is_maildrop: true
+is_pop: false
+is_mta: false
+create_default_accounts: true
+create_maildrop_accounts: true
+setup_stores: true
+use_scality: true
+use_reverse_proxy: false
+do_create_domain: no

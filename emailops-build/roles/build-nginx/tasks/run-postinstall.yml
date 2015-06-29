@@ -19,3 +19,11 @@
     owner="{{ file_owner }}"
     group="{{ group_owner }}"
     mode=0644
+
+- name: Apply auth.php
+  template:
+    src=auth.j2
+    dest=/var/www/html
+    owner="{{ file_owner }}"
+    group="{{ group_owner }}"
+    mode=0600

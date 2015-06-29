@@ -1,0 +1,230 @@
+<?php
+    // Configuration
+    $ldap_host = "ldap://{{ ldap_host }}:389/";
+    $ldap_pass = "{{ ldap_password }}";
+
+    // Make sure we were passed all necessary parameters.
+    if (!isset($_SERVER["HTTP_AUTH_USER"])) { fail('Missing username parameter.'); }
+    if (!isset($_SERVER["HTTP_AUTH_PASS"])) { fail('Missing password parameter.'); }
+    if (!isset($_SERVER["HTTP_CLIENT_IP"])) { fail('Missing client ip parameter.'); }
+
+    // Open logfile
+    openlog("NGINX", LOG_PID | LOG_PERROR, LOG_LOCAL0);
+
+    // Extract username (and domain, though we don't use it)
+    $auth_user = $_SERVER["HTTP_AUTH_USER"];
+
+    // remove any spaces (regular or HTML) from the user's name since it breaks auth
+    $auth_user = str_replace("%20", "", $auth_user);
+    $auth_user = str_replace(" ", "", $auth_user);
+    $idx = strrpos($auth_user, "@");
+
+    if (is_bool($idx) && !$idx)
+    {
+        $username = $auth_user;
+        $domain = "{{ domain }}";
+    }
+    else
+    {
+        $username = substr($auth_user, 0, $idx);
+        $domain   = substr($auth_user, $idx + 1);
+    }
+
+    $useraddr = "$username@$domain";
+    syslog(LOG_INFO,"$useraddr");
+
+    // Extract password and unescape characters nginx munged
+    $auth_pass = $_SERVER["HTTP_AUTH_PASS"];
+    $auth_pass = str_replace("%20", " ", $auth_pass);
+    $auth_pass = str_replace("%25", "%", $auth_pass);
+
+    // Extract protocol
+    $auth_proto = $_SERVER["HTTP_AUTH_PROTOCOL"];
+
+    // Extract client IP
+    $client_ip = $_SERVER["HTTP_CLIENT_IP"];
+
+    $blacklisted_ips = file('/opt/zimbra/conf/nginx/blacklisted_ips.txt');
+    foreach ($blacklisted_ips as $ip)
+    {
+        $ip = rtrim($ip);
+        if ($ip == $client_ip)
+        {
+            syslog(LOG_INFO, "Auth-Blocked:$client_ip:$username ($auth_user / $auth_pass) ->\n");
+            fail("Auth-Status: Invalid login or password");
+        }
+    }
+
+    // Perform the LDAP lookup; set some variables if we actually exist
+    $attrs = ldapgather($username, $domain, $ldap_host, $ldap_pass, '');
+
+    if ($attrs['count'] > 0) 
+    {
+        $attr_user = $attrs[0]['mail'][0];
+        $attr_host = $attrs[0]['zimbramailhost'][0];
+        $attr_pass = $attrs[0]['userpassword'][0];
+        $attr_cos  = $attrs[0]['zimbracosid'][0];
+        //$attr_imap = $attrs[0]['zimbraimapenabled'][0];
+    }
+
+    // Things are a bit ugly here - we need to redirect to the remote WOW server under one of two
+    // conditions: either the LDAP lookup returned no entry, which means the user doesn't exist
+    // local; or they're "pre-wow" and it's not one of dnewman's scripts.
+    //
+    // I did some cut and paste here just to make the code easier to follow
+    $octets = explode('.', $client_ip);
+
+    if ($attr_cos == 'a5055b14-57e9-46d0-8ce7-41357a3904af')
+    {
+        $target_ip   = gethostbyname($attr_host);
+        $target_port = ($auth_proto == "imap") ? 7143 : 7110;
+        $target_user = $attr_user;
+
+        if (authuser_bind($ldap_host,$useraddr,$auth_pass))
+        {
+            syslog(LOG_INFO, "Auth-Proxy:$client_ip:$username ($auth_user / $auth_pass) -> $target_ip:$target_port [GOOD]\n");
+        }
+        else
+        {
+            syslog(LOG_INFO, "Auth-Proxy:$client_ip:$username ($auth_user / $auth_pass) -> $target_ip:$target_port [BAD]\n");
+        }
+
+        /*
+        if ($auth_proto != "imap")
+        {
+            // accept valid users only now unless they are prewow and using imap so they can migrate
+            fail("Auth-Status: Invalid login or password");
+        }
+        */
+
+        // just return with a pass since we can't trust our passwords
+        pass($target_ip, $target_port, $auth_user);
+    }
+    else
+    {
+        $target_ip   = gethostbyname($attr_host);
+        $target_port = ($auth_proto == "imap") ? 7143 : 7110;
+        $target_user = $attr_user;
+
+        /*
+        if ($auth_proto == "imap" && $attr_imap != 'TRUE' && $octets[0] != '10') {
+            fail("Auth-Status: Unauthorized IMAP user");
+        }
+        */
+
+        if (authuser_bind($ldap_host,$useraddr,$auth_pass))
+        {
+            syslog(LOG_INFO, "Auth-Success:$client_ip:$username ($auth_user) -> $target_ip:$target_port\n");
+            pass($target_ip, $target_port, $target_user);
+        }
+        else
+        {
+            syslog(LOG_INFO, "Auth-Failed:$client_ip:$username ($auth_user) -> $target_ip:$target_port\n");
+            fail("Auth-Status: Invalid login or password");
+        }
+    }
+
+    function ldapgather($user, $dns, $host, $pass, $bdn)
+    {
+        $filter = "(&(mail=$user@$dns)(zimbraMailStatus=enabled))";
+        $ds = ldap_connect ($host, 389) or die("Couldn't connect to LDAP server: $host");
+        ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
+        $r=ldap_bind($ds,"uid=zimbra,cn=admins,cn=zimbra",$pass) or die("Couldn't bind to LDAP with password.")
+        $sr=ldap_search($ds, $bdn, $filter, array("zimbraMailHost","userPassword","zimbraCOSId","zimbraImapEnabled","mail")) or die("Couldn't execute LDAP search.");
+        $attrs = ldap_get_entries($ds, $sr);
+
+        ldap_unbind($ds);
+
+        return $attrs;
+    }
+
+    function authuser($offered, $known)
+    {
+        if (preg_match ("/{SMD5}/i", $known))
+        {
+            $encrypted = substr($known, 6);
+            $hash = base64_decode($encrypted);
+            $salt = substr($hash,16);
+            $mhashed =  mhash(MHASH_MD5, $offered . $salt);
+            $without_salt = explode($salt,$hash);
+        
+            return ($without_salt[0] == $mhashed);
+        }
+        elseif (preg_match ("/{SSHA}/i", $known))
+        {
+            $ohash = base64_decode(substr($known,6));
+            $osalt = substr($ohash,20);
+            $ohash = substr($ohash,0,20);
+            $nhash = pack("H*",sha1($offered . $osalt));
+
+            return ($ohash == $nhash);
+        }
+        else
+        {
+            return ($offered == $known);
+        }
+
+        return false;
+    }
+
+    function fail($msg)
+    {
+        header("Auth-Status: $msg");
+
+        exit;
+    }
+
+    function pass($server, $port, $user)
+    {
+        header("Auth-Status: OK");
+        header("Auth-Server: $server");
+        header("Auth-Port: $port");
+        header("Auth-User: $user");
+
+        exit;
+    }
+
+    function user_dn($useraddr)
+    {
+        list($username,$domain)=explode('@',$useraddr);
+        $dc = array_map
+        (
+            create_function('$x', 'return ("dc=" . $x);'),
+            explode('.', $domain)
+        );
+        $dn = sprintf('uid=%s,ou=people,%s', $username, join(',',$dc));
+
+        return $dn;
+    }
+
+    function authuser_bind($ldaphost, $user, $userpass)
+    {
+        $ds = ldap_connect ($ldaphost);
+                
+        if (!$ds)
+        {
+            syslog(LOG_INFO, "AUTH: connect errno: " . ldap_errno($ds));
+
+            return FALSE;
+        }
+
+        ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
+        $dn = user_dn($user);
+
+        syslog("LOG_INFO", "Trying to bind as $dn with $userpass");
+
+        $rv = ldap_bind($ds, $dn, $userpass);
+
+        if (!$rv)
+        {
+            syslog(LOG_INFO, "AUTH: bind errno: " . ldap_errno($ds));
+            syslog(LOG_INFO, "dn: $dn pass: $userpass");
+
+            return FALSE;
+        }
+
+        ldap_unbind($ds);
+
+        return TRUE;
+    }
+?>

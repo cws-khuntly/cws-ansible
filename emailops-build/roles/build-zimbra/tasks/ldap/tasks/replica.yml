@@ -11,14 +11,18 @@
   become: yes
   become_user: zimbra
   become_method: sudo
+  when: not is_master_ldap
 
 - name: Stop LDAP services
   command: "{{ install_dir }}/bin/ldap stop"
+  when: not is_master_ldap
 
 - name: Pause for 30 seconds to allow completion
   pause:
     prompt="Pause for 30 seconds to allow LDAP shutdown"
     seconds=30
+  when: not is_master_ldap
 
 - name: Start LDAP after change
   command: "{{ install_dir }}/bin/ldap start"
+  when: not is_master_ldap

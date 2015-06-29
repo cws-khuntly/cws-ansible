@@ -4,13 +4,15 @@
 #==============================================================================
 ---
 - name: Run ecelerity installation steps (ecmgr)
-  vars_files:
-    - ecmgr.yml
   include: run-installation.yml
   notify:
     - sync-puppet
     - restart-service
     - ecmgr-build-complete
+  notify:
+    - sync-puppet
+    - restart-service
+    - ecelerity-build-complete
   when: is_ecmgr
 
 - name: Run ecelerity installation steps (mx)
@@ -20,7 +22,7 @@
   notify:
     - sync-puppet
     - restart-service
-    - mx-build-complete
+    - ecelerity-build-complete
   when: is_mx
 
 - name: Run ecelerity installation steps (smtp)
@@ -30,7 +32,7 @@
   notify:
     - sync-puppet
     - restart-service
-    - smtp-build-complete
+    - ecelerity-build-complete
   when: is_smtp
 
 - name: Remove installer options file (ecmgr)

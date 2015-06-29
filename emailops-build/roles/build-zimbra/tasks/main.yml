@@ -7,31 +7,34 @@
   include: run-installation.yml
 
 - name: (POSTINSTALL) Run Zimbra post-installation steps (ldap)
-  vars_files:
-    - ldap/vars/main.yml
   include: run-postinstall.yml
   notify:
     - sync-puppet
     - restart-service
-    - ldap-build-complete
-  when: is_ldap
 
 - name: (POSTINSTALL) Run Zimbra post-installation steps (maildrop)
-  vars_files:
-    - maildrop/vars/main.yml
   include: run-postinstall.yml
   notify:
     - sync-puppet
     - restart-service
-    - maildrop-build-complete
-  when: is_maildrop
 
 - name: (POSTINSTALL) Run Zimbra post-installation steps (pop)
-  vars_files:
-    - pop/vars/main.yml
   include: run-postinstall.yml
   notify:
     - sync-puppet
     - restart-service
-    - pop-build-complete
+
+- name: Notify LDAP complete
+  command: /bin/true
+  notify: ldap-build-complete
+  when: is_ldap
+
+- name: Notify maildrop complete
+  command: /bin/true
+  notify: maildrop-build-complete
+  when: is_maildrop
+
+- name: Notify POP complete
+  command: /bin/true
+  notify: pop-build-complete
   when: is_pop

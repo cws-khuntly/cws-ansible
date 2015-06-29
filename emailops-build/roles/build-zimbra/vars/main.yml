@@ -23,16 +23,12 @@ zimbra_version: 807
 zimbra_major_version: 8
 
 ##
-## ldap config
-##
-##
 ## LDAP
 ##
-ldap_password: ewsyicfa
-admin_password: Viedvidd
 admin_address: "admin@{{ client_name }}.{{ datacenter }}.synacor.com"
 ldap_host: "ldap01.{{ client_name }}.{{ datacenter }}.synacor.com"
 ldap_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
+is_multimaster: TRUE
 
 ##
 ## smtp

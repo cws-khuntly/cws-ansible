@@ -6,4 +6,4 @@
 is_master_ldap: TRUE
 do_create_domain: yes
 ldap_rid: 100
-ldap_master_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
+ldap_master_url: "ldap://ldap02.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"

@@ -42,7 +42,7 @@
 
 ## if multi-master is enabled, set it up
 - include: ldap/tasks/multimaster.yml
-  when: is_mulimaster
+  when: is_multimaster
 
 ##
 ## apply LDAP config
