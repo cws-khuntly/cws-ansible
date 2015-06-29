@@ -1,0 +1,37 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/ldap/multimaster.yml
+#   DESCRIPTION:  Enable LDAP multi-master configuration
+#==============================================================================
+---
+##
+## Set up multi-master replication
+##
+- name: (POSTINSTALL) Promote node to master
+  command: "{{ install_dir }}/libexec/zmldappromote-replica-mmr -s {{ ldap_rid }}"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+  when: not is_master_ldap
+
+- name: (POSTINSTALL) Enable multi-master LDAP replication (zmldapenable-mmr)
+  command: "{{ install_dir }}/libexec/zmldapenable-mmr -s {{ ldap_rid }} -m \"ldap://{{ hostvars[inventory_hostname]['ansible_fqdn'] }}:389/\""
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+- name: (POSTINSTALL) Enable multi-master LDAP replication (local config)
+  command: "{{ install_dir }}/bin/zmlocalconfig -e ldap_master_url=\"{{ ldap_master_url }}\" ldap_url=\"{{ ldap_url }}\""
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+- name: Stop LDAP services
+  command: "{{ install_dir }}/bin/ldap stop"
+
+- name: Pause for 30 seconds to allow completion
+  pause:
+    prompt="Pause for 30 seconds to allow LDAP shutdown"
+    seconds=30
+
+- name: Start LDAP after change
+  command: "{{ install_dir }}/bin/ldap start"

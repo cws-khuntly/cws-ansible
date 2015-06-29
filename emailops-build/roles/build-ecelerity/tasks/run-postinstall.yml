@@ -1,0 +1,40 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  run-postinstall.yml
+#   DESCRIPTION:  Perform post-installation configuration
+#==============================================================================
+---
+- name: Check if /opt/ecelerity exists
+  stat:
+    path=/opt/ecelerity
+    get_md5=no
+  register: exists
+
+- name: If /opt/ecelerity exists, move its content to /opt/msys/ecelerity
+  command: mv /opt/ecelerity/bin/* /opt/msys/ecelerity/bin
+  when: exists
+
+- name: Remove /opt/ecelerity
+  file:
+    path=/opt/ecelerity
+    state=absent
+  when: exists
+
+- name: Create symlink /opt/ecelerity => /opt/msys/ecelerity
+  file:
+    path=/opt/ecelerity
+    src=/opt/msys/ecelerity
+    state=link
+
+- name: Synchronize SMTP configuration
+  unarchive:
+    src=smtp-default.tar.gz
+    dest="/opt/msys/ecelerity"
+    copy=yes
+  when: is_smtp
+
+- name: Synchronize MX configuration
+  unarchive:
+    src=mx-default.tar.gz
+    dest="/opt/msys/ecelerity"
+    copy=yes
+  when: is_mx

@@ -1,0 +1,39 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  vars/common.yml
+#   DESCRIPTION:  Common variables that apply to this play
+#==============================================================================
+---
+## These variables will be used to generate the unattended installation options file
+## Change to suit environment
+install_dir: /opt/zimbra
+rpm_path:
+activate_license: TRUE
+file_owner: zimbra
+group_owner: zimbra
+run_zmfixperms_extended: TRUE
+pkg_version: 8.0.7_GA_6021.RHEL6_64-20140408123937
+build_ecmgr: FALSE
+disable_fsck: FALSE
+mailboxd_java_options: "-XX:+UseConcMarkSweepGC -XX:PermSize=128m -XX:MaxPermSize=350m -XX:SoftRefLRUPolicyMSPerMB=1 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCApplicationStoppedTime -XX:-OmitStackTraceInFastThrow -XX:+UseParNewGC -XX:NewRatio=2 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/zimbra/store/log -XX:ErrorFile=/opt/zimbra/log/hs_err_pid%p.log"
+
+##
+## version info
+##
+zimbra_version: 807
+zimbra_major_version: 8
+
+##
+## LDAP
+##
+admin_address: "admin@{{ client_name }}.{{ datacenter }}.synacor.com"
+ldap_host: "ldap01.{{ client_name }}.{{ datacenter }}.synacor.com"
+ldap_master_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap02.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
+is_multimaster: TRUE
+
+##
+## smtp
+##
+smtp_host: "mailrelay.{{ client_name }}.{{ datacenter }}.synacor.com"
+smtp_source:
+smtp_dest:
+email_dest: khuntly@synacor.com

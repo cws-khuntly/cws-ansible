@@ -1,0 +1,8 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/smtp
+#   DESCRIPTION:  Variables that apply to Ecelerity SMTP servers
+#==============================================================================
+---
+## These variables will be used to generate the unattended installation options file
+## Change to suit environment
+build_type: MessageSystems SMTP Server

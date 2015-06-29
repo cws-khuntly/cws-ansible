@@ -1,4 +1,15 @@
 ---
+<<<<<<< HEAD
+- name: Synchronize SSH authorized_keys
+  copy:
+    src="{{ ansible_env.HOME }}/.ssh/{{ datacenter }}/admin/authorized_keys"
+    dest="{{ remote_home }}/.ssh/authorized_keys"
+    owner="{{ remote_user }}"
+    group="{{ remote_group }}"
+    mode=0600
+
+=======
+>>>>>>> c7cdf66b3349637f5bf2f0616bcad5a7c1e89a8c
 - name: Synchronize profile across hosts
   synchronize:
     src="{{ ansible_env.HOME }}/dotfiles"
@@ -13,6 +24,8 @@
     rsync_opts="-avr --exclude-from={{ ansible_env.HOME }}/.etc/excludes --no-motd --stats --progress"
   notify:
     - install
+<<<<<<< HEAD
+=======
 
 - name: Copy/create files
   copy:
@@ -22,3 +35,4 @@
     group="{{ remote_group }}"
     mode=0600
 
+>>>>>>> c7cdf66b3349637f5bf2f0616bcad5a7c1e89a8c

@@ -1,0 +1,14 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  main.yml
+#   DESCRIPTION:  Primary entry point for this play
+#==============================================================================
+---
+- name: Run nginx installation steps
+  include: run-installation.yml
+
+- name: Run nginx installation steps
+  include: run-postinstall.yml
+  notify:
+    - sync-puppet
+    - restart-service
+    - nginx-build-complete

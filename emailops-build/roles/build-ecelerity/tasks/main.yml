@@ -1,0 +1,56 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  main.yml
+#   DESCRIPTION:  Primary entry point for play
+#==============================================================================
+---
+- name: Run ecelerity installation steps (ecmgr)
+  include: run-installation.yml
+  notify:
+    - sync-puppet
+    - restart-service
+    - ecmgr-build-complete
+  notify:
+    - sync-puppet
+    - restart-service
+    - ecelerity-build-complete
+  when: is_ecmgr
+
+- name: Run ecelerity installation steps (mx)
+  vars_files:
+    - mta.yml
+  include: run-postinstall.yml
+  notify:
+    - sync-puppet
+    - restart-service
+    - ecelerity-build-complete
+  when: is_mx
+
+- name: Run ecelerity installation steps (smtp)
+  vars_files:
+    - mta.yml
+  include: run-postinstall.yml
+  notify:
+    - sync-puppet
+    - restart-service
+    - ecelerity-build-complete
+  when: is_smtp
+
+- name: Remove installer options file (ecmgr)
+  file:
+    path="{{ tmpdir }}/ecmgr"
+    state=absent
+
+- name: Remove installer options file (mta)
+  file:
+    path="{{ tmpdir }}/mta"
+    state=absent
+
+- name: Remove install archive
+  file:
+    path="{{ tmpdir }}/ecelerity.tar.gz"
+    state=absent
+
+- name: Remove post-install checkout
+  file:
+    path="{{ tmpdir }}/ecelerity"
+    state=absent

@@ -1,0 +1,29 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  hosts
+#   DESCRIPTION:  Host list for ansible playbook
+#==============================================================================
+[maildrop]
+md01.khuntly.dev.opal.synacor.com
+
+[smtp]
+smtp01.khuntly.dev.opal.synacor.com
+
+[mx]
+mx01.khuntly.dev.opal.synacor.com
+
+[nginx]
+pop01.khuntly.dev.opal.synacor.com
+
+[ldap]
+ldap01.khuntly.dev.opal.synacor.com
+
+[ecmgr]
+ecmgr01.khuntly.dev.opal.synacor.com
+
+[opal:children]
+maildrop
+mx
+smtp
+ecmgr
+nginx
+ldap

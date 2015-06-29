@@ -1,0 +1,32 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  templates/mta.j2
+#   DESCRIPTION:  "{{ ansible_managed }}"
+#==============================================================================
+
+$selections = {
+  'cloudmark' => 'y',
+  'beik' => 'n',
+  'lbu' => 'y',
+  'adapt_lu' => 'y',
+  'db_init' => 'n',
+  'expurgate' => 'n',
+  'brightmail' => 'n',
+  'MTA' => 'y',
+  'csapi' => 'n',
+  'ctasd' => 'n',
+  'devel' => 'y',
+  'roles' => {
+    'database' => 0,
+    'web' => 0,
+    'mta' => 1,
+    'singlenode' => 0,
+    'manager' => 0
+  },
+  'dbhost' => '{{ manager_hostname }}',
+  'cluster' => 'y',
+  'validation-tools' => 'y',
+  'mgrhost' => '{{ manager_hostname }}',
+  'encryption' => 'n',
+  'momentum-receiving' => 'y',
+  'svcpasswd' => '{{ svcpasswd }}'
+};

@@ -1,0 +1,19 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  handlers/main.yml
+#   DESCRIPTION:  Service restart handler
+#==============================================================================
+---
+- name: restart-service
+  command: /etc/init.d/nginx restart
+
+- name: Synchronize with puppet master
+  command: /usr/bin/puppet agent -t
+
+- name: nginx-build-complete
+  jabber:
+    user="{{ jabber_user }}"
+    host="{{ jabber_host }}"
+    port="{{ jabber_port }}"
+    password="{{ jabber_pass }}"
+    to="{{ jabber_to }}"
+    msg="{{ build_type }} build complete for {{ client }} on {{ hostvars['{{ inventory_hostname }}'] }}"

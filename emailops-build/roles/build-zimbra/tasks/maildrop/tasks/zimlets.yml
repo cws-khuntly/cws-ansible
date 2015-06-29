@@ -1,0 +1,92 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/maildrop-globalconfig.yml
+#   DESCRIPTION:  Install and configure Zimbra zimlets
+#==============================================================================
+---
+## zimlets
+- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_dnd)
+  yum:
+    disable_gpg_check=yes
+    name=zimbra-zimlet-generic-com_synacor_dnd
+    state=present
+
+- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_external_email)
+  yum:
+    disable_gpg_check=yes
+    name=zimbra-zimlet-generic-com_synacor_external_email
+    state=present
+
+- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_reference)
+  yum:
+    disable_gpg_check=yes
+    name=zimbra-zimlet-generic-com_synacor_reference
+    state=present
+
+- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_spam)
+  yum:
+    disable_gpg_check=yes
+    name=zimbra-zimlet-generic-com_synacor_spam
+    state=present
+
+- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_social)
+  yum:
+    disable_gpg_check=yes
+    name=zimbra-zimlet-generic-com_synacor_social
+    state=present
+
+- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_core_change)
+  yum:
+    disable_gpg_check=yes
+    name=zimbra-zimlet-generic-com_synacor_core_change
+    state=present
+
+- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_dynamic_ads)
+  yum:
+    disable_gpg_check=yes
+    name=zimbra-zimlet-generic-com_synacor_dynamic_ads
+    state=present
+
+## zimbra 7 zimlets
+- name: (POSTINSTALL) Install zimlets (zimbra-skin-synacor-synabase)
+  yum:
+    disable_gpg_check=yes
+    name=zimbra-skin-synacor-synabase
+    state=present
+  when: zimbra_major_version == 7
+
+- name: (POSTINSTALL) Configure Zimbra zimlets ((COS) zimbraPrefSkin/synabase)
+  command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin synabase"
+  when: zimbra_major_version == 7
+
+## zimbra 8 zimlets
+- name: (POSTINSTALL) Install zimlets (zimbra-skin-synacor-synabasev8)
+  yum:
+    disable_gpg_check=yes
+    name=zimbra-skin-synacor-synabasev8
+    state=present
+  when: zimbra_major_version == 8
+
+- name: (POSTINSTALL) Configure Zimbra zimlets ((COS) zimbraPrefSkin/synabasev8)
+  command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin synabasev8"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+  when: zimbra_major_version == 8
+
+- name: (POSTINSTALL) Configure Zimbra zimlets (global config)
+  command: "{{ install_dir }}/bin/zmprov mcf -zimbraInstalledSkin bones -zimbraInstalledSkin hotrod -zimbraInstalledSkin lake -zimbraInstalledSkin lavender -zimbraInstalledSkin lemongrass
+    -zimbraInstalledSkin oasis -zimbraInstalledSkin pebble -zimbraInstalledSkin sand -zimbraInstalledSkin sky -zimbraInstalledSkin smoke -zimbraInstalledSkin steel -zimbraInstalledSkin tree
+    -zimbraInstalledSkin twilight -zimbraInstalledSkin waves -zimbraInstalledSkin beach -zimbraInstalledSkin bare"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+- name: (POSTINSTALL) Remove unused data
+  command: "rm -rf {{ application_home }}/zimlets/com_zimbra_linkedin.zip {{ install_dir }}/zimlets/com_zimbra_dnd.zip
+    {{ install_dir }}/zimlets/com_zimbra_social.zip {{ install_dir }}/zimlets/com_zimbra_webex.zip
+    {{ install_dir }}/jetty/webapps/zimbra/skins/bare/ {{ install_dir }}/jetty/webapps/zimbra/skins/beach/ {{ install_dir }}/jetty/webapps/zimbra/skins/waves/
+    {{ install_dir }}/jetty/webapps/zimbra/skins/twilight/ {{ install_dir }}/jetty/webapps/zimbra/skins/sand/ {{ install_dir }}/jetty/webapps/zimbra/skins/tree/
+    {{ install_dir }}/jetty/webapps/zimbra/skins/oasis/ {{ install_dir }}/jetty/webapps/zimbra/skins/lemongrass/ {{ install_dir }}/jetty/webapps/zimbra/skins/lake/
+    {{ install_dir }}/jetty/webapps/zimbra/skins/steel/ {{ install_dir }}/jetty/webapps/zimbra/skins/hotrod/ {{ install_dir }}/jetty/webapps/zimbra/skins/smoke/
+    {{ install_dir }}/jetty/webapps/zimbra/skins/pebble/ {{ install_dir }}/jetty/webapps/zimbra/skins/bones/ {{ install_dir }}/jetty/webapps/zimbra/skins/sky/
+    {{ install_dir }}/jetty/webapps/zimbra/skins/lavender/"

@@ -1,0 +1,131 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/run-installation.yml
+#   DESCRIPTION:  Performs base Zimbra installation for maildrop/LDAP
+#==============================================================================
+---
+##
+## Create user group/account
+##
+- name: (INSTALL) Create Zimbra user group
+  group:
+    gid=454
+    name=zimbra
+    state=present
+    system=yes
+
+- name: (INSTALL) Create Zimbra user account
+  user:
+    createhome=yes
+    force=no
+    generate_ssh_key=yes
+    group=zimbra
+    groups=adm,tty,postfix
+    home=/opt/zimbra
+    move_home=no
+    name=zimbra
+    shell=/bin/bash
+    state=present
+    system=yes
+    uid=454
+
+##
+## Run installation steps
+##
+- name: (INSTALL) Install netcat
+  yum:
+    name=nc
+    state=present
+
+- name: (INSTALL) Install zimbra core
+  yum:
+    name="zimbra-core-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+    state=present
+
+- name: (INSTALL) Install zimbra meta baseline
+  yum:
+    name="meta-zimbra-baseline-1.0.3-1.noarch"
+    state=present
+
+- name: Include LDAP installation tasks
+  include: ldap/tasks/install.yml
+  vars_files:
+    - ldap/vars/main.yml
+  when: is_ldap
+
+- name: Include maildrop installation tasks
+  include: maildrop/tasks/install.yml
+  vars_files:
+    - maildrop/vars/main.yml
+  when: is_maildrop
+
+- name: Include POP installation tasks
+  include: pop/tasks/install.yml
+  vars_files:
+    - pop/vars/main.yml
+  when: is_pop
+
+- name: (INSTALL) Create resource file for unattended installation
+  template:
+    src=unattended.j2
+    dest="{{ install_dir }}/conf/unattended.conf"
+    owner="{{ file_owner }}"
+    group="{{ group_owner }}"
+    mode=0644
+
+- name: Run zmsetup with unattended file
+  include: run-zmsetup.yml
+
+##
+## Restart services
+##
+- name: (INSTALL => POSTINSTALL) Stop LDAP services
+  command: /opt/zimbra/bin/ldap stop
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+- name: Pause for 30 seconds to allow completion
+  pause:
+    prompt="Pause for 30 seconds to allow LDAP shutdown"
+    seconds=30
+
+- name: Kill any remaining slapd processes
+  command: /usr/bin/pkill slapd
+  ignore_errors: yes
+
+- name: (INSTALL => POSTINSTALL) Stop Zimbra
+  command: /opt/zimbra/bin/zmcontrol stop
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+  ignore_errors: yes
+
+- name: Pause for 30 seconds to allow completion
+  pause:
+    prompt="Pause for 30 seconds to allow LDAP shutdown"
+    seconds=30
+
+- name: Kill any remaining Zimbra processes
+  command: /usr/bin/killall -u zimbra
+  ignore_errors: yes
+
+- name: (INSTALL => POSTINSTALL) Start LDAP services
+  command: /opt/zimbra/bin/ldap start
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+- name: Pause for 30 seconds to allow completion
+  pause:
+    prompt="Pause for 30 seconds to allow LDAP shutdown"
+    seconds=30
+
+- name: (INSTALL => POSTINSTALL) Restart Zimbra
+  command: /opt/zimbra/bin/zmcontrol start
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+##
+## INSTALLATION COMPLETE
+##

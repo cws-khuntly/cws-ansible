@@ -1,0 +1,29 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/postinstall.yml
+#   DESCRIPTION:  Configure Zimbra maildrop post-installation
+#==============================================================================
+---
+##
+## Generate 2048 bit DH key
+##
+- name: Stop nginx (if running)
+  command: /etc/init.d/nginx stop
+
+- name: Generate 2048 bit DH key for nginx (logjam)
+  command: "/usr/bin/openssl dhparam -out {{ dhparam_output }} {{ dhparam_keysize }}"
+
+- name: Apply nginx configuration updates
+  template:
+    src=nginx.j2
+    dest="{{ nginx_conf }}"
+    owner="{{ file_owner }}"
+    group="{{ group_owner }}"
+    mode=0644
+
+- name: Apply auth.php
+  template:
+    src=auth.j2
+    dest=/var/www/html
+    owner="{{ file_owner }}"
+    group="{{ group_owner }}"
+    mode=0600

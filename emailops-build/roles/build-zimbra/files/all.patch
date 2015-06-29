@@ -1,0 +1,11 @@
+214c214,219
+< setDefaultsFromLocalConfig() if (! $newinstall);
+---
+> if(!$newinstall){
+>   setDefaultsFromLocalConfig()
+> }
+> elsif($options{c}){
+>   loadConfig ($options{c});
+> }
+231d235
+<   loadConfig ($options{c});

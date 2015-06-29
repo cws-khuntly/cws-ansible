@@ -1,0 +1,8 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/mx
+#   DESCRIPTION:  Variables that apply to Ecelerity MX servers
+#==============================================================================
+---
+## These variables will be used to generate the unattended installation options file
+## Change to suit environment
+build_type: MessageSystems Console MX server

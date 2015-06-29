@@ -1,0 +1,48 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  templates/ecmgr.j2
+#   DESCRIPTION:  "{{ ansible_managed }}"
+#==============================================================================
+$selections = {
+  'cloudmark' => 'y',
+  'beik' => 'n',
+  'mobility' => 'n',
+  'dbroot' => '{{ db_root }}',
+  'db_init' => 'y',
+  'expurgate' => 'n',
+  'brightmail' => 'n',
+  'csapi' => 'n',
+  'ctasd' => 'n',
+  'devel' => 'y',
+  'scope' => 'n',
+  'roles' => {
+    'database' => 1,
+    'web' => 1,
+    'mta' => 0,
+    'singlenode' => 0,
+    'manager' => 1
+  },
+  'dbhost' => '{{ manager_hostname }}',
+  'DB' => 'y',
+  'validation-tools' => 'y',
+  'pgssl' => 'n',i
+  'ssl' => 'n',
+  'encryption' => 'n',
+  'cluster-mgr' => 'y',
+  'adminpass' => '{{ adminpass }}',
+  'svcpasswd' => '{{ svcpasswd }}',
+  'subclusters' => {
+    'inbound' => {
+      {% for entry in inbound_hosts %}
+        '{{ entry.name }}' => '{{ entry.ipaddr }}'
+      {% endfor %}
+    },
+    'outbound' => {
+      {% for entry in outbound_hosts %}
+        '{{ entry.name }}' => '{{ entry.ipaddr }}'
+      {% endfor %}
+    },
+    'manager' => {
+      '{{ manager_hostname }}' => '{{ manager_ipaddr }}'
+    }
+  }
+};

@@ -1,0 +1,22 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/maildrop/install.yml
+#   DESCRIPTION:  Performs extra installations necessary for maildrops
+#==============================================================================
+---
+##
+## Run installation steps
+##
+- name: (INSTALL) Install zimbra store
+  yum:
+    name="zimbra-store-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+    state=present
+
+- name: (INSTALL) Install zimbra apache
+  yum:
+    name="zimbra-apache-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+    state=present
+
+- name: (INSTALL) Install zimbra spell
+  yum:
+    name="zimbra-spell-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+    state=present
