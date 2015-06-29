@@ -1,0 +1,37 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/main.yml
+#   DESCRIPTION:  Entry point for the Zimbra build play
+#==============================================================================
+---
+- name: (INSTALL) Run Zimbra installation steps
+  include: run-installation.yml
+
+- name: (POSTINSTALL) Run Zimbra post-installation steps (ldap)
+  vars_files:
+    - ldap/vars/main.yml
+  include: run-postinstall.yml
+  notify:
+    - sync-puppet
+    - restart-service
+    - ldap-build-complete
+  when: is_ldap
+
+- name: (POSTINSTALL) Run Zimbra post-installation steps (maildrop)
+  vars_files:
+    - maildrop/vars/main.yml
+  include: run-postinstall.yml
+  notify:
+    - sync-puppet
+    - restart-service
+    - maildrop-build-complete
+  when: is_maildrop
+
+- name: (POSTINSTALL) Run Zimbra post-installation steps (pop)
+  vars_files:
+    - pop/vars/main.yml
+  include: run-postinstall.yml
+  notify:
+    - sync-puppet
+    - restart-service
+    - pop-build-complete
+  when: is_pop

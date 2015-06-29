@@ -1,0 +1,10 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/handlers/main.yml
+#   DESCRIPTION:  Execute Zimbra restarts post-installation
+#==============================================================================
+---
+- name: restart-service
+  command: /etc/init.d/zimbra restart
+
+- name: Synchronize with puppet master
+  command: /usr/bin/puppet agent -t

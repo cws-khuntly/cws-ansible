@@ -1,0 +1,35 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/patch-zmsetup.yml
+#   DESCRIPTION:  Copies and applies appropriate patch file for zmsetup
+#==============================================================================
+---
+- name: (INSTALL) Copy zmsetup patch (8.0.6_GA_5922.RHEL6_64-20131203103753)
+  copy:
+    src="806.patch"
+    dest="{{ tmpdir }}/all.patch"
+    owner="{{ file_owner }}"
+    group="{{ group_owner }}"
+    mode=0644
+  when: "'{{ pkg_version }}' == '8.0.6_GA_5922.RHEL6_64-20131203103753'"
+
+- name: (INSTALL) Copy zmsetup patch (all others)
+  copy:
+    src="all.patch"
+    dest="{{ tmpdir }}/all.patch"
+    owner="{{ file_owner }}"
+    group="{{ group_owner }}"
+    mode=0644
+  when: "'{{ pkg_version }}' != '8.0.6_GA_5922.RHEL6_64-20131203103753'"
+
+- name: (INSTALL) Patch zmsetup (8.0.6_GA_5922.RHEL6_64-20131203103753)
+  shell: "patch {{ install_dir }}/libexec/zmsetup.pl < {{ tmpdir }}/806.patch"
+  ignore_errors: yes
+  when: "'{{ pkg_version }}' == '8.0.6_GA_5922.RHEL6_64-20131203103753'"
+
+- name: (INSTALL) Patch zmsetup (all others)
+  shell: "patch {{ install_dir }}/libexec/zmsetup.pl < {{ tmpdir }}/all.patch"
+  ignore_errors: yes
+  when: "'{{ pkg_version }}' != '8.0.6_GA_5922.RHEL6_64-20131203103753'"
+
+- name: (INSTALL) Run zmsetup
+  command: "{{ install_dir }}/libexec/zmsetup.pl -d -c {{ install_dir }}/conf/unattended.conf"

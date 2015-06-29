@@ -1,0 +1,33 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  maildrop/createaccounts.yml
+#   DEcommandION:  Create Synacor monitoring accounts
+#==============================================================================
+---
+## create monitoring accounts
+- name: (POSTINSTALL) Get Zimbra account settings
+  command: "{{ install_dir }}/bin/zimbraMailHost {{ hostvars[inventory_hostname] }} zimbraPrefGroupMailBy message zimbraPrefComposeFormat html"
+  register: account_settings
+
+- name: (POSTINSTALL) Create accounts
+  command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+- name: (POSTINSTALL) Create accounts
+  command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+- name: (POSTINSTALL) Create accounts
+  command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+- name: (POSTINSTALL) Create accounts
+  command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
+  become: yes
+  become_user: zimbra
+  become_method: sudo

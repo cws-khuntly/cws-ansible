@@ -1,0 +1,25 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  hosts
+#   DESCRIPTION:  Host list for ansible playbook
+#==============================================================================
+[maildrop]
+<list of maildrops>
+
+[smtp]
+<list of smtp servers>
+
+[mx]
+<list of mx servers>
+
+[nginx]
+<list of nginx servers>
+
+[ldap]
+<list of ldap servers>
+
+[opal:children]
+maildrop
+mx
+smtp
+nginx
+ldap

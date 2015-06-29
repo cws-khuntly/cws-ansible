@@ -1,0 +1,7 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  vars/ldap.yml
+#   DESCRIPTION:  Variables that apply to LDAP installations
+#==============================================================================
+---
+## These variables will be used to generate the unattended installation options file
+## Change to suit environment

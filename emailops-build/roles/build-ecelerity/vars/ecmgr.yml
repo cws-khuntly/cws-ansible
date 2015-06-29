@@ -1,0 +1,23 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/all
+#   DESCRIPTION:  Variables that apply to Ecelerity Cluster managers
+#==============================================================================
+---
+## These variables will be used to generate the unattended installation options file
+## Change to suit environment
+adminpass: 13atbac0n
+svcpasswd: 13atbac0n
+manager_hostname: "ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com"
+manager_ipaddr: "{{ hostvars['{{ inventory_hostname }}']['ansible_default_ipv4']['address'] }}"
+
+inbound_hosts:
+  - name: "mx01.{{ client_name }}.{{ datacenter }}.synacor.com"
+    address: <ipaddr>
+  - name: "mx02.{{ client_name }}.{{ datacenter }}.synacor.com"
+    address: <ipaddr>
+
+outbound_hosts:
+  - name: "smtp01.{{ client_name }}.{{ datacenter }}.synacor.com"
+    address: <ipaddr>
+  - name: "smtp01.{{ client_name }}.{{ datacenter }}.synacor.com"
+    address: <ipaddr>

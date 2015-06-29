@@ -1,0 +1,14 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  vars/main.yml
+#   DESCRIPTION:  Common variables for play
+#==============================================================================
+---
+## These variables will be used to generate the unattended installation options file
+## Change to suit environment
+nginx_user: nginx
+nginx_group: nginx
+nginx_home: /var/lib/nginx
+nginx_conf: /etc/nginx/nginx.conf
+pkg_version: 1.2.7-2
+dhparam_keysize: 2048
+dhparam_output: /etc/nginx/ssl/dhparams-nginx.pem

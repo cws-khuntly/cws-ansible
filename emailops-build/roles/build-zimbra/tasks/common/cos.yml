@@ -1,0 +1,21 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  cos.yml
+#   DESCRIPTION:  Applies Zimbra Classes of Service
+#==============================================================================
+---
+##
+## apply class of service
+##
+- name: (POSTINSTALL) Get CoS listing from Zimbra
+  command: "{{ install_dir }}/bin/zmprov -l gac"
+  register: cos_listing
+
+- name: (POSTINSTALL) Add CoS entries
+  command: "/opt/zimbra/bin/zmprov mc {{ cos }} \"zimbraAttachmentsIndexingEnabled FALSE zimbraFeatureBriefcaseDocsEnabled FALSE zimbraFeatureBriefcaseSlidesEnabled FALSE 
+    zimbraFeatureBriefcaseSpreadsheetEnabled FALSE zimbraFeatureBriefcasesEnabled FALSE zimbraFeatureChangePasswordEnabled FALSE zimbraPrefCalendarAlwaysShowMiniCal FALSE
+    zimbraFeatureConfirmationPageEnabled TRUE zimbraFeatureIMEnabled FALSE zimbraFeatureMAPIConnectorEnabled FALSE zimbraFeatureMobileSyncEnabled FALSE zimbraFeatureMobilePolicyEnabled FALSE
+    zimbraFeatureSkinChangeEnabled TRUE\""
+  with_items: cost_listing.stdout_lines
+  become: yes
+  become_user: zimbra
+  become_method: sudo

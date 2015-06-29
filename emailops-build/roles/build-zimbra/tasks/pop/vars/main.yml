@@ -1,0 +1,16 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  vars/ldap.yml
+#   DESCRIPTION:  Variables that apply to LDAP installations
+#==============================================================================
+---
+## These variables will be used to generate the unattended installation options file
+## Change to suit environment
+is_ldap: false
+is_maildrop: false
+is_pop: true
+is_mta: false
+create_default_accounts: false
+create_maildrop_accounts: false
+setup_stores: false
+use_scality: false
+use_reverse_proxy: true
