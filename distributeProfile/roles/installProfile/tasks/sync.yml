@@ -1,3 +1,8 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  tasks/sync.yml
+#   DESCRIPTION:  Synchronize dotfiles across hosts
+#==============================================================================
+---
 ---
 - name: Synchronize profile across hosts
   synchronize:

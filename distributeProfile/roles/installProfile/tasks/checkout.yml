@@ -1,3 +1,7 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  checkout.yml
+#   DESCRIPTION:  Checks out the current Git dotfiles repository for release
+#==============================================================================
 ---
 - name: check out current repository
   git:

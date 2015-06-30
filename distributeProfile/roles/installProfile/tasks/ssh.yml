@@ -1,6 +1,6 @@
 #======  ANSIBLE  ============================================================
-#          NAME:  ssh.yml
-#   DESCRIPTION:  Rotates log files based on size or time.
+#          NAME:  tasks/ssh.yml
+#   DESCRIPTION:  Add authorized_keys to target hosts
 #==============================================================================
 ---
 ##

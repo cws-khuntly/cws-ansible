@@ -1,3 +1,7 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  vars/main.yml
+#   DESCRIPTION:  Variables utilized by this play
+#==============================================================================
 ---
 ## local vars
 username: khuntly

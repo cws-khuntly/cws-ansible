@@ -79,7 +79,7 @@
 
 - name: (POSTINSTALL) Apply licensing
   command: "{{ install_dir }}/bin/zmlicense -a"
-  when: activate_license
+  when: activate_license and not is_ldap
   become: yes
   become_user: zimbra
   become_method: sudo

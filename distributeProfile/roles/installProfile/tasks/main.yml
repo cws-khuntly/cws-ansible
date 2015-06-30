@@ -1,6 +1,6 @@
 #======  ANSIBLE  ============================================================
-#          NAME:  rotateLogsByTime
-#   DESCRIPTION:  Rotates log files based on size or time.
+#          NAME:  tasks/main.yml
+#   DESCRIPTION:  Primary entry point for this play
 #==============================================================================
 ---
 - name: Include github checkout

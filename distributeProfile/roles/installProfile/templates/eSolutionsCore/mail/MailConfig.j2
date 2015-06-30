@@ -1,3 +1,9 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  MailConfig.j2
+#   DESCRIPTION:  Mail properties file for JavaMail
+#         NOTES:  {{ ansible_managed }}
+#==============================================================================
+---
 mail.debug = {{ debug_mail }}
 mail.from = {{ mail_from }}
 mail.transport.protocol = smtp

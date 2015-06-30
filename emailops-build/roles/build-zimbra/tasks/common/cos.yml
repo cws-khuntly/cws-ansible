@@ -11,11 +11,11 @@
   register: cos_listing
 
 - name: (POSTINSTALL) Add CoS entries
-  command: "/opt/zimbra/bin/zmprov mc {{ cos }} \"zimbraAttachmentsIndexingEnabled FALSE zimbraFeatureBriefcaseDocsEnabled FALSE zimbraFeatureBriefcaseSlidesEnabled FALSE 
+  command: "/opt/zimbra/bin/zmprov mc {{ item }} zimbraAttachmentsIndexingEnabled FALSE zimbraFeatureBriefcaseDocsEnabled FALSE zimbraFeatureBriefcaseSlidesEnabled FALSE 
     zimbraFeatureBriefcaseSpreadsheetEnabled FALSE zimbraFeatureBriefcasesEnabled FALSE zimbraFeatureChangePasswordEnabled FALSE zimbraPrefCalendarAlwaysShowMiniCal FALSE
     zimbraFeatureConfirmationPageEnabled TRUE zimbraFeatureIMEnabled FALSE zimbraFeatureMAPIConnectorEnabled FALSE zimbraFeatureMobileSyncEnabled FALSE zimbraFeatureMobilePolicyEnabled FALSE
-    zimbraFeatureSkinChangeEnabled TRUE\""
-  with_items: cost_listing.stdout_lines
+    zimbraFeatureSkinChangeEnabled TRUE"
+  with_items: cos_listing.stdout_lines
   become: yes
   become_user: zimbra
   become_method: sudo

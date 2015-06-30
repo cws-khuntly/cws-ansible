@@ -1,9 +1,0 @@
-#=====  ANSIBLE   =============================================================
-#                 NAME:  configure/handlers/main.yml
-#   DESCRIPTION:  Execute named restarts post-installation
-#==============================================================================
----
-- name: restart-service
-  service:
-    name=named
-    state=restarted

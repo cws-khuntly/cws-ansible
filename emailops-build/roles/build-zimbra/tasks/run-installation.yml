@@ -15,13 +15,9 @@
 
 - name: (INSTALL) Create Zimbra user account
   user:
-    createhome=yes
-    force=no
-    generate_ssh_key=yes
     group=zimbra
     groups=adm,tty,postfix
     home=/opt/zimbra
-    move_home=no
     name=zimbra
     shell=/bin/bash
     state=present
