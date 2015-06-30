@@ -1,0 +1,5 @@
+### Binding Phase ###
+$bind_check = ec_header_get "X-BINDING";
+if vctx_mess :regex "maildrop" ".+" {
+    ec_set_binding "%{vctx_mess:maildrop}";
+}

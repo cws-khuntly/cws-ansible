@@ -22,6 +22,11 @@ datacenter: dev.opal
 tmpdir: /var/tmp
 
 ##
+## LDAP
+##
+ldap_host: "ldap01.{{ client_name }}.{{ datacenter }}.synacor.com"
+
+##
 ## ssl
 ##
 exclude_ciphers:

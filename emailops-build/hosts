@@ -2,6 +2,8 @@
 #          NAME:  hosts
 #   DESCRIPTION:  Host list for ansible playbook
 #==============================================================================
+localhost ansible_connection=local
+
 [maildrop]
 md01.khuntly.dev.opal.synacor.com
 

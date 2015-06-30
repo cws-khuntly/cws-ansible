@@ -3,114 +3,14 @@
 #   DESCRIPTION:  Configure Zimbra maildrop post-installation
 #==============================================================================
 ---
-##
-## Update OpenSSL and java.security
-##
-- name: (POSTINSTALL) Remove existing OpenSSL installation
-  file:
-    path="{{ install_dir }}/openssl-1.0.1f"
-    state=absent
-
-- name: (POSTINSTALL) Synchronize OpenSSL update
-  unarchive:
-    copy=yes
-    dest="{{ install_dir }}"
-    group="{{ group_owner }}"
-    owner="{{ file_owner }}"
-    src="{{ playbook_dir }}/files/openssl-1.0.1f.tgz"
-
-- name: (POSTINSTALL) Copy java.security update to target host
-  copy:
-    src="{{ playbook_dir }}/files/java.security"
-    dest="{{ install_dir }}/java/jre/lib/security/java.security"
-    owner="{{ file_owner }}"
-    group="{{ group_owner }}"
-    mode=0644
-
-## shut things down, change permissions, restart
-- name: (POSTINSTALL) Fix Zimbra permissions
-  file:
-    group="{{ group_owner }}"
-    owner="{{ file_owner }}"
-    path="{{ install_dir }}"
-    recurse=yes
-    state=directory
-
-## if this is an LDAP master turn that shit on
-- name: Include LDAP replication tasks
-  include: ldap/replica.yml
-  when: is_ldap and is_master_ldap
-
-## if multi-master is enabled, set it up
-- name: Include LDAP multi-master tasks
-  include: ldap/multimaster.yml
-  when: is_ldap and is_multimaster
-
-##
-## apply LDAP config
-##
-- name: Include Zimbra local configuration tasks
-  include: common/localconfig.yml
-
-##
-## Start services so things actually fucking work
-##
-- name: (POSTINSTALL) Start Zimbra services
-  command: /etc/init.d/zimbra start
-
-- name: Pause for 30 seconds to allow completion
-  pause:
-    seconds=30
-
-- name: Include Zimbra global configuration tasks
-  include: common/globalconfig.yml
-
-- name: Include Zimbra server configuration tasks
-  include: common/serverconfig.yml
-
-- name: Include Zimbra CoS tasks
-  include: common/cos.yml
-
-- name: (POSTINSTALL) Turn off Zimbra backups
-  command: "{{ install_dir }}/bin/zmschedulebackup -F"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-
-- name: (POSTINSTALL) Apply licensing
-  command: "{{ install_dir }}/bin/zmlicense -a"
-  when: activate_license and not is_ldap
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-
-- name: Include reverse proxy configuration tasks
-  include: pop/proxy.yml
-  when: use_reverse_proxy
-
-- name: Include maildrop store configuration tasks
-  include: maildrop/storeconfig.yml
-  when: is_maildrop and setup_stores
-
-- name: Include monitoring account creation
-  include: maildrop/createaccounts.yml
-  when: is_maildrop and create_maildrop_accounts
-
-- name: Include Zimbra webapp modifications
-  include: maildrop/webapp.yml
-  when: is_maildrop
-
-- name: Include Zimbra zimlet installations
-  include: maildrop/zimlets.yml
-  when: is_maildrop and install_synacor_skins_zimlets
-
-- name: Include Scality installation/configuration tasks
-  include: maildrop/scality.yml
-  when: is_maildrop and use_scality
-
 ## shut down
 - name: (POSTINSTALL) Stopping Zimbra to apply changes
   command: /usr/local/bin/zimbra_service.sh -k
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Kill any remaining Zimbra processes
+  command: killall -u zimbra
+  ignore_errors: yes
 
 - name: Pause for 30 seconds to allow completion
   pause:

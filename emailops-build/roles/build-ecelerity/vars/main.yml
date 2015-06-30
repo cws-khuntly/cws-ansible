@@ -6,4 +6,13 @@
 ## These variables will be used to generate the unattended installation options file
 ## Change to suit environment
 manager_hostname: "ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com"
-manager_ipaddr: "{{ hostvars['{{ inventory_hostname }}']['ansible_default_ipv4']['address'] }}"
+manager_ipaddr: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+file_owner: ecuser
+group_owner: ecuser
+cluster_group: ec_cluster
+control_group: ec_cosole
+
+maildrops:
+ - list
+ - of
+ - drops

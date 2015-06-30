@@ -3,38 +3,15 @@
 #   DESCRIPTION:  Perform post-installation configuration
 #==============================================================================
 ---
-- name: Check if /opt/ecelerity exists
-  stat:
-    path=/opt/ecelerity
-    get_md5=no
-  register: exists
+- name: Fix installation permissions/directories
+  include: fix-installation.yml
 
-- name: If /opt/ecelerity exists, move its content to /opt/msys/ecelerity
-  command: mv /opt/ecelerity/bin/* /opt/msys/ecelerity/bin
-  when: exists
+- name: Synchronize puppet
+  command: /usr/sbin/puppet agent -t
 
-- name: Remove /opt/ecelerity
-  file:
-    path=/opt/ecelerity
-    state=absent
-  when: exists
-
-- name: Create symlink /opt/ecelerity => /opt/msys/ecelerity
-  file:
-    path=/opt/ecelerity
-    src=/opt/msys/ecelerity
-    state=link
-
-- name: Synchronize SMTP configuration
-  unarchive:
-    src=smtp-default.tar.gz
-    dest="/opt/msys/ecelerity"
-    copy=yes
-  when: is_smtp
-
-- name: Synchronize MX configuration
-  unarchive:
-    src=mx-default.tar.gz
-    dest="/opt/msys/ecelerity"
-    copy=yes
-  when: is_mx
+- name: Include ecelerity configuration steps
+  include: apply-configuration.yml
+  notify:
+    - sync-puppet
+    - restart-service
+    - ecelerity-build-complete

@@ -3,8 +3,19 @@
 #   DESCRIPTION:  Entry point for the Zimbra build play
 #==============================================================================
 ---
-#- name: (INSTALL) Run Zimbra installation steps
-#  include: run-installation.yml
+- name: Check if mount points exist
+  stat:
+    path="{{ item.name }}"
+    get_md5=FALSE
+    get_checksum=FALSE
+  with_items: "{{ mountpoints }}"
+  register: volume_exists
+  fail:
+    msg="Zimbra volumes have not been set up. Please configure the volumes and retry."
+  when: not volume_exists.stat.exists
+
+- name: (INSTALL) Run Zimbra installation steps
+  include: run-installation.yml
 
 - name: (POSTINSTALL) Run Zimbra post-installation steps (ldap)
   include: run-postinstall.yml
@@ -24,17 +35,12 @@
     - sync-puppet
     - restart-service
 
-- name: Notify LDAP complete
-  command: /bin/true
-  notify: ldap-build-complete
-  when: is_ldap
-
-- name: Notify maildrop complete
-  command: /bin/true
-  notify: maildrop-build-complete
-  when: is_maildrop
-
-- name: Notify POP complete
-  command: /bin/true
-  notify: pop-build-complete
-  when: is_pop
+- name: Send notification
+  jabber:
+    user="{{ jabber_user }}"
+    host="{{ jabber_host }}"
+    port="{{ jabber_port }}"
+    password="{{ jabber_pass }}"
+    to="{{ jabber_to }}"
+    msg="{{ build_type }} build complete for {{ client_name }} on {{ hostvars[inventory_hostname]['ansible_fqdn'] }}"
+  delegate_to: localhost

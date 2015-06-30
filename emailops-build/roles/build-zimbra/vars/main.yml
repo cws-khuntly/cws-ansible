@@ -6,8 +6,6 @@
 ## These variables will be used to generate the unattended installation options file
 ## Change to suit environment
 install_dir: /opt/zimbra
-rpm_path:
-activate_license: TRUE
 file_owner: zimbra
 group_owner: zimbra
 run_zmfixperms_extended: TRUE
@@ -25,9 +23,8 @@ zimbra_major_version: 8
 ##
 ## LDAP
 ##
-admin_address: "admin@{{ client_name }}.{{ datacenter }}.synacor.com"
-ldap_host: "ldap01.{{ client_name }}.{{ datacenter }}.synacor.com"
 ldap_master_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap02.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
+admin_address: "admin@{{ client_name }}.{{ datacenter }}.synacor.com"
 is_multimaster: TRUE
 
 ##

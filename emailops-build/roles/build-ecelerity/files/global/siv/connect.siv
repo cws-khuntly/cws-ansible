@@ -1,0 +1,36 @@
+### Connect Phase ###
+
+# Incriment connection attempts
+ec_inc_counter "Connections:Connections Attempted";
+
+# As_logger includes
+ec_include "/opt/msys/ecelerity/etc/conf/global/siv/in_def_audit_series.siv";
+ec_include "/opt/msys/ecelerity/etc/conf/global/siv/out_def_audit_series.siv";
+
+# As_logger count connection attempts
+define_cidr "as_wl" "wlbl" "select address || '/' || ifnull(netmask, 32) from ec_as_wl" "600";
+$is_as_wl = check_cidr "as_wl";
+if not ec_test :is "${is_as_wl}" "true" {
+    if vctx_conn :is "mx" "true" {
+        audit_series_add $ib_attempts;
+    }
+    else {
+        audit_series_add $ob_attempts;
+    }
+}    
+else {
+    vctx_conn_set "as_wl" "true";
+}    
+
+ec_inc_counter "Connections:Connections Accepted";
+
+# As_logger count sucessful connections
+if not ec_test :is "${as_wl}" "true" {
+    if vctx :is "mx" "true" {
+        audit_series_add $ib_connections;
+    }
+    else {
+        audit_series_add $ob_connections;
+    }
+}    
+

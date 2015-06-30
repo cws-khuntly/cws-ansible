@@ -6,14 +6,21 @@
 ## These variables will be used to generate the unattended installation options file
 ## Change to suit environment
 build_type: Zimbra Maildrop
-is_ldap: false
-is_maildrop: true
-is_pop: false
-is_mta: false
-create_default_accounts: true
-create_maildrop_accounts: true
-setup_stores: true
-use_scality: true
-use_reverse_proxy: false
+is_ldap: FALSE
+is_maildrop: TRUE
+is_pop: FALSE
+is_mta: FALSE
+create_default_accounts: TRUE
+create_maildrop_accounts: TRUE
+setup_stores: TRUE
+use_scality: TRUE
+use_reverse_proxy: FALSE
+activate_license: TRUE
 do_create_domain: no
 install_packages: zimbra-core zimbra-apache zimbra-spell zimbra-store
+
+## disks
+mountpoints:
+ - name: /opt/zimbra
+ - name: /opt/zimbra/index
+ - name: /opt/zimbra/db
