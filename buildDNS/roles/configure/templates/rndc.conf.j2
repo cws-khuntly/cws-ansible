@@ -1,0 +1,18 @@
+##
+## {{ ansible_managed }}
+##
+key "rndc-key" {
+    algorithm    hmac-md5;
+    secret          "{{ rndc_key }}";
+};
+
+key "remote-key" {
+    algorithm    hmac-md5;
+    secret          "{{ remote_key }}";
+};
+
+options {
+    default-key       "rndc-key";
+    default-server    127.0.0.1;
+    default-port      10953;
+};

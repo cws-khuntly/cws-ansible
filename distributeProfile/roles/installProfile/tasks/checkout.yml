@@ -2,13 +2,8 @@
 - name: check out current repository
   git:
     clone=yes
-<<<<<<< HEAD
-    dest= "{{ ansible_env.HOME }}/ .dotfiles"
-    key_file= "{{ ssh_key }}"
-=======
     dest="{{ ansible_env.HOME }}/.dotfiles"
     key_file="{{ ssh_key }}"
->>>>>>> c7cdf66b3349637f5bf2f0616bcad5a7c1e89a8c
     recursive=yes
     repo="{{ dotfiles_repo }}"
     track_submodules=yes

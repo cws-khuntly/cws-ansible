@@ -1,64 +1,3 @@
-<<<<<<< HEAD
----
-- name: Create ~/.etc/SecurityService/config/
-  file:
-    path="{{ remote_home }}/.etc/SecurityService/config/"
-    state=directory
-    mode=0755
-
-- name: Create ~/.etc/eSolutionsCore/config/
-  file:
-    path="{{ remote_home }}/.etc/eSolutionsCore/config/"
-    state=directory
-    mode=0755
-
-- name: Create ~/.etc/eSolutionsCore/mail/
-  file:
-    path="{{ remote_home }}/.etc/eSolutionsCore/mail/"
-    state=directory
-    mode=0755
-
-- name: Copy/create files
-  copy:
-    src="{{ ansible_env.HOME }}/.etc/sudo"
-    dest="{{ remote_home }}/.etc/sudo"
-    owner="{{ remote_user }}"
-    group="{{ remote_group }}"
-    mode=0600
-
-- name: update security service config
-  template:
-    src=SecurityService/config/ServiceConfig.j2
-    dest="{{ remote_home }}/.etc/SecurityService/config/ServiceConfig.xml"
-    owner="{{ remote_user }}"
-    group="{{ remote_group }}"
-    mode=0644
-
-- name: update esol-core service config
-  template:
-    src=eSolutionsCore/config/ServiceConfig.j2
-    dest="{{ remote_home }}/.etc/eSolutionsCore/config/ServiceConfig.xml"
-    owner="{{ remote_user }}"
-    group="{{ remote_group }}"
-    mode=0644
-
-- name: update esol-core mail config
-  template:
-    src=eSolutionsCore/mail/MailConfig.j2
-    dest="{{ remote_home }}/.etc/eSolutionsCore/mail/MailConfig.properties"
-    owner="{{ remote_user }}"
-    group="{{ remote_group }}"
-    mode=0644
-
-- name: update ssh config
-  template:
-    src=ssh/config.j2
-    dest="{{ remote_home }}/.ssh/config"
-    owner="{{ remote_user }}"
-    group="{{ remote_group }}"
-    mode=0644
-=======
-
 #======  ANSIBLE  ============================================================
 #          NAME:  rotateLogsByTime
 #   DESCRIPTION:  Rotates log files based on size or time.
@@ -75,4 +14,3 @@
 
 - name: Set up configuration files for Java apps
   include: update-config.yml
->>>>>>> c7cdf66b3349637f5bf2f0616bcad5a7c1e89a8c

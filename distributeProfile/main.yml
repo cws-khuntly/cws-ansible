@@ -1,6 +1,0 @@
-- hosts: all
-  gather_facts: false
-  sudo: false
-  user: "{{ username }}"
-  roles:
-    - installProfile

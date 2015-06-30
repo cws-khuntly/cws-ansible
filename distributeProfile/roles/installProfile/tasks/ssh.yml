@@ -1,4 +1,3 @@
-
 #======  ANSIBLE  ============================================================
 #          NAME:  ssh.yml
 #   DESCRIPTION:  Rotates log files based on size or time.
@@ -10,7 +9,7 @@
 - name: Set up authorized_keys
   authorized_key:
     key="{{ item }}"
-    key_options='host="10.0.1.1"'
+    key_options="{{ key_options }}"
     state=present
   with_file:
     - "{{ ansible_env.HOME }}/.ssh/id_rsa.pub"

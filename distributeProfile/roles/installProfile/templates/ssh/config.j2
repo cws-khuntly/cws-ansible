@@ -34,5 +34,6 @@ Host *
     XAuthLocation               = /usr/bin/xauth
     User                        = "{{ username }}"
     IdentitiesOnly              = yes
-    IdentityFile                = ~/.ssh/id_rsa
-    IdentityFile                = ~/.ssh/id_dsa
+    {% for keyfile in ssh_keyfiles %}
+      "IdentityFile                = ~/.ssh/{{ keyfile }}"
+    {% endfor %}

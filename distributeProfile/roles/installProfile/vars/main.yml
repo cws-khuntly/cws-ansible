@@ -13,8 +13,15 @@ ssh_key: "{{ ansible_env.HOME }}/.ssh/id_cws-khuntly"
 dotfiles_repo: git://github.com/cws-khuntly/dotfiles.git
 version: HEAD
 
+##
+## ssh opts
+##
+key_options: hosts="127.0.0.1"
+ssh_keyfiles:
+  - id_rsa
+
 ## replacement variables for eSolutionsCore/ServiceConfig.xml
-mail_address: khuntly@synacor.com
+mail_address: kmhuntly@caspersbox.com
 proxy_required: false
 proxy_host: 
 proxy_port: 

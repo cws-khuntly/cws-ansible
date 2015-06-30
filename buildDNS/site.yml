@@ -1,6 +1,5 @@
 - hosts: all
-  gather_facts: false
-  sudo: false
-  user: "{{ username }}"
+  gather_facts: true
   roles:
-    - installProfile
+    - install
+    - configure
