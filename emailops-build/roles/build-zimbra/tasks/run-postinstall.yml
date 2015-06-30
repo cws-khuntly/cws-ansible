@@ -38,13 +38,13 @@
 
 ## if this is an LDAP master turn that shit on
 - name: Include LDAP replication tasks
-  include: ldap/tasks/replica.yml
-  when: is_master_ldap
+  include: ldap/replica.yml
+  when: is_ldap and is_master_ldap
 
 ## if multi-master is enabled, set it up
 - name: Include LDAP multi-master tasks
-  include: ldap/tasks/multimaster.yml
-  when: is_multimaster
+  include: ldap/multimaster.yml
+  when: is_ldap and is_multimaster
 
 ##
 ## apply LDAP config
@@ -86,27 +86,27 @@
   become_method: sudo
 
 - name: Include reverse proxy configuration tasks
-  include: pop/tasks/proxy.yml
+  include: pop/proxy.yml
   when: use_reverse_proxy
 
 - name: Include maildrop store configuration tasks
-  include: maildrop/tasks/storeconfig.yml
+  include: maildrop/storeconfig.yml
   when: is_maildrop and setup_stores
 
 - name: Include monitoring account creation
-  include: maildrop/tasks/createaccounts.yml
+  include: maildrop/createaccounts.yml
   when: is_maildrop and create_maildrop_accounts
 
 - name: Include Zimbra webapp modifications
-  include: maildrop/tasks/webapp.yml
+  include: maildrop/webapp.yml
   when: is_maildrop
 
 - name: Include Zimbra zimlet installations
-  include: maildrop/tasks/zimlets.yml
+  include: maildrop/zimlets.yml
   when: is_maildrop and install_synacor_skins_zimlets
 
 - name: Include Scality installation/configuration tasks
-  include: maildrop/tasks/scality.yml
+  include: maildrop/scality.yml
   when: is_maildrop and use_scality
 
 ## shut down

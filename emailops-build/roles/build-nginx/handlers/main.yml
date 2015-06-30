@@ -16,4 +16,5 @@
     port="{{ jabber_port }}"
     password="{{ jabber_pass }}"
     to="{{ jabber_to }}"
-    msg="{{ build_type }} build complete for {{ client }} on {{ hostvars['{{ inventory_hostname }}'] }}"
+    msg="{{ build_type }} build complete for {{ client_name }} on {{ hostvars[inventory_hostname]['ansible_fqdn'] }}"
+

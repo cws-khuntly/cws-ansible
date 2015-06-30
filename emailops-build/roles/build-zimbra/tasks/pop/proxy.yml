@@ -3,12 +3,6 @@
 #   DESCRIPTION:  Configure Zimbra for a reverse proxy
 #==============================================================================
 ---
-- name: (POSTINSTALL) Configure Zimbra for reverse proxying (local config)
-  command: "{{ install_dir }}/bin/zmlocalconfig -e ssl_allow_untrusted_certs=true"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-
 - name: (POSTINSTALL) Configure Zimbra for reverse proxying (server config)
   command: "{{ install_dir }}/bin/zmprov ms {{ hostvars['{{ inventory_hostname }}'] }} zimbraMailReferMode reverse-proxied -zimbraReverseProxyImapStartTlsMode on -zimbraReverseProxyImapStartTlsMode off
     -zimbraReverseProxyImapStartTlsMode only zimbraImapBindPort 7143 zimbraImapProxyBindPort 143 zimbraImapSSLBindPort 7993 zimbraImapSSLProxyBindPort 993

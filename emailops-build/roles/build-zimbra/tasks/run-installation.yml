@@ -47,21 +47,15 @@
     state=present
 
 - name: Include LDAP installation tasks
-  include: ldap/tasks/install.yml
-  vars_files:
-    - ldap/vars/main.yml
+  include: ldap/install.yml
   when: is_ldap
 
 - name: Include maildrop installation tasks
-  include: maildrop/tasks/install.yml
-  vars_files:
-    - maildrop/vars/main.yml
+  include: maildrop/install.yml
   when: is_maildrop
 
 - name: Include POP installation tasks
-  include: pop/tasks/install.yml
-  vars_files:
-    - pop/vars/main.yml
+  include: pop/install.yml
   when: is_pop
 
 - name: (INSTALL) Create resource file for unattended installation
