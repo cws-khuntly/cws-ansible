@@ -80,7 +80,6 @@
 
 - name: Pause for 30 seconds to allow completion
   pause:
-    prompt="Pause for 30 seconds to allow LDAP shutdown"
     seconds=30
 
 - name: Kill any remaining slapd processes
@@ -96,7 +95,6 @@
 
 - name: Pause for 30 seconds to allow completion
   pause:
-    prompt="Pause for 30 seconds to allow LDAP shutdown"
     seconds=30
 
 - name: Kill any remaining Zimbra processes
@@ -111,7 +109,6 @@
 
 - name: Pause for 30 seconds to allow completion
   pause:
-    prompt="Pause for 30 seconds to allow LDAP shutdown"
     seconds=30
 
 - name: (INSTALL => POSTINSTALL) Restart Zimbra

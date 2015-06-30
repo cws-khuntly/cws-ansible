@@ -4,7 +4,9 @@
 #==============================================================================
 ---
 - name: restart-service
-  command: /etc/init.d/ecelerity restart
+  service:
+    name=ecelerity
+    state=restarted
 
 - name: sync-puppet
   command: /usr/bin/puppet agent -t

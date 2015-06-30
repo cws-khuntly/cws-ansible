@@ -30,7 +30,6 @@
 
 - name: Pause for 30 seconds to allow completion
   pause:
-    prompt="Pause for 30 seconds to allow LDAP shutdown"
     seconds=30
 
 - name: Start LDAP after change

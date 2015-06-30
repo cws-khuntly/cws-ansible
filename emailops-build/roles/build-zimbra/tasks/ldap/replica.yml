@@ -19,7 +19,6 @@
 
 - name: Pause for 30 seconds to allow completion
   pause:
-    prompt="Pause for 30 seconds to allow LDAP shutdown"
     seconds=30
   when: not is_master_ldap
 

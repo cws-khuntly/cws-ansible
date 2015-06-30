@@ -12,7 +12,6 @@
 
 - name: Pause to wait for completion
   pause:
-    prompt="Pause for 30 seconds to allow service restart"
     seconds=30
 
 - name: (POSTINSTALL) Restart lighttpd services
@@ -21,7 +20,6 @@
 
 - name: Pause to wait for completion
   pause:
-    prompt="Pause for 30 seconds to allow service restart"
     seconds=30
 
 - name: (POSTINSTALL) Verify scality is running

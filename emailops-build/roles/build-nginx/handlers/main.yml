@@ -4,7 +4,9 @@
 #==============================================================================
 ---
 - name: restart-service
-  command: /etc/init.d/nginx restart
+  service:
+    name=nginx
+    state=restarted
 
 - name: Synchronize with puppet master
   command: /usr/bin/puppet agent -t

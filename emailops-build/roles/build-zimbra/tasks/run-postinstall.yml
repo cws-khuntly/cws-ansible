@@ -60,7 +60,6 @@
 
 - name: Pause for 30 seconds to allow completion
   pause:
-    prompt="Pause for 30 seconds to allow LDAP shutdown"
     seconds=30
 
 - name: Include Zimbra global configuration tasks
@@ -115,7 +114,6 @@
 
 - name: Pause for 30 seconds to allow completion
   pause:
-    prompt="Pause for 30 seconds to allow LDAP shutdown"
     seconds=30
 
 - name: (POSTINSTALL) JSP recompilation

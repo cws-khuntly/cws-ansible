@@ -4,7 +4,9 @@
 #==============================================================================
 ---
 - name: restart-service
-  command: /etc/init.d/zimbra restart
+  service:
+    name=zimbra
+    state=restarted
 
 - name: Synchronize with puppet master
   command: /usr/bin/puppet agent -t
