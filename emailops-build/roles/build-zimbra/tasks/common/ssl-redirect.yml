@@ -8,6 +8,12 @@
 ##
 - name: (POSTINSTALL) Enable SSL redirect (zmtlsctl)
   command: "{{ install_dir }}/bin/zmtlsctl mixed"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
 
 - name: (POSTINSTALL) Enforce SSL during authentication (server config)
   command: "{{ install_dir }}/bin/zmprov ms {{ hostvars[inventory_hostname]['ansible_fqdn'] }} zimbraReverseProxyMailMode mixed"
+  become: yes
+  become_user: zimbra
+  become_method: sudo

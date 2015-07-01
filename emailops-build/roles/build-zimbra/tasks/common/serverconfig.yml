@@ -8,8 +8,14 @@
 ##
 - name: (POSTINSTALL) Update a couple things so we can remove them
   command: "{{ install_dir }}/bin/zmprov ms {{ hostvars[inventory_hostname]['ansible_fqdn'] }} zimbraLmtpNumThreads 20 zimbraHttpNumThreads 250 zimbraImapNumThreads 600 zimbraPop3NumThreads 600"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
 
 - name: (POSTINSTALL) Apply Zimbra configuration (server config)
   command: "{{ install_dir }}/bin/zmprov ms {{ hostvars[inventory_hostname]['ansible_fqdn'] }} -zimbraLmtpNumThreads 20 -zimbraHttpNumThreads 250 -zimbraImapNumThreads 600 -zimbraPop3NumThreads 600
     -zimbraImapMaxRequestSize 200 -zimbraImapMaxConnections 600 -zimbraHttpDebugHandlerEnabled FALSE -zimbraHttpDebugHandlerEnabled TRUE -zimbraRedoLogDeleteOnRollover FALSE
     -zimbraRedoLogDeleteOnRollover TRUE"
+  become: yes
+  become_user: zimbra
+  become_method: sudo

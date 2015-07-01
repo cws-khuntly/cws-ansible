@@ -11,7 +11,13 @@
     zimbraLmtpNumThreads 250 zimbraHttpNumThreads 500 zimbraImapNumThreads 600 zimbraPop3NumThreads 600 zimbraImapMaxRequestSize 10240 zimbraImapMaxConnections 600
     zimbraReverseProxySSLCiphers '{{ include_ciphers }}' +zimbraAccountExtraObjectClass synacorEmailAccount +zimbraAccountExtraObjectClass synacorPortalAccount +zimbraDomainExtraObjectClass
     synacorEmailDomain +zimbraDomainExtraObjectClass synacorPortalDomain +zimbraCosExtraObjectClass synacorEmailCOS"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
 
 - name: (POSTINSTALL) Update exclude cipher list (global config)
   command: "{{ install_dir }}/bin/zmprov mcf zimbraReverseProxySSLCiphers +{{ item }}"
   with_items: "{{ exclude_ciphers }}"
+  become: yes
+  become_user: zimbra
+  become_method: sudo

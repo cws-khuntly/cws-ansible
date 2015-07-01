@@ -12,6 +12,12 @@
 
 - name: (MAIN) Run Zimbra installation steps
   include: run-installation.yml
+  notify:
+    - sync puppet
+    - restart service
 
 - name: (MAIN) Run Zimbra post-installation
   include: run-postinstall.yml
+  notify:
+    - sync puppet
+    - restart service

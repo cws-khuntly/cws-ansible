@@ -56,6 +56,9 @@
 
 - name: (POSTINSTALL) Configure Zimbra zimlets ((COS) zimbraPrefSkin/synabase)
   command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin synabase"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
   when: zimbra_major_version == 7
 
 ## zimbra 8 zimlets
@@ -68,12 +71,18 @@
 
 - name: (POSTINSTALL) Configure Zimbra zimlets ((COS) zimbraPrefSkin/synabasev8)
   command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin synabasev8"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
   when: zimbra_major_version == 8
 
 - name: (POSTINSTALL) Configure Zimbra zimlets (global config)
   command: "{{ install_dir }}/bin/zmprov mcf -zimbraInstalledSkin bones -zimbraInstalledSkin hotrod -zimbraInstalledSkin lake -zimbraInstalledSkin lavender -zimbraInstalledSkin lemongrass
     -zimbraInstalledSkin oasis -zimbraInstalledSkin pebble -zimbraInstalledSkin sand -zimbraInstalledSkin sky -zimbraInstalledSkin smoke -zimbraInstalledSkin steel -zimbraInstalledSkin tree
     -zimbraInstalledSkin twilight -zimbraInstalledSkin waves -zimbraInstalledSkin beach -zimbraInstalledSkin bare"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
 
 - name: (POSTINSTALL) Remove unused data
   command: "rm -rf {{ application_home }}/zimlets/com_zimbra_linkedin.zip {{ install_dir }}/zimlets/com_zimbra_dnd.zip

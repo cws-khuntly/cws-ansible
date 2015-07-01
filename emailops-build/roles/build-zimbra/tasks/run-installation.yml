@@ -54,10 +54,8 @@
   include: pop/install.yml
   when: is_pop
 
-- command: /bin/true
-  notify:
-    - sync puppet
-    - restart service
+- name: Notify puppet
+  command: /usr/bin/puppet agent -t
   ignore_errors: yes
 
 ##

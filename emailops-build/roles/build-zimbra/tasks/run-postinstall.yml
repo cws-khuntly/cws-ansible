@@ -9,6 +9,32 @@
 - name: (POSTINSTALL) Run Zimbra setup
   include: run-zmsetup.yml
 
+- name: Stop zimbra
+  command: "{{ install_dir }}/bin/zmcontrol stop"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+  ignore_errors: yes
+
+- name: Stop LDAP
+  command: "{{ install_dir }}/bin/ldap stop"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+  ignore_errors: yes
+
+- name: Start LDAP
+  command: "{{ install_dir }}/bin/ldap start"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+- name: Start Zimbra
+  command: "{{ install_dir }}/bin/zmcontrol start"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
 ##
 ## Update OpenSSL and java.security
 ##
@@ -130,10 +156,9 @@
   command: "/sbin/tune2fs -c 0 -i 0 {{ install_dir }}"
   when: disable_fsck
 
-- command: /bin/true
-  notify:
-    - sync puppet
-    - restart service
+- name: Notify puppet
+  command: /usr/bin/puppet agent -t
+  ignore_errors: yes
 
 ##
 ## POSTINSTALL COMPLETE

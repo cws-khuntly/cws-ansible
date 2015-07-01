@@ -8,7 +8,11 @@
 ##
 - name: (POSTINSTALL) Run zmldapenablereplica if this is an LDAP master
   command: /opt/zimbra/libexec/zmldapenablereplica
+  become: yes
+  become_user: zimbra
+  become_method: sudo
 
-- command: /bin/true
-  notify:
-    - restart ldap
+- command: "{{ install_dir }}/bin/ldap restart"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
