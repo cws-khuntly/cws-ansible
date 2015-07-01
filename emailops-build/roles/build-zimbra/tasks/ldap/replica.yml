@@ -8,20 +8,7 @@
 ##
 - name: (POSTINSTALL) Run zmldapenablereplica if this is an LDAP master
   command: /opt/zimbra/libexec/zmldapenablereplica
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-  when: not is_master_ldap
 
-- name: Stop LDAP services
-  command: "{{ install_dir }}/bin/ldap stop"
-  when: not is_master_ldap
-
-- name: Pause for 30 seconds to allow completion
-  pause:
-    seconds=30
-  when: not is_master_ldap
-
-- name: Start LDAP after change
-  command: "{{ install_dir }}/bin/ldap start"
-  when: not is_master_ldap
+- command: /bin/true
+  notify:
+    - restart ldap

@@ -8,15 +8,5 @@
     name=nginx
     state=restarted
 
-- name: Synchronize with puppet master
+- name: sync-puppet
   command: /usr/bin/puppet agent -t
-
-- name: nginx-build-complete
-  jabber:
-    user="{{ jabber_user }}"
-    host="{{ jabber_host }}"
-    port="{{ jabber_port }}"
-    password="{{ jabber_pass }}"
-    to="{{ jabber_to }}"
-    msg="{{ build_type }} build complete for {{ client_name }} on {{ hostvars[inventory_hostname]['ansible_fqdn'] }}"
-

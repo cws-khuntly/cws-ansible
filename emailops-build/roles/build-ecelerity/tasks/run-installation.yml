@@ -34,6 +34,3 @@
 - name: Process installation
   command: "{{ tmpdir }}/ecelerity/installer --option-file {{ tmpdir }}/ecelerity/mta"
   when: is_smtp or is_mx
-
-- name: Synchronize puppet post-install
-  command: /usr/sbin/puppet agent -t

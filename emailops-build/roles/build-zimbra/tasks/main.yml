@@ -3,40 +3,15 @@
 #   DESCRIPTION:  Entry point for the Zimbra build play
 #==============================================================================
 ---
-- name: Check if mount points exist
+- name: (MAIN) Check if mount points exist
   stat:
     path="{{ item.name }}"
     get_md5=FALSE
     get_checksum=FALSE
   with_items: "{{ mountpoints }}"
 
-- name: (INSTALL) Run Zimbra installation steps
+- name: (MAIN) Run Zimbra installation steps
   include: run-installation.yml
 
-- name: (POSTINSTALL) Run Zimbra post-installation steps (ldap)
+- name: (MAIN) Run Zimbra post-installation
   include: run-postinstall.yml
-  notify:
-    - sync-puppet
-    - restart-service
-
-- name: (POSTINSTALL) Run Zimbra post-installation steps (maildrop)
-  include: run-postinstall.yml
-  notify:
-    - sync-puppet
-    - restart-service
-
-- name: (POSTINSTALL) Run Zimbra post-installation steps (pop)
-  include: run-postinstall.yml
-  notify:
-    - sync-puppet
-    - restart-service
-
-- name: Send notification
-  jabber:
-    user="{{ jabber_user }}"
-    host="{{ jabber_host }}"
-    port="{{ jabber_port }}"
-    password="{{ jabber_pass }}"
-    to="{{ jabber_to }}"
-    msg="{{ build_type }} build complete for {{ client_name }} on {{ hostvars[inventory_hostname]['ansible_fqdn'] }}"
-  delegate_to: localhost

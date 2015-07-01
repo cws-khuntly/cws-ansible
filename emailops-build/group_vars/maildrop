@@ -15,7 +15,7 @@ create_maildrop_accounts: TRUE
 setup_stores: TRUE
 use_scality: TRUE
 use_reverse_proxy: FALSE
-activate_license: TRUE
+activate_license: FALSE
 do_create_domain: no
 install_packages: zimbra-core zimbra-apache zimbra-spell zimbra-store
 
@@ -24,7 +24,6 @@ mountpoints:
   - name: /opt/zimbra
   - name: /opt/zimbra/index
   - name: /opt/zimbra/db
-  - name: /opt/zoobar
 
 packages:
   - name: mysql

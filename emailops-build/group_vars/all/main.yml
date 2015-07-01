@@ -10,6 +10,12 @@ ansible_become: true
 ansible_become_method: sudo
 
 ##
+## system config
+##
+system_type: dev
+update_systems: FALSE
+
+##
 ## client/datacenter information
 ##
 client_name: khuntly

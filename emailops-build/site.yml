@@ -3,13 +3,6 @@
 #   DESCRIPTION:  Entry point for all plays within this playbook
 #==============================================================================
 ---
-- hosts: all
-  gather_facts: true
-  roles:
-    - system-updatee
-  tags:
-    - system-update
-
 - hosts: ldap
   gather_facts: true
   vars:

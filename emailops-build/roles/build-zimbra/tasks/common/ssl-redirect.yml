@@ -1,0 +1,13 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/common/ssl-redirect.yml
+#   DESCRIPTION:  Enable redirect from http to https
+#==============================================================================
+---
+##
+## Run installation steps
+##
+- name: (POSTINSTALL) Enable SSL redirect (zmtlsctl)
+  command: "{{ install_dir }}/bin/zmtlsctl mixed"
+
+- name: (POSTINSTALL) Enforce SSL during authentication (server config)
+  command: "{{ install_dir }}/bin/zmprov ms {{ hostvars[inventory_hostname]['ansible_fqdn'] }} zimbraReverseProxyMailMode mixed"

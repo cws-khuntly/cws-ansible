@@ -3,39 +3,138 @@
 #   DESCRIPTION:  Configure Zimbra maildrop post-installation
 #==============================================================================
 ---
+##
+## Run zmsetup after installation to configure
+##
+- name: (POSTINSTALL) Run Zimbra setup
+  include: run-zmsetup.yml
+
+##
+## Update OpenSSL and java.security
+##
+- name: (POSTINSTALL) Remove existing OpenSSL installation
+  file:
+    path="{{ install_dir }}/openssl-1.0.1f"
+    state=absent
+
+- name: (POSTINSTALL) Synchronize OpenSSL update
+  unarchive:
+    copy=yes
+    dest="{{ install_dir }}"
+    group="{{ group_owner }}"
+    owner="{{ file_owner }}"
+    src="{{ playbook_dir }}/files/openssl-1.0.1f.tgz"
+
+- name: (POSTINSTALL) Copy java.security update to target host
+  copy:
+    src="{{ playbook_dir }}/files/java.security"
+    dest="{{ install_dir }}/java/jre/lib/security/java.security"
+    owner="{{ file_owner }}"
+    group="{{ group_owner }}"
+    mode=0644
+
+## shut things down, change permissions, restart
+- name: (POSTINSTALL) Fix Zimbra permissions
+  file:
+    group="{{ group_owner }}"
+    owner="{{ file_owner }}"
+    path="{{ install_dir }}"
+    recurse=yes
+    state=directory
+
+## if this is an LDAP master turn that shit on
+- name: (POSTINSTALL) Include LDAP replication tasks
+  include: ldap/replica.yml
+  when: is_ldap and not is_master_ldap
+
+## if multi-master is enabled, set it up
+- name: (POSTINSTALL) Include LDAP multi-master tasks
+  include: ldap/multimaster.yml
+  when: is_ldap and is_multimaster
+
+##
+## Common configuration for all zimbra installations
+##
+- name: (POSTINSTALL) Include Zimbra local configuration tasks
+  include: common/localconfig.yml
+
+- name: (POSTINSTALL) Include Zimbra global configuration tasks
+  include: common/globalconfig.yml
+
+- name: (POSTINSTALL) Include Zimbra server configuration tasks
+  include: common/serverconfig.yml
+
+- name: (POSTINSTALL) Include Zimbra CoS tasks
+  include: common/cos.yml
+
+- name: (POSTINSTALL) Enable mixed-mode
+  include: common/ssl-redirect.yml
+
+- name: (POSTINSTALL) Turn off Zimbra backups
+  command: "{{ install_dir }}/bin/zmschedulebackup -F"
+
+##
+## POP-specific config
+##
+- name: (POSTINSTALL) Include reverse proxy configuration tasks
+  include: pop/proxy.yml
+  when: use_reverse_proxy
+
+##
+## Maildrop-specific config
+##
+- name: (POSTINSTALL) Include maildrop store configuration tasks
+  include: maildrop/storeconfig.yml
+  when: is_maildrop and setup_stores
+
+- name: (POSTINSTALL) Include monitoring account creation
+  include: maildrop/createaccounts.yml
+  when: is_maildrop and create_maildrop_accounts
+
+- name: (POSTINSTALL) Include Zimbra webapp modifications
+  include: maildrop/webapp.yml
+  when: is_maildrop
+
+- name: (POSTINSTALL) Include Zimbra zimlet installations
+  include: maildrop/zimlets.yml
+  when: is_maildrop and install_synacor_skins_zimlets
+
+- name: (POSTINSTALL) Include Scality installation/configuration tasks
+  include: maildrop/scality.yml
+  when: is_maildrop and use_scality
+
 ## shut down
 - name: (POSTINSTALL) Stopping Zimbra to apply changes
   command: /usr/local/bin/zimbra_service.sh -k
-  ignore_errors: yes
 
-- name: (POSTINSTALL) Kill any remaining Zimbra processes
-  command: killall -u zimbra
-  ignore_errors: yes
-
-- name: Pause for 30 seconds to allow completion
+- name: (POSTINSTALL) Pause for 30 seconds to allow completion
   pause:
     seconds=30
 
 - name: (POSTINSTALL) JSP recompilation
   command: "{{ install_dir }}/libexec/zmjsprecompile"
   when: is_maildrop and zimbra_major_version == 8
-  become: yes
-  become_user: zimbra
-  become_method: sudo
 
 - name: (POSTINSTALL) Clear the Zimbra work directory
   command: "{{ install_dir }}/jetty/work/*"
   when: is_maildrop and zimbra_version == 8
-  become: yes
-  become_user: zimbra
-  become_method: sudo
 
 - name: (POSTINSTALL) Set Zimbra permissions
   command: "{{ install_dir }}/libexec/zmfixperms -extended"
 
-- name: (POSTINSTALL) Starting Zimbra to apply changes
-  command: /usr/local/bin/zimbra_service.sh -s
+- name: (POSTINSTALL) Apply licensing
+  command: "{{ install_dir }}/bin/zmlicense -a"
+  when: activate_license
 
 - name: (POSTINSTALL) Turn off fsck
   command: "/sbin/tune2fs -c 0 -i 0 {{ install_dir }}"
   when: disable_fsck
+
+- command: /bin/true
+  notify:
+    - sync puppet
+    - restart service
+
+##
+## POSTINSTALL COMPLETE
+##

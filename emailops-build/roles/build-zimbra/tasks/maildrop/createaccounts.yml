@@ -10,24 +10,12 @@
 
 - name: (POSTINSTALL) Create accounts
   command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
 
 - name: (POSTINSTALL) Create accounts
   command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
 
 - name: (POSTINSTALL) Create accounts
   command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
 
 - name: (POSTINSTALL) Create accounts
   command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
-  become: yes
-  become_user: zimbra
-  become_method: sudo

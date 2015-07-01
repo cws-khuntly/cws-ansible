@@ -9,12 +9,6 @@
     -zimbraReverseProxyPop3StartTlsMode on -zimbraReverseProxyPop3StartTlsMode off -zimbraReverseProxyPop3StartTlsMode only
     zimbraPop3BindPort 7110 zimbraPop3ProxyBindPort 110 zimbraPop3SSLBindPort 7995 zimbraPop3SSLProxyBindPort 995
     -zimbraImapCleartextLoginEnabled TRUE -zimbraImapCleartextLoginEnabled FALSE -zimbraPop3CleartextLoginEnabled TRUE -zimbraPop3CleartextLoginEnabled FALSE"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
 
 - name: (POSTINSTALL) Configure Zimbra for reverse proxying (global config)
   command: "{{ install_dir }}/bin/zmprov mcf zimbraReverseProxyImapStartTlsMode on zimbraReverseProxyPop3StartTlsMode on zimbraImapCleartextLoginEnabled TRUE zimbraPop3CleartextLoginEnabled TRUE"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
