@@ -9,10 +9,6 @@
     get_md5=FALSE
     get_checksum=FALSE
   with_items: "{{ mountpoints }}"
-  register: volume_exists
-  fail:
-    msg="Zimbra volumes have not been set up. Please configure the volumes and retry."
-  when: not volume_exists.stat.exists
 
 - name: (INSTALL) Run Zimbra installation steps
   include: run-installation.yml

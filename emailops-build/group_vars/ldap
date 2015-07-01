@@ -12,4 +12,7 @@ use_reverse_proxy: FALSE
 
 ## disks
 mountpoints:
- - name: /opt
+  - name: /opt
+
+packages:
+  - name: "zimbra-ldap-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"

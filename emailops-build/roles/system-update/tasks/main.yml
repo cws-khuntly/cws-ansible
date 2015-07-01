@@ -1,0 +1,10 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  main.yml
+#   DESCRIPTION:  Primary entry point for play
+#==============================================================================
+---
+- name: Clean yum package cache
+  command: yum clean all
+
+- name: Perform system-wide update
+  command: yum -y update

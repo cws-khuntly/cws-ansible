@@ -1,5 +1,5 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/ldap/install.yml
+#          NAME:  build-zimbra/pop/install.yml
 #   DESCRIPTION:  Performs extra installations necessary for LDAP
 #==============================================================================
 ---
