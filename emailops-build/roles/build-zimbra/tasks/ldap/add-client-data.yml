@@ -1,0 +1,14 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/add-client-data.yml
+#   DESCRIPTION:  Add client domains to target host
+#==============================================================================
+---
+##
+## localconfig
+##
+- name: (POSTINSTALL) Add client domains
+  command: "{{ install_dir }}/bin/zmprov cd {{ item }} zimbraAuthMech zimbra"
+  with_items: "{{ client_domains }}"
+  become: yes
+  become_user: zimbra
+  become_method: sudo

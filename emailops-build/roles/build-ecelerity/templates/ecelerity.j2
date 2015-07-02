@@ -1,3 +1,7 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-ecelerity/templates/ecelerity.j2
+#   DESCRIPTION:  "{{ ansible_managed }}"
+#==============================================================================
 #########################################################
 # ecelerity.conf configuration file 
 #########################################################
@@ -93,9 +97,9 @@ include "webui-common.conf"
 #
 #########################################################
 # This setting allows ecelerity to drop privileges and run as the
-# {{ file_owner }} role user.
+# {{ user_name }} role user.
 # The product packaging is designed to run this way.
-# Changing from {{ file_owner }} is not recommended, as you will have to
+# Changing from {{ user_name }} is not recommended, as you will have to
 # take extra measures to ensure that the ownership and permissions
 # on many files and directories are set correctly.
 # Note that in a cluster configuration, you will want to change
@@ -103,8 +107,8 @@ include "webui-common.conf"
 # duravip.  This is handled for you when you include the
 # ecelerity-cluster.conf file (search for that line in this file)
 Security {
-    user = {{ file_owner }}
-    group = {{ group_owner }}
+    user = {{ user_name }}
+    group = {{ group_name }}
 
     # On Linux, allow binding to privileged ports without requiring
     # a process restart

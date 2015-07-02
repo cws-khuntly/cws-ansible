@@ -1,13 +1,31 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  vars/common.yml
+#          NAME:  build-zimbra/vars/main.yml
 #   DESCRIPTION:  Common variables that apply to this play
 #==============================================================================
 ---
-## These variables will be used to generate the unattended installation options file
-## Change to suit environment
+##
+## accounting
+##
+group_id: 454
+group_name: zimbra
+addl_groups: adm,tty,postfix
+home_dir: /opt/home/zimbra
+user_name: zimbra
+user_shell: /bin/bash
+user_uid: 454
+
+##
+## disks
+##
+mountpoints:
+  - name: /opt/zimbra
+  - name: /opt/zimbra/index
+  - name: /opt/zimbra/db
+
+##
+## install data
+##
 install_dir: /opt/zimbra
-file_owner: zimbra
-group_owner: zimbra
 run_zmfixperms_extended: TRUE
 pkg_version: 8.0.7_GA_6021.RHEL6_64-20140408123937
 build_ecmgr: FALSE
@@ -23,9 +41,17 @@ zimbra_major_version: 8
 ##
 ## LDAP
 ##
-ldap_master_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap02.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
+ldap_master_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap02.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap03.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap04.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
 admin_address: "admin@{{ client_name }}.{{ datacenter }}.synacor.com"
 is_multimaster: TRUE
+
+##
+## client-specific attributes
+##
+client_domains:
+ - kevin.com
+cos_list:
+ - mycos
 
 ##
 ## smtp

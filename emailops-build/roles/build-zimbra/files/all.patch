@@ -1,3 +1,7 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  files/all.patch
+#   DESCRIPTION:  "{{ ansible_managed }}"
+#==============================================================================
 214c214,219
 < setDefaultsFromLocalConfig() if (! $newinstall);
 ---

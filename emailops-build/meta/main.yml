@@ -1,15 +1,26 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/tasks/create-disks.yml
-#   DESCRIPTION:  Entry point for the Zimbra build play
+#          NAME:  meta/main.yml
+#   DESCRIPTION:  Meta information for this playbook
 #==============================================================================
 ---
 galaxy_info:
   author: "Kevin Huntly"
   company: "Synacor, Inc. Email Operations"
-  description: "Zimbra - multi-platform messaging system"
+  description: "Zimbra Collaboration Suite and supporting tools/utilities/servers"
   license: Apache
+  min_ansible_version: 1.2
+  platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Fedora
+      versions:
+        - all
+    - name: Amazon
+      versions:
+        - all
   categories:
-    - development
-    - servers
+    - development
     - networking
-
+    - system
+    - web

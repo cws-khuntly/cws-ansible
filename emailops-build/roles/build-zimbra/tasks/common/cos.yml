@@ -1,16 +1,26 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  cos.yml
+#          NAME:  build-zimbra/tasks/common/cos.yml
 #   DESCRIPTION:  Applies Zimbra Classes of Service
 #==============================================================================
 ---
 ##
 ## apply class of service
 ##
+- name: (POSTINSTALL) Add client CoS
+  command: "{{ install_dir }}/bin/zmprov cc {{ item }}"
+  with_items: "{{ cos_list }}"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
 - name: (POSTINSTALL) Get CoS listing from Zimbra
   command: "{{ install_dir }}/bin/zmprov -l gac"
   register: cos_listing
+  become: yes
+  become_user: zimbra
+  become_method: sudo
 
-- name: (POSTINSTALL) Add CoS entries
+- name: (POSTINSTALL) Modify CoS entries
   command: "/opt/zimbra/bin/zmprov mc {{ item }} zimbraAttachmentsIndexingEnabled FALSE zimbraFeatureBriefcaseDocsEnabled FALSE zimbraFeatureBriefcaseSlidesEnabled FALSE 
     zimbraFeatureBriefcaseSpreadsheetEnabled FALSE zimbraFeatureBriefcasesEnabled FALSE zimbraFeatureChangePasswordEnabled FALSE zimbraPrefCalendarAlwaysShowMiniCal FALSE
     zimbraFeatureConfirmationPageEnabled TRUE zimbraFeatureIMEnabled FALSE zimbraFeatureMAPIConnectorEnabled FALSE zimbraFeatureMobileSyncEnabled FALSE zimbraFeatureMobilePolicyEnabled FALSE

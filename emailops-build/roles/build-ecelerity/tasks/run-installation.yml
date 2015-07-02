@@ -1,5 +1,5 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  run-install.yml
+#          NAME:  build-ecelerity/tasks/run-install.yml
 #   DESCRIPTION:  Perform software installation
 #==============================================================================
 ---
@@ -13,8 +13,8 @@
   template:
     src=ecmgr.j2
     dest="{{ tmpdir }}/ecmgr"
-    owner="{{ file_owner }}"
-    group="{{ group_owner }}"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
     mode=0644
   when: is_ecmgr
 
@@ -22,8 +22,8 @@
   template:
     src=mta.j2
     dest="{{ tmpdir }}/ecelerity/mta"
-    owner="{{ file_owner }}"
-    group="{{ group_owner }}"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
     mode=0644
   when: is_smtp or is_mx
 

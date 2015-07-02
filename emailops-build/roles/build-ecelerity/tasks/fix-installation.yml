@@ -1,5 +1,5 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  fix-installation.yml
+#          NAME:  build-ecelerity/tasks/fix-installation.yml
 #   DESCRIPTION:  Perform post-installation configuration
 #==============================================================================
 ---
@@ -21,24 +21,24 @@
 
 - name: Create symlink /opt/ecelerity => /opt/msys/ecelerity
   file:
-    group="{{ group_owner }}"
-    owner="{{ file_owner }}"
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
     path=/opt/ecelerity
     src=/opt/msys/ecelerity
     state=link
 
 - name: Change permissions on /opt/msys
   file:
-    group="{{ group_owner }}"
-    owner="{{ file_owner }}"
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
     path=/opt/msys
     recurse=yes
     state=directory
 
 - name: Change permissions on /var/log/ecelerity
   file:
-    group="{{ group_owner }}"
-    owner="{{ file_owner }}"
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
     path=/var/log/ecelerity
     recurse=yes
     state=directory

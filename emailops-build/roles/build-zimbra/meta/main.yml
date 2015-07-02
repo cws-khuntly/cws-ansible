@@ -1,10 +1,8 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/tasks/main.yml
+#          NAME:  build-zimbra/meta/main.yml
 #   DESCRIPTION:  Entry point for the Zimbra build play
 #==============================================================================
 ---
-- name: (META) Include dependencies
-  dependencies:
-    - { role: system-update }
-    - { role: common }
-
+dependencies:
+  - { role: system-update }
+  - { role: common }

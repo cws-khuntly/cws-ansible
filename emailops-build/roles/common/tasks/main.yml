@@ -8,20 +8,31 @@
 ##
 - name: (PREINSTALL) Ensure mountpoints exist
   stat:
-    path=/opt/zimbra
-    state=directory
+    path="{{ item }}"
   register: mount_exists
+  with_items: "{{ mountpoints }}"
 
 - name: (PREINSTALL) Create disks and filesystems
-  include: common/create-disks.yml
+  include: disks/create-disks.yml
   when: not mount_exists
 
-- name: (PREINSTALL) Create accounts as necessary
-  include: users/add-zimbra-user.yml
+##
+## Create user group/account
+##
+- name: (PREINSTALL) Create user group
+  group:
+    gid="{{ group_id }}"
+    name="{{ group_name }}"
+    state=present
+    system=yes
 
-- name: (PREINSTALL) Create accounts as necessary
-  include: users/add-nginx-user.yml
-
-- name: (PREINSTALL) Create accounts as necessary
-  include: users/add-ecelerity-user.yml
-
+- name: (PREINSTALL) Create user account
+  user:
+    group="{{ group_name }}"
+    groups="{{ addl_groups }}"
+    home="{{ home_dir }}"
+    name="{{ user_name }}"
+    shell="{{ user_shell }}"
+    state=present
+    system=yes
+    uid="{{ user_uid }}"

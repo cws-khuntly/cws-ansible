@@ -1,0 +1,13 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/maildrop/disable-stats.yml
+#   DESCRIPTION:  Configure Zimbra server options
+#==============================================================================
+---
+##
+## server config
+##
+- name: (POSTINSTALL) Disable stats (server config (LDAP ONLY))
+  command: "{{ install_dir }}/bin/zmprov ms {{ hostvars[inventory_hostname]['ansible_fqdn'] }} -zimbraServiceEnabled stats -zimbraServiceInstalled stats"
+  become: yes
+  become_user: zimbra
+  become_method: sudo

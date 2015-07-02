@@ -1,6 +1,6 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  maildrop/createaccounts.yml
-#   DEcommandION:  Create Synacor monitoring accounts
+#          NAME:  build-zimbra/maildrop/createaccounts.yml
+#   DESCRIPTION:  Create Synacor monitoring accounts
 #==============================================================================
 ---
 ## create monitoring accounts

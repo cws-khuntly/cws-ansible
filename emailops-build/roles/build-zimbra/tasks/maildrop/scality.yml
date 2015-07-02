@@ -1,6 +1,6 @@
 #=====  ANSIBLE   =============================================================
 #          NAME:  build-zimbra/tasks/maildrop-scality.yml
-#   DEcommandION:  Configure Zimbra for Scality usage
+#   DESCRIPTION:  Configure Zimbra for Scality usage
 #==============================================================================
 ---
 ##

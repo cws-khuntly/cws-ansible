@@ -1,8 +1,7 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  templates/nginx.j2
+#          NAME:  build-nginx/templates/nginx.j2
 #   DESCRIPTION:  "{{ ansible_managed }}"
 #==============================================================================
-
 user                                "{{ nginx_user }}";
 worker_processes                    8;
 error_log                           /var/log/error.log;

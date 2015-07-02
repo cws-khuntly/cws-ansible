@@ -1,5 +1,5 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/tasks/postinstall.yml
+#          NAME:  build-nginx/tasks/run-postinstall.yml
 #   DESCRIPTION:  Configure Zimbra maildrop post-installation
 #==============================================================================
 ---

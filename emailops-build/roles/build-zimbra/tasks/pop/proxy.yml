@@ -1,5 +1,5 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/tasks/maildrop/reverse-proxy.yml
+#          NAME:  build-zimbra/tasks/pop/proxy.yml
 #   DESCRIPTION:  Configure Zimbra for a reverse proxy
 #==============================================================================
 ---

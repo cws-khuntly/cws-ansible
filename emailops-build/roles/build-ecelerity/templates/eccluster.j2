@@ -1,8 +1,12 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-ecelerity/templates/eccluster.j2
+#   DESCRIPTION:  "{{ ansible_managed }}"
+#==============================================================================
 # vim:ts=2:sw=2:et:ft=conf:
 
 Security {
-    User = "{{ file_owner }}"
-    Group = "{{ group_owner }}"
+    User = "{{ user_name }}"
+    Group = "{{ group_name }}"
 }
 
 # Reversible Encryption support

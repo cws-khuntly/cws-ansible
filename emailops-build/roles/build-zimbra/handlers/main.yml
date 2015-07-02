@@ -3,10 +3,6 @@
 #   DESCRIPTION:  Execute Zimbra restarts post-installation
 #==============================================================================
 ---
-- name: sync puppet
-  shell: /usr/bin/puppet agent -t
-  ignore_errors: yes
-
 - name: restart service
   service:
     name=zimbra

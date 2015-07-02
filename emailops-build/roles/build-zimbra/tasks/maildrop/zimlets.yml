@@ -1,5 +1,5 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/tasks/maildrop-globalconfig.yml
+#          NAME:  build-zimbra/tasks/maildrop/zimlets.yml
 #   DESCRIPTION:  Install and configure Zimbra zimlets
 #==============================================================================
 ---
@@ -49,12 +49,12 @@
 ##
 ## custom skins/zimlets
 ##
-- name: (POSTINSTALL) Install zimlets (client specific)
-  yum:
-    disable_gpg_check=yes
-    name="{{ item }}"
-    state=present
-  with_items: "{{ customizations }}"
+#- name: (POSTINSTALL) Install zimlets (client specific)
+#  yum:
+#    disable_gpg_check=yes
+#    name="{{ item }}"
+#    state=present
+#  with_items: "{{ customizations }}"
 
 ## zimbra 7 zimlets
 - name: (POSTINSTALL) Install zimlets (zimbra-skin-synacor-synabase)

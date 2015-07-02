@@ -1,3 +1,7 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  files/java.security
+#   DESCRIPTION:  "{{ ansible_managed }}"
+#==============================================================================
 #
 # This is the "master security properties file".
 #

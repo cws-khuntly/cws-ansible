@@ -1,9 +1,13 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-ecelerity/templates/ecelerity-cluster.j2
+#   DESCRIPTION:  "{{ ansible_managed }}"
+#==============================================================================
 # Sample Cluster Module configuration, see the manual for more details
 
 # Ensure that we have appropriate privileges
 Security {
-    user = {{ file_owner }}
-    group = {{ group_owner }}
+    user = {{ user_name }}
+    group = {{ group_name }}
 
     # Linux
     Capabilities = "cap_net_admin+ep cap_net_bind_service+ep cap_net_raw+ep cap_sys_resource+ep"

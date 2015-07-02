@@ -1,39 +1,107 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/tasks/postinstall.yml
+#          NAME:  build-zimbra/tasks/run-postinstall.yml
 #   DESCRIPTION:  Configure Zimbra maildrop post-installation
 #==============================================================================
 ---
 ##
 ## Run zmsetup after installation to configure
 ##
-- name: (POSTINSTALL) Run Zimbra setup
-  include: common/run-zmsetup.yml
+- name: (POSTINSTALL) Create resource file for unattended installation
+  template:
+    src=unattended.j2
+    dest="{{ install_dir }}/conf/unattended.conf"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
 
-- name: Stop zimbra
-  command: "{{ install_dir }}/bin/zmcontrol stop"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
+- name: (POSTINSTALL) Copy zmsetup patch (8.0.6_GA_5922.RHEL6_64-20131203103753)
+  copy:
+    src="806.patch"
+    dest="{{ tmpdir }}/zmsetup.patch"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+  when: "'{{ pkg_version }}' == '8.0.6_GA_5922.RHEL6_64-20131203103753'"
+
+- name: (POSTINSTALL) Copy zmsetup patch (all others)
+  copy:
+    src="all.patch"
+    dest="{{ tmpdir }}/zmsetup.patch"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+  when: "'{{ pkg_version }}' != '8.0.6_GA_5922.RHEL6_64-20131203103753'"
+
+- name: (POSTINSTALL) Patch zmsetup
+  shell: "patch {{ install_dir }}/libexec/zmsetup.pl < {{ tmpdir }}/zmsetup.patch"
   ignore_errors: yes
 
-- name: Stop LDAP
+##
+## Shut down services before continuing
+##
+- name: (POSTINSTALL) Stop LDAP
   command: "{{ install_dir }}/bin/ldap stop"
   become: yes
   become_user: zimbra
   become_method: sudo
   ignore_errors: yes
 
-- name: Start LDAP
-  command: "{{ install_dir }}/bin/ldap start"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
+- name: (POSTINSTALL) Kill any remaining slapd pids
+  command: pkill slapd
+  ignore_errors: yes
 
-- name: Start Zimbra
-  command: "{{ install_dir }}/bin/zmcontrol start"
+- name: (POSTINSTALL) Stop Zimbra services
+  service:
+    name=zimbra
+    state=stopped
+
+- name: (POSTINSTALL) Kill any remaining Zimbra pids
+  command: pkill java
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Kill any remaining Zimbra sessions
+  command: killall -u zimbra
+  ignore_errors: yes
+
+##
+## Run zmsetup to apply configuration
+##
+##
+- name: (POSTINSTALL) Run zmsetup
+  command: "{{ install_dir }}/libexec/zmsetup.pl -d -c {{ install_dir }}/conf/unattended.conf"
+
+##
+## Notify puppet after install
+- name: (POSTINSTALL) Notify puppet after zmsetup
+  command: /usr/bin/puppet agent -t
+  ignore_errors: yes
+
+##
+## Shut down services before continuing
+##
+- name: (POSTINSTALL) Stop LDAP
+  command: "{{ install_dir }}/bin/ldap stop"
   become: yes
   become_user: zimbra
   become_method: sudo
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Kill any remaining slapd pids
+  command: pkill slapd
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Stop Zimbra services
+  service:
+    name=zimbra
+    state=stopped
+
+- name: (POSTINSTALL) Kill any remaining Zimbra pids
+  command: pkill java
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Kill any remaining Zimbra sessions
+  command: killall -u zimbra
+  ignore_errors: yes
 
 ##
 ## Update OpenSSL and java.security
@@ -47,36 +115,28 @@
   unarchive:
     copy=yes
     dest="{{ install_dir }}"
-    group="{{ group_owner }}"
-    owner="{{ file_owner }}"
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
     src="{{ playbook_dir }}/files/openssl-1.0.1f.tgz"
 
 - name: (POSTINSTALL) Copy java.security update to target host
   copy:
     src="{{ playbook_dir }}/files/java.security"
     dest="{{ install_dir }}/java/jre/lib/security/java.security"
-    owner="{{ file_owner }}"
-    group="{{ group_owner }}"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
     mode=0644
 
-## shut things down, change permissions, restart
+##
+## fix permissions on install
+##
 - name: (POSTINSTALL) Fix Zimbra permissions
   file:
-    group="{{ group_owner }}"
-    owner="{{ file_owner }}"
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
     path="{{ install_dir }}"
     recurse=yes
     state=directory
-
-## if this is an LDAP master turn that shit on
-- name: (POSTINSTALL) Include LDAP replication tasks
-  include: ldap/replica.yml
-  when: is_ldap and not is_master_ldap
-
-## if multi-master is enabled, set it up
-- name: (POSTINSTALL) Include LDAP multi-master tasks
-  include: ldap/multimaster.yml
-  when: is_ldap and is_multimaster
 
 ##
 ## Common configuration for all zimbra installations
@@ -84,6 +144,24 @@
 - name: (POSTINSTALL) Include Zimbra local configuration tasks
   include: common/localconfig.yml
 
+##
+## restart services
+##
+- name: (POSTINSTALL) Start LDAP
+  command: "{{ install_dir }}/bin/ldap start"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+- name: (POSTINSTALL) Start Zimbra
+  command: "{{ install_dir }}/bin/zmcontrol start"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+##
+## continue applying configuration changes
+##
 - name: (POSTINSTALL) Include Zimbra global configuration tasks
   include: common/globalconfig.yml
 
@@ -98,6 +176,9 @@
 
 - name: (POSTINSTALL) Turn off Zimbra backups
   command: "{{ install_dir }}/bin/zmschedulebackup -F"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
 
 ##
 ## POP-specific config
@@ -129,6 +210,28 @@
   include: maildrop/scality.yml
   when: is_maildrop and use_scality
 
+##
+## LDAP specific config
+##
+- name: (POSTINSTALL) Include LDAP replication tasks
+  include: ldap/replica.yml
+  when: is_ldap and is_master_ldap
+
+- name: (POSTINSTALL) Disable stats (LDAP)
+  include: ldap/disable-stats.yml
+  when: is_ldap
+
+- name: (POSTINSTALL) Include LDAP multi-master tasks
+  include: ldap/multimaster.yml
+  when: is_ldap and is_multimaster
+
+##
+## Client-specific data
+##
+- name: (POSTINSTALL) Add client data
+  include: ldap/add-client-data.yml
+  when: is_ldap
+
 ## shut down
 - name: (POSTINSTALL) Stopping Zimbra to apply changes
   command: /usr/local/bin/zimbra_service.sh -k
@@ -143,20 +246,23 @@
 
 - name: (POSTINSTALL) Clear the Zimbra work directory
   command: "{{ install_dir }}/jetty/work/*"
-  when: is_maildrop and zimbra_version == 8
+  when: is_maildrop and zimbra_major_version == 8
 
 - name: (POSTINSTALL) Set Zimbra permissions
   command: "{{ install_dir }}/libexec/zmfixperms -extended"
 
 - name: (POSTINSTALL) Apply licensing
   command: "{{ install_dir }}/bin/zmlicense -a"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
   when: activate_license
 
 - name: (POSTINSTALL) Turn off fsck
   command: "/sbin/tune2fs -c 0 -i 0 {{ install_dir }}"
   when: disable_fsck
 
-- name: Notify puppet
+- name: (POSTINSTALL) Notify puppet
   command: /usr/bin/puppet agent -t
   ignore_errors: yes
 

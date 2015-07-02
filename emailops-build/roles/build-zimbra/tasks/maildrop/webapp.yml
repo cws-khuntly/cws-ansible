@@ -1,6 +1,6 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  maildrop/webapp.yml
-#   DEcommandION:  Configure the Zimbra web application
+#          NAME:  build-zimbra/tasks/maildrop/webapp.yml
+#   DESCRIPTION:  Configure the Zimbra web application
 #==============================================================================
 ---
 ## update webapps
@@ -14,7 +14,7 @@
   command: "cp {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbrastore.jar {{ install_dir }}/jetty/common/lib/"
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar/ownership)
-  command: "chown {{ file_owner }}:{{ group_owner}} {{ install_dir }}/jetty/common/lib/zimbrastore.jar"
+  command: "chown {{ user_name }}:{{ group_owner}} {{ install_dir }}/jetty/common/lib/zimbrastore.jar"
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar/permissions)
   command: "chmod 644 {{ install_dir }}/jetty/common/lib/zimbrastore.jar"
@@ -30,7 +30,7 @@
   when: zimbrasoap.stat.exists
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar/ownership)
-  command: "chown {{ file_owner }}:{{ group_owner}} {{ install_dir }}/jetty/common/lib/zimbrastore.jar"
+  command: "chown {{ user_name }}:{{ group_owner}} {{ install_dir }}/jetty/common/lib/zimbrastore.jar"
   when: zimbrasoap.stat.exists
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbrasoap.jar/permissions)
@@ -48,7 +48,7 @@
   when: zimbraclient.stat.exists
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbraclient.jar/ownership)
-  command: "chown {{ file_owner }}:{{ group_owner}} {{ install_dir }}/jetty/common/lib/zimbraclient.jar"
+  command: "chown {{ user_name }}:{{ group_owner}} {{ install_dir }}/jetty/common/lib/zimbraclient.jar"
   when: zimbraclient.stat.exists
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbrasoap.jar/permissions)

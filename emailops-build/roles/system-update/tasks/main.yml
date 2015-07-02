@@ -3,11 +3,12 @@
 #   DESCRIPTION:  Primary entry point for play
 #==============================================================================
 ---
-- name: Clean yum package cache
-  command: yum clean all
-
 - name: Perform system-wide update
-  command: yum -y update
+  yum:
+    name=*
+    state=latest
+    update_cache=yes
 
 - name: Sync with puppet master
   command: /usr/bin/puppet agent -t
+  ignore_errors: yes

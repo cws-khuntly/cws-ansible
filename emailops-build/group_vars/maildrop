@@ -1,5 +1,5 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  vars/maildrop.yml
+#          NAME:  group_vars/maildrop.yml
 #   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
 #==============================================================================
 ---
@@ -19,19 +19,7 @@ activate_license: FALSE
 do_create_domain: no
 install_packages: zimbra-core zimbra-apache zimbra-spell zimbra-store
 
-## disks
-mountpoints:
-  - name: /opt/zimbra
-  - name: /opt/zimbra/index
-  - name: /opt/zimbra/db
-
 packages:
-  - name: mysql
-  - name: mysql-libs
-  - name: perl-DBD-MySQL
-  - name: perl-Synacor-Service-BE-EWB-Utilities
-  - name: perl-Synacor-Update
-  - name: perl-Synacor-Update-Plugin-Bundle
   - name: "zimbra-store-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: "zimbra-apache-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: "zimbra-spell-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"

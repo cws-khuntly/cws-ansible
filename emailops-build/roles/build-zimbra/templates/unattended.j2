@@ -1,3 +1,7 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/templates/unattended.j2
+#   DESCRIPTION:  {{ ansible_managed }}
+#==============================================================================
 CREATEADMIN=admin@{{ client_name }}.{{ datacenter }}.synacor.com
 CREATEDOMAIN={{ client_name }}.{{ datacenter }}.synacor.com
 DOCREATEDOMAIN={{ do_create_domain }}
