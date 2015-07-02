@@ -1,0 +1,27 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/main.yml
+#   DESCRIPTION:  Entry point for the Zimbra build play
+#==============================================================================
+---
+##
+## Check for appropriate disks
+##
+- name: (PREINSTALL) Ensure mountpoints exist
+  stat:
+    path=/opt/zimbra
+    state=directory
+  register: mount_exists
+
+- name: (PREINSTALL) Create disks and filesystems
+  include: common/create-disks.yml
+  when: not mount_exists
+
+- name: (PREINSTALL) Create accounts as necessary
+  include: users/add-zimbra-user.yml
+
+- name: (PREINSTALL) Create accounts as necessary
+  include: users/add-nginx-user.yml
+
+- name: (PREINSTALL) Create accounts as necessary
+  include: users/add-ecelerity-user.yml
+

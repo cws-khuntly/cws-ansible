@@ -4,32 +4,10 @@
 #==============================================================================
 ---
 ##
-## Create user group/account
-- name: Create nginx user group
-  group:
-    gid=409
-    name="{{ nginx_group }}"
-    state=present
-    system=yes
-
-- name: Create nginx user account
-  user:
-    createhome=yes
-    force=no
-    generate_ssh_key=no
-    group="{{ nginx_group }}"
-    home="{{ nginx_home }}"
-    move_home=no
-    name="{{ nginx_user }}"
-    shell=/sbin/nologin
-    state=present
-    system=yes
-    uid=409
-
-##
 ## Run installation steps
 ##
 - name: Install nginx
   yum:
     name: "nginx-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
     state: present
+

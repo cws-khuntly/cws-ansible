@@ -46,6 +46,16 @@
     name=zimbra-zimlet-generic-com_synacor_dynamic_ads
     state=present
 
+##
+## custom skins/zimlets
+##
+- name: (POSTINSTALL) Install zimlets (client specific)
+  yum:
+    disable_gpg_check=yes
+    name="{{ item }}"
+    state=present
+  with_items: "{{ customizations }}"
+
 ## zimbra 7 zimlets
 - name: (POSTINSTALL) Install zimlets (zimbra-skin-synacor-synabase)
   yum:

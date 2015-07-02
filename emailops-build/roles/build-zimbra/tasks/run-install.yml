@@ -4,27 +4,6 @@
 #==============================================================================
 ---
 ##
-## Create user group/account
-##
-- name: (INSTALL) Create Zimbra user group
-  group:
-    gid=454
-    name=zimbra
-    state=present
-    system=yes
-
-- name: (INSTALL) Create Zimbra user account
-  user:
-    group=zimbra
-    groups=adm,tty,postfix
-    home=/opt/zimbra
-    name=zimbra
-    shell=/bin/bash
-    state=present
-    system=yes
-    uid=454
-
-##
 ## Run installation steps
 ##
 - name: (INSTALL) Install netcat
@@ -35,11 +14,6 @@
 - name: (INSTALL) Install zimbra core
   yum:
     name="zimbra-core-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-    state=present
-
-- name: (INSTALL) Install zimbra meta baseline
-  yum:
-    name="meta-zimbra-baseline-1.0.3-1.noarch"
     state=present
 
 - name: (INSTALL) Include LDAP installation tasks

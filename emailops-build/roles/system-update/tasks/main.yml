@@ -8,3 +8,6 @@
 
 - name: Perform system-wide update
   command: yum -y update
+
+- name: Sync with puppet master
+  command: /usr/bin/puppet agent -t

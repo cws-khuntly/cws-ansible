@@ -1,0 +1,15 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/create-disks.yml
+#   DESCRIPTION:  Entry point for the Zimbra build play
+#==============================================================================
+---
+galaxy_info:
+  author: "Kevin Huntly"
+  company: "Synacor, Inc. Email Operations"
+  description: "Zimbra - multi-platform messaging system"
+  license: Apache
+  categories:
+    - development
+    - servers
+    - networking
+

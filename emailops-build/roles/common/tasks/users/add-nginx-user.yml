@@ -1,0 +1,26 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  run-installation.yml
+#   DESCRIPTION:  Perform software installation
+#==============================================================================
+---
+##
+## Create user group/account
+##
+- name: Create nginx user group
+  group:
+    gid=454
+    name="{{ nginx_group }}"
+    state=present
+    system=yes
+
+- name: Create nginx user account
+  user:
+    createhome=yes
+    group="{{ nginx_group }}"
+    home="{{ nginx_home }}"
+    name="{{ nginx_user }}"
+    shell=/sbin/nologin
+    state=present
+    system=yes
+    uid=454
+

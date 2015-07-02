@@ -1,0 +1,38 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/create-disks.yml
+#   DESCRIPTION:  Entry point for the Zimbra build play
+#==============================================================================
+---
+##
+## Check for appropriate disks
+##
+- name: (PREINSTALL) Ensure mountpoints exist
+  stat:
+    path=/opt/zimbra
+    state=directory
+  register: mount_exists
+
+- name: (PREINSTALL) Create disks and filesystems
+  include: common/create-disks.yml
+  when: not mount_exists
+
+##
+## Create user group/account
+##
+- name: (PREINSTALL) Create Zimbra user group
+  group:
+    gid=454
+    name=zimbra
+    state=present
+    system=yes
+
+- name: (PREINSTALL) Create Zimbra user account
+  user:
+    group=zimbra
+    groups=adm,tty,postfix
+    home=/opt/zimbra
+    name=zimbra
+    shell=/bin/bash
+    state=present
+    system=yes
+    uid=454

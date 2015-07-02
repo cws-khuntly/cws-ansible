@@ -7,7 +7,7 @@
 ## Run zmsetup after installation to configure
 ##
 - name: (POSTINSTALL) Run Zimbra setup
-  include: run-zmsetup.yml
+  include: common/run-zmsetup.yml
 
 - name: Stop zimbra
   command: "{{ install_dir }}/bin/zmcontrol stop"

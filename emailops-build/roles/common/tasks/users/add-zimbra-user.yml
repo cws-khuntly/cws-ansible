@@ -1,0 +1,26 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  common/tasks/create-users.yml
+#   DESCRIPTION:  Entry point for the Zimbra build play
+#==============================================================================
+---
+##
+## Create user group/account
+##
+- name: (PREINSTALL) Create Zimbra user group
+  group:
+    gid=454
+    name=zimbra
+    state=present
+    system=yes
+
+- name: (PREINSTALL) Create Zimbra user account
+  user:
+    group=zimbra
+    groups=adm,tty,postfix
+    home=/opt/zimbra
+    name=zimbra
+    shell=/bin/bash
+    state=present
+    system=yes
+    uid=454
+

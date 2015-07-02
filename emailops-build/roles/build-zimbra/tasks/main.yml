@@ -3,18 +3,16 @@
 #   DESCRIPTION:  Entry point for the Zimbra build play
 #==============================================================================
 ---
-- name: (MAIN) Check if mount points exist
-  stat:
-    path="{{ item.name }}"
-    get_md5=FALSE
-    get_checksum=FALSE
-  with_items: "{{ mountpoints }}"
+- name: (MAIN) Run pre-installation steps
+  include: run-preinstall.yml
 
 - name: (MAIN) Run Zimbra installation steps
   include: run-installation.yml
   notify:
     - sync puppet
     - restart service
+
+- meta: flush_handlers
 
 - name: (MAIN) Run Zimbra post-installation
   include: run-postinstall.yml

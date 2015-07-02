@@ -34,3 +34,10 @@ smtp_host: "mailrelay.{{ client_name }}.{{ datacenter }}.synacor.com"
 smtp_source:
 smtp_dest:
 email_dest: khuntly@synacor.com
+
+##
+## custom skins/zimlets as necessary
+##
+customizations:
+  - zimlet1
+  - skin1
