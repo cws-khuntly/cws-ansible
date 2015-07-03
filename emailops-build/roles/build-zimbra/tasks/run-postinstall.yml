@@ -267,5 +267,13 @@
   ignore_errors: yes
 
 ##
+## Bring up zimbra
+##
+- name: (POSTINSTALL) Start zimbra on completion
+  service:
+    name=zimbra
+    state=restarted
+
+##
 ## POSTINSTALL COMPLETE
 ##
