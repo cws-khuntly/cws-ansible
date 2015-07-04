@@ -72,8 +72,11 @@
 
 ##
 ## Notify puppet after install
+##
 - name: (POSTINSTALL) Notify puppet after zmsetup
-  command: /usr/bin/puppet agent -t
+  puppet:
+    show_diff=no
+    timeout=10m
   ignore_errors: yes
 
 ##
@@ -263,7 +266,9 @@
   when: disable_fsck
 
 - name: (POSTINSTALL) Notify puppet
-  command: /usr/bin/puppet agent -t
+  puppet:
+    show_diff=no
+    timeout=10m
   ignore_errors: yes
 
 ##

@@ -48,3 +48,12 @@
     owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
+
+- name: (POSTINSTALL) Copy sysctl configuration
+  copy:
+    src="10-ecelerity.conf"
+    dest="/etc/sysctl.d/10-ecelerity.conf"
+    owner="root"
+    group="root"
+    mode=0644
+
