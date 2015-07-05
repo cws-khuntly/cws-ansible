@@ -1,5 +1,6 @@
 #======  ANSIBLE  ============================================================
-#          NAME:  rotateLogsByTime
+#          NAME:  group_vars/all
 #   DESCRIPTION:  Rotates log files based on size or time.
 #==============================================================================
---- 
+---
+
