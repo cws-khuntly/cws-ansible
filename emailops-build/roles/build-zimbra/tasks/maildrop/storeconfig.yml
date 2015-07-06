@@ -4,7 +4,11 @@
 #==============================================================================
 ---
 - name: (POSTINSTALL) Configure server stores (fstore)
-  command: "mkdir {{ install_dir }}/fstore"
+  file:
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
+    path="{{ install_dir }}/fstore"
+    state=directory
 
 - name: (POSTINSTALL) Modify store permissions (fstore)
   command: "chown {{ user_name }}:{{ group_name }} {{ install_dir }}/fstore"
