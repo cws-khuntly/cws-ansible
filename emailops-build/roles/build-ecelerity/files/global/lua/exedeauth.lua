@@ -8,7 +8,7 @@ local mod = {};
 local auth = {};
 local q_params = {};
 -- should be in a client vars file, but until I know how to do that, lets put it in here
-local default_domain = "cableone.net";
+local default_domain = "exede.net";
 
 function auth:authenticate(filename, paramsdict, username, password)
 
@@ -82,7 +82,7 @@ end
 
 function mod:init()
   -- must be called from an init routine
-  msys.registerAuth("cableoneauth", auth);
+  msys.registerAuth("exedeauth", auth);
   return true;
 end;
 

@@ -12,11 +12,11 @@ $from_domain = envelope :domain "from";
 $from_localpart = envelope :localpart "from";
 
 # Include client variables
-ec_include "/opt/msys/ecelerity/etc/conf/default/siv/client_vars.siv";
+ec_include "siv/client_vars.siv";
 
 # Include Audit Series
-ec_include "/opt/msys/ecelerity/etc/conf/global/siv/in_def_audit_series.siv";
-ec_include "/opt/msys/ecelerity/etc/conf/global/siv/out_def_audit_series.siv";
+ec_include "siv/in_def_audit_series.siv";
+ec_include "siv/out_def_audit_series.siv";
 
 # Add Auth headers for trackability
 if vctx_conn :is "smtp_relay" "true" {
@@ -270,7 +270,7 @@ To: ${orginal_to}
 #%{rfc2822:message}
 #.
 #;
-
+#
 #        discard;
 #    }
 }
@@ -652,13 +652,13 @@ $cosid = $results_md["zimbraCOSId"];
 vctx_mess_set "cos" "${cosid}";
 $maildrophost = $results_md["zimbraMailHost"];
 vctx_mess_set "maildrophost" "${maildrophost}";
-if anyof (ec_test :is $cosid  "${default_cos}", ec_test :is $cosid "${default_biz_cos}") {
+if anyof (ec_test :is $cosid  "${default_cos1}", ec_test :is $cosid  "${default_cos2}", ec_test :is $cosid  "${default_cos3}", ec_test :is $cosid  "${default_cos4}") {
     $maildrophost = $results_md["zimbraMailHost"];
     vctx_mess_set "maildrop" "${maildrophost}";
     vctx_mess_set "x-binding" "${maildrophost}";
     stop;
 }
-elsif ec_test :is $cosid  "${premig_cos}" {
+elsif anyof (ec_test :is $cosid  "${premig_cos1}", ec_test :is $cosid  "${premig_cos2}", ec_test :is $cosid  "${premig_cos3}", ec_test :is $cosid  "${premig_cos4}") {
     vctx_mess_set "premigration" "yes";
     vctx_mess_set "maildrop" "${premig_binding}";
     ec_header_add "x-binding" "${premig_binding}";
@@ -682,19 +682,9 @@ if vctx_conn :is "smtp_relay" "true" {
         vctx_mess_set "maildrop" "failover";
         stop;
     }
-# Failover Military traffic
-    if ec_test :matches :comparator "i;ascii-casemap" "%{vctx_mess:rcptto_domain}" "*.mil" {
-       vctx_mess_set "maildrop" "failover";
-       stop;
-    }
 # Failover all outbound traffic
     if ec_test :is :comparator "i;ascii-casemap" "${failover_all}" "1" {
         vctx_mess_set "maildrop" "failover";
         stop;
     }
-# Don't use this, set ALL;1 in failover in ec_failover_domain table.
-#    if not vctx_mess :is "local_each_rcpt" "yes" {
-#        vctx_mess_set "maildrop" "failover";
-#        stop;
-#   }
 }    

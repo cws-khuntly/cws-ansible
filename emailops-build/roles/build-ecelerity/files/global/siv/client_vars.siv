@@ -9,14 +9,19 @@
 #       This section contains all sending information.             #
 ####################################################################
  
-$mailer_daemon = "postmaster@cableone.net";
+$mailer_daemon = "postmaster@directv.net";
 $postmaster = "postmaster@synacordomains.com";
-$cluster = "cableone.cmh.synacor.com";
-$default_cos = "7f7649bd-d019-4ed7-ab9a-c538acd51242";
-$default_biz_cos = "221289f0-5a87-40ab-9531-e1e91639ab0b";
-$premig_cos = "a5055b14-57e9-46d0-8ce7-41357a3904af";
-$premig_binding = "premig.cableone.net";
-$ldap_pass = "76wmjHkp";
+$cluster = "viasat.aga.synacor.com";
+$default_cos1 = "578f457a-ca0b-478c-a49f-24fc20221d5e";
+$default_cos2 = "34ae9e90-f582-4789-8477-311a0d189164";
+$default_cos3 = "0b07de9e-dda4-4313-9d7e-e78649aba635";
+$default_cos4 = "d923be94-79fa-470a-a8c8-c76ad8b18c87";
+$premig_cos1 = "563bc2f0-ca65-44ae-bfad-03476819b324";
+$premig_cos2 = "c5f9cfd3-3f19-47a9-8235-cd8e596a462c";
+$premig_cos3 = "41159505-4041-4b8a-baff-2ab445341df2";
+$premig_cos4 = "a5d0e605-211d-4322-ab7e-6836f11f0b5f";
+$premig_binding = "premig.viasat";
+$ldap_pass = "CudEvWyn";
  
 ####################################################################
 #   THRESHOLDS                                                     #

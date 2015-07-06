@@ -3,7 +3,6 @@
 #   DESCRIPTION:  Synchronize dotfiles across hosts
 #==============================================================================
 ---
----
 - name: Synchronize profile across hosts
   synchronize:
     src="{{ ansible_env.HOME }}/dotfiles"

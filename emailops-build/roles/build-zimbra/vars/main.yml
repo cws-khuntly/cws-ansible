@@ -64,6 +64,10 @@ email_dest: khuntly@synacor.com
 ##
 ## custom skins/zimlets as necessary
 ##
-customizations:
-  - zimlet1
-  - skin1
+custom-zimlets:
+  - zimbra-zimlet-wow-com_zimbra_rssfeeds_wow
+  - zimbra-zimlet-wow-com_synacor_search_wow
+
+custom-skins:
+  - zimbra-skin-viasat-viasatV8
+  - zimbra-skin-viasat-wildblueV8

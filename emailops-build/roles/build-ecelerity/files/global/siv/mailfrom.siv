@@ -1,11 +1,11 @@
 ### Mail From Phase ###
 
 # Include client variables
-ec_include "/opt/msys/ecelerity/etc/conf/global/siv/client_vars.siv";
+ec_include "siv/client_vars.siv";
 
 # As_logger includes
-ec_include "/opt/msys/ecelerity/etc/conf/global/siv/in_def_audit_series.siv";
-ec_include "/opt/msys/ecelerity/etc/conf/global/siv/out_def_audit_series.siv";
+ec_include "siv/in_def_audit_series.siv";
+ec_include "siv/out_def_audit_series.siv";
 
 # grab mail from address
 $mail_from = "%{vctx_mess:mailfrom_localpart}@%{vctx_mess:mailfrom_domain}";
@@ -190,8 +190,14 @@ if isset $results_domain "zimbraDomainName" {
 	}
 }
 
+# Check internal wl
+($internal_wl) = ds_fetch "wlbl" "SELECT address FROM ec_internal_wl_addresses WHERE address = ?" ["%{vctx_mess:mailfrom_localpart}@%{vctx_mess:mailfrom_domain}"];
+if ec_test :is :comparator "i;ascii-casemap" "${mailfrom_wl}" "%{vctx_mess:mailfrom_localpart}@%{vctx_mess:mailfrom_domain}" {
+	vctx_mess_set "internal_wl" "yes";
+}
+
 # Mail from and auth thresholds
-if not anyof (vctx_mess :is "mailfrom_wl" "yes", vctx_mess :is "from_rate_wl" "true", vctx_conn :is "msg_rate_wl" "true", vctx_conn :is "dp_whitelist_global" "true") {
+if not anyof (vctx_mess :is "mailfrom_wl" "yes", vctx_mess :is "from_rate_wl" "true", vctx_mess :is "internal_wl" "yes", vctx_conn :is "msg_rate_wl" "true", vctx_conn :is "dp_whitelist_global" "true") {
     # Webmail mail from gauge
     if vctx_conn :is "trusted" "yes" {
         ec_gauge_cache_init "trust_hour_count_list" 10000 3600 1;
@@ -200,11 +206,6 @@ if not anyof (vctx_mess :is "mailfrom_wl" "yes", vctx_mess :is "from_rate_wl" "t
         # If the webmail user sends more messages than the mailfrom_threshold disconnect else incriment the hour count list.
         $trust_block_test = ec_gauge_cache_get "trust_hour_block_list" "${mail_from}";
         if not ec_test :is "${mail_from}" "@" {
-            # internalwhitelist check
-            ($internal_wl) = ds_fetch "wlbl" "SELECT address FROM ec_internal_wl_addresses WHERE address = ?" ["%{vctx_mess:mailfrom_localpart}@%{vctx_mess:mailfrom_domain}"];
-            if ec_test :is :comparator "i;ascii-casemap" "${mailfrom_wl}" "%{vctx_mess:mailfrom_localpart}@%{vctx_mess:mailfrom_domain}" {
-                vctx_mess_set "internal_wl" "yes";
-            }
             if not vctx_mess :is "internal_wl" "yes"{    
                 if ec_test :value "gt" :comparator "i;ascii-numeric" "${trust_block_test}" "0" {
                     vctx_mess_set "webmail_bounce_mailfroms" "yes";
@@ -212,7 +213,7 @@ if not anyof (vctx_mess :is "mailfrom_wl" "yes", vctx_mess :is "from_rate_wl" "t
                 else {
                     ec_gauge_cache_inc "trust_hour_count_list" "${mail_from}";
                     $usercos = $results_user["zimbraCOSId"];
-                    if anyof (ec_test :is $usercos "$default_cos", ec_test :is $usercos "$premig_cos") {
+                    if anyof (ec_test :is $usercos "$default_cos1", ec_test :is $usercos "$default_cos2", ec_test :is $usercos "$default_cos3", ec_test :is $usercos "$default_cos4", ec_test :is $usercos "$premig_cos1", ec_test :is $usercos "$premig_cos3", ec_test :is $usercos "$premig_cos3", ec_test :is $usercos "$premig_cos4") {
                         # If the trust_hour_count_list is above the mailfrom_threshold add to the trust_hour_block_list.
                         $trust_hour_count_test = ec_gauge_cache_get "trust_hour_count_list" "${mail_from}";
                         if ec_test :value "gt" :comparator "i;ascii-numeric" "${trust_hour_count_test}" "${web_from_log_threshold}" {
@@ -261,7 +262,7 @@ if not anyof (vctx_mess :is "mailfrom_wl" "yes", vctx_mess :is "from_rate_wl" "t
 		        ec_gauge_cache_inc "hour_count_list" "${mail_from}";
                         # If the hour_count_list is above the mailfrom_threshold add to the hour_block_list
 		        $hour_count_test = ec_gauge_cache_get "hour_count_list" "${mail_from}";
-                        if anyof (ec_test :is $usercos "$default_cos", ec_test :is $usercos "$premig_cos") {
+                        if anyof (ec_test :is $usercos "$default_cos1", ec_test :is $usercos "$default_cos2", ec_test :is $usercos "$default_cos3", ec_test :is $usercos "$default_cos4", ec_test :is $usercos "$premig_cos1", ec_test :is $usercos "$premig_cos3", ec_test :is $usercos "$premig_cos3", ec_test :is $usercos "$premig_cos4") {
 		            if ec_test :value "gt" :comparator "i;ascii-numeric" "${hour_count_test}" "${smtp_noauth_log_threshold}" {
                                 ec_log_file "/var/log/ecelerity/logging.ec" "%{t} %{spfv1:i} ${mail_from} - exceeded SMTP no auth threshold ${smtp_noauth_log_threshold}";
                                 ec_log_file "jlog:///var/log/ecelerity/logging.cluster=>master" "%{t} %{spfv1:i} ${mail_from} - exceeded SMTP no auth threshold ${smtp_noauth_log_threshold}";

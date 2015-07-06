@@ -3,9 +3,9 @@
 #   DESCRIPTION:  Configure Zimbra maildrop post-installation
 #==============================================================================
 ---
-##
-## Run zmsetup after installation to configure
-##
+###
+### Run zmsetup after installation to configure
+###
 - name: (POSTINSTALL) Create resource file for unattended installation
   template:
     src=unattended.j2
@@ -73,10 +73,8 @@
 ##
 ## Notify puppet after install
 ##
-- name: (POSTINSTALL) Notify puppet after zmsetup
-  puppet:
-    show_diff=no
-    timeout=10m
+- name: Notify puppet
+  command: puppet agent -t
   ignore_errors: yes
 
 ##
@@ -155,6 +153,7 @@
   become: yes
   become_user: zimbra
   become_method: sudo
+  when: is_ldap
 
 - name: (POSTINSTALL) Start Zimbra
   command: "{{ install_dir }}/bin/zmcontrol start"
@@ -170,9 +169,6 @@
 
 - name: (POSTINSTALL) Include Zimbra server configuration tasks
   include: common/serverconfig.yml
-
-- name: (POSTINSTALL) Include Zimbra CoS tasks
-  include: common/cos.yml
 
 - name: (POSTINSTALL) Enable mixed-mode
   include: common/ssl-redirect.yml
@@ -193,6 +189,14 @@
 ##
 ## Maildrop-specific config
 ##
+- name: (POSTINSTALL) Include Zimbra CoS tasks
+  include: maildrop/cos.yml
+  when: is_maildrop
+
+- name: (POSTINSTALL) Add client data
+  include: maildrop/add-client-data.yml
+  when: is_maildrop
+
 - name: (POSTINSTALL) Include maildrop store configuration tasks
   include: maildrop/storeconfig.yml
   when: is_maildrop and setup_stores
@@ -229,13 +233,8 @@
   when: is_ldap and is_multimaster
 
 ##
-## Client-specific data
+## restart services
 ##
-- name: (POSTINSTALL) Add client data
-  include: ldap/add-client-data.yml
-  when: is_ldap
-
-## shut down
 - name: (POSTINSTALL) Stopping Zimbra to apply changes
   command: /usr/local/bin/zimbra_service.sh -k
 
@@ -265,10 +264,8 @@
   command: "/sbin/tune2fs -c 0 -i 0 {{ install_dir }}"
   when: disable_fsck
 
-- name: (POSTINSTALL) Notify puppet
-  puppet:
-    show_diff=no
-    timeout=10m
+- name: Notify puppet
+  command: puppet agent -t
   ignore_errors: yes
 
 ##

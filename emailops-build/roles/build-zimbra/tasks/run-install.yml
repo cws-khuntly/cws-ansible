@@ -29,9 +29,7 @@
   when: is_pop
 
 - name: Notify puppet
-  puppet:
-    show_diff=no
-    timeout=10m
+  command: puppet agent -t
   ignore_errors: yes
 
 ##

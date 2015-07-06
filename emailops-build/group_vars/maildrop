@@ -18,6 +18,7 @@ use_reverse_proxy: FALSE
 activate_license: FALSE
 do_create_domain: no
 install_packages: zimbra-core zimbra-apache zimbra-spell zimbra-store
+ldap_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
 
 packages:
   - name: "zimbra-store-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
