@@ -7,7 +7,7 @@
   include: fix-installation.yml
 
 - name: Synchronize puppet
-  command: /usr/sbin/puppet agent -t
+  command: puppet agent -t
 
 - name: Include ecelerity configuration steps
   include: apply-configuration.yml

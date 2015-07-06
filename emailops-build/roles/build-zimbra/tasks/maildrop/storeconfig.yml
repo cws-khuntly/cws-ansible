@@ -7,11 +7,9 @@
   file:
     group="{{ group_name }}"
     owner="{{ user_name }}"
+    mode=0755
     path="{{ install_dir }}/fstore"
     state=directory
-
-- name: (POSTINSTALL) Modify store permissions (fstore)
-  command: "chown {{ user_name }}:{{ group_name }} {{ install_dir }}/fstore"
 
 - name: (POSTINSTALL) Notify Zimbra of store (primary)
   command: "{{ install_dir }}/bin/zmvolume --add --name fstore --type primaryMessage --compress false --path {{ install_dir }}/fstore"

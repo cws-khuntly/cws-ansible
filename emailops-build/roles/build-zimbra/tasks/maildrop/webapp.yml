@@ -10,47 +10,92 @@
 - name: (POSTINSTALL) Configure Zimbra web application
   command: "/usr/local/bin/replacer.pl --indir {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/classes/keys/ --outdir {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/classes/keys/"
 
+- name: (POSTINSTALL) Check if zimbrastore.jar exists
+  stat:
+    path="{{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbrastore.jar"
+    get_md5=yes
+  register: zimbrastore_precopy
+
 - name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar)
   command: "cp {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbrastore.jar {{ install_dir }}/jetty/common/lib/"
+  when: zimbrastore_precopy.stat.exists
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar/ownership)
-  command: "chown {{ user_name }}:{{ group_owner}} {{ install_dir }}/jetty/common/lib/zimbrastore.jar"
+- name: (POSTINSTALL) Check if zimbrastore.jar exists
+  stat:
+    path="{{ install_dir }}/jetty/common/lib/zimbrastore.jar"
+    get_md5=yes
+  register: zimbrastore_postcopy
+  when: zimbrastore_precopy.stat.exists
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar/permissions)
-  command: "chmod 644 {{ install_dir }}/jetty/common/lib/zimbrastore.jar"
+- name: (POSTINSTALL) verify file copy (zimbrastore.jar)
+  fail: "File copy FAILED for zimbrastore.jar'
+  when: zimbrastore_precopy.stat.md5 is not zimbrastore_postcopy.stat.md5
+
+- name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar)
+  file:
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+    src="{{ install_dir }}/jetty/common/lib/zimbrastore.jar"
+  when: zimbrastore_postcopy.stat.exists
+
 
 - name: (POSTINSTALL) Check if zimbrasoap.jar exists
   stat:
     path="{{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbrasoap.jar"
-    get_md5=no
-  register: zimbrasoap
+    get_md5=yes
+  register: zimbrasoap_precopy
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbrasoap.jar)
   command: "cp {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbrasoap.jar {{ install_dir }}/jetty/common/lib/"
-  when: zimbrasoap.stat.exists
+  when: zimbrasoap_precopy.stat.exists
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar/ownership)
-  command: "chown {{ user_name }}:{{ group_owner}} {{ install_dir }}/jetty/common/lib/zimbrastore.jar"
-  when: zimbrasoap.stat.exists
+- name: (POSTINSTALL) Check if zimbrasoap.jar exists
+  stat:
+    path="{{ install_dir }}/jetty/common/lib/zimbrasoap.jar"
+    get_md5=yes
+  register: zimbrasoap_postcopy
+  when: zimbrasoap_precopy.stat.exists
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbrasoap.jar/permissions)
-  command: "chmod 644 {{ install_dir }}/jetty/common/lib/zimbrasoap.jar"
-  when: zimbrasoap.stat.exists
+- name: (POSTINSTALL) verify file copy (zimbrasoap.jar)
+  fail: "File copy FAILED for zimbrasoap.jar'
+  when: zimbrasoap_precopy.stat.md5 is not zimbrasoap_postcopy.stat.md5
+
+- name: (POSTINSTALL) Update Zimbra webapp (zimbrasoap.jar)
+  file:
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+    src="{{ install_dir }}/jetty/common/lib/zimbrasoap.jar"
+  when: zimbrasoap_postcopy.stat.exists
+
 
 - name: (POSTINSTALL) Check if zimbraclient.jar exists
   stat:
     path="{{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbraclient.jar"
-    get_md5=no
-  register: zimbraclient
+    get_md5=yes
+  register: zimbraclient_precopy
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbrasoap.jar)
+- name: (POSTINSTALL) Update Zimbra webapp (zimbraclient.jar)
   command: "cp {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbraclient.jar {{ install_dir }}/jetty/common/lib/"
-  when: zimbraclient.stat.exists
+  when: zimbraclient_precopy.stat.exists
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbraclient.jar/ownership)
-  command: "chown {{ user_name }}:{{ group_owner}} {{ install_dir }}/jetty/common/lib/zimbraclient.jar"
-  when: zimbraclient.stat.exists
+- name: (POSTINSTALL) Check if zimbraclient.jar exists
+  stat:
+    path="{{ install_dir }}/jetty/common/lib/zimbraclient.jar"
+    get_md5=yes
+  register: zimbraclient_postcopy
+  when: zimbraclient_precopy.stat.exists
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbrasoap.jar/permissions)
-  command: "chmod 644 {{ install_dir }}/jetty/common/lib/zimbraclient.jar"
-  when: zimbraclient.stat.exists
+- name: (POSTINSTALL) verify file copy (zimbraclient.jar)
+  fail: "File copy FAILED for zimbraclient.jar'
+  when: zimbraclient_precopy.stat.md5 is not zimbraclient_precopy.stat.md5
+
+- name: (POSTINSTALL) Update Zimbra webapp (zimbraclient.jar)
+  file:
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+    src="{{ install_dir }}/jetty/common/lib/zimbraclient.jar"
+  when: zimbraclient_precopy.stat.exists
+

@@ -47,6 +47,33 @@
     state=present
 
 ##
+## zimbra 7 zimlets
+##
+- name: (POSTINSTALL) Install zimlets (zimbra-skin-synacor-synabase)
+  yum:
+    disable_gpg_check=yes
+    name=zimbra-skin-synacor-synabase
+    state=present
+  when: zimbra_major_version == 7
+
+- name: (POSTINSTALL) Configure Zimbra zimlets ((COS) zimbraPrefSkin/synabase)
+  command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin synabase"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+  when: zimbra_major_version == 7
+
+##
+## zimbra 8 zimlets
+##
+- name: (POSTINSTALL) Install zimlets (zimbra-skin-synacor-synabasev8)
+  yum:
+    disable_gpg_check=yes
+    name=zimbra-skin-synacor-synabasev8
+    state=present
+  when: zimbra_major_version == 8
+
+##
 ## custom skins/zimlets
 ##
 - name: (POSTINSTALL) Install zimlets (client specific)
@@ -63,29 +90,9 @@
     state=present
   with_items: "{{ custom_skins }}"
 
-## zimbra 7 zimlets
-- name: (POSTINSTALL) Install zimlets (zimbra-skin-synacor-synabase)
-  yum:
-    disable_gpg_check=yes
-    name=zimbra-skin-synacor-synabase
-    state=present
-  when: zimbra_major_version == 7
-
-- name: (POSTINSTALL) Configure Zimbra zimlets ((COS) zimbraPrefSkin/synabase)
-  command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin synabase"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-  when: zimbra_major_version == 7
-
-## zimbra 8 zimlets
-- name: (POSTINSTALL) Install zimlets (zimbra-skin-synacor-synabasev8)
-  yum:
-    disable_gpg_check=yes
-    name=zimbra-skin-synacor-synabasev8
-    state=present
-  when: zimbra_major_version == 8
-
+##
+## set preferred skin
+##
 - name: (POSTINSTALL) Configure Zimbra zimlets ((COS) zimbraPrefSkin/synabasev8)
   command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin synabasev8"
   become: yes
@@ -93,6 +100,9 @@
   become_method: sudo
   when: zimbra_major_version == 8
 
+##
+## remove zimbra pre-installed skins
+##
 - name: (POSTINSTALL) Configure Zimbra zimlets (global config)
   command: "{{ install_dir }}/bin/zmprov mcf -zimbraInstalledSkin bones -zimbraInstalledSkin hotrod -zimbraInstalledSkin lake -zimbraInstalledSkin lavender -zimbraInstalledSkin lemongrass
     -zimbraInstalledSkin oasis -zimbraInstalledSkin pebble -zimbraInstalledSkin sand -zimbraInstalledSkin sky -zimbraInstalledSkin smoke -zimbraInstalledSkin steel -zimbraInstalledSkin tree
@@ -101,6 +111,9 @@
   become_user: zimbra
   become_method: sudo
 
+##
+## cleanup after removal
+##
 - name: (POSTINSTALL) Remove unused data
   command: "rm -rf {{ application_home }}/zimlets/com_zimbra_linkedin.zip {{ install_dir }}/zimlets/com_zimbra_dnd.zip
     {{ install_dir }}/zimlets/com_zimbra_social.zip {{ install_dir }}/zimlets/com_zimbra_webex.zip

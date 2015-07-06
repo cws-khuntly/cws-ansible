@@ -39,21 +39,14 @@
 ##
 ## Shut down services before continuing
 ##
-- name: (POSTINSTALL) Stop LDAP
-  command: "{{ install_dir }}/bin/ldap stop"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-  ignore_errors: yes
+- name: (POSTINSTALL) Stop services
+  service:
+    name=zimbra
+    state=stopped
 
 - name: (POSTINSTALL) Kill any remaining slapd pids
   command: pkill slapd
   ignore_errors: yes
-
-- name: (POSTINSTALL) Stop Zimbra services
-  service:
-    name=zimbra
-    state=stopped
 
 - name: (POSTINSTALL) Kill any remaining Zimbra pids
   command: pkill java
@@ -72,37 +65,11 @@
 
 ##
 ## Notify puppet after install
+## NOTE: We arent ignoring errors
+## because if puppet fails so will zimbra
 ##
 - name: Notify puppet
   command: puppet agent -t
-  ignore_errors: yes
-
-##
-## Shut down services before continuing
-##
-- name: (POSTINSTALL) Stop LDAP
-  command: "{{ install_dir }}/bin/ldap stop"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-  ignore_errors: yes
-
-- name: (POSTINSTALL) Kill any remaining slapd pids
-  command: pkill slapd
-  ignore_errors: yes
-
-- name: (POSTINSTALL) Stop Zimbra services
-  service:
-    name=zimbra
-    state=stopped
-
-- name: (POSTINSTALL) Kill any remaining Zimbra pids
-  command: pkill java
-  ignore_errors: yes
-
-- name: (POSTINSTALL) Kill any remaining Zimbra sessions
-  command: killall -u zimbra
-  ignore_errors: yes
 
 ##
 ## Update OpenSSL and java.security
@@ -146,20 +113,32 @@
   include: common/localconfig.yml
 
 ##
+## Shut down services before continuing
+##
+- name: (POSTINSTALL) Stop services
+  service:
+    name=zimbra
+    state=stopped
+
+- name: (POSTINSTALL) Kill any remaining slapd pids
+  command: pkill slapd
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Kill any remaining Zimbra pids
+  command: pkill java
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Kill any remaining Zimbra sessions
+  command: killall -u zimbra
+  ignore_errors: yes
+
+##
 ## restart services
 ##
-- name: (POSTINSTALL) Start LDAP
-  command: "{{ install_dir }}/bin/ldap start"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-  when: is_ldap
-
-- name: (POSTINSTALL) Start Zimbra
-  command: "{{ install_dir }}/bin/zmcontrol start"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
+- name: (POSTINSTALL) Start services
+  service:
+    name=zimbra
+    state=restarted
 
 ##
 ## continue applying configuration changes
@@ -233,14 +212,24 @@
   when: is_ldap and is_multimaster
 
 ##
-## restart services
+## Shut down services before continuing
 ##
-- name: (POSTINSTALL) Stopping Zimbra to apply changes
-  command: /usr/local/bin/zimbra_service.sh -k
+- name: (POSTINSTALL) Stop services
+  service:
+    name=zimbra
+    state=stopped
 
-- name: (POSTINSTALL) Pause for 30 seconds to allow completion
-  pause:
-    seconds=30
+- name: (POSTINSTALL) Kill any remaining slapd pids
+  command: pkill slapd
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Kill any remaining Zimbra pids
+  command: pkill java
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Kill any remaining Zimbra sessions
+  command: killall -u zimbra
+  ignore_errors: yes
 
 - name: (POSTINSTALL) JSP recompilation
   command: "{{ install_dir }}/libexec/zmjsprecompile"

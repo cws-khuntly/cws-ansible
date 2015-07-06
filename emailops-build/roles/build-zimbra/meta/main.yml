@@ -5,4 +5,4 @@
 ---
 dependencies:
   - { role: system-update }
-#  - { role: common }
+  - { role: common }
