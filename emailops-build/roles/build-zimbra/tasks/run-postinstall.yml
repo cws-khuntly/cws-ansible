@@ -1,185 +1,185 @@
-##=====  ANSIBLE   =============================================================
-##          NAME:  build-zimbra/tasks/run-postinstall.yml
-##   DESCRIPTION:  Configure Zimbra maildrop post-installation
-##==============================================================================
-#---
-###
-### Run zmsetup after installation to configure
-###
-#- name: (POSTINSTALL) Create resource file for unattended installation
-  #template:
-    #src=unattended.j2
-    #dest="{{ install_dir }}/conf/unattended.conf"
-    #owner="{{ user_name }}"
-    #group="{{ group_name }}"
-    #mode=0644
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/run-postinstall.yml
+#   DESCRIPTION:  Configure Zimbra maildrop post-installation
+#==============================================================================
+---
+##
+## Run zmsetup after installation to configure
+##
+- name: (POSTINSTALL) Create resource file for unattended installation
+  template:
+    src=unattended.j2
+    dest="{{ install_dir }}/conf/unattended.conf"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
 
-#- name: (POSTINSTALL) Copy zmsetup patch (8.0.6_GA_5922.RHEL6_64-20131203103753)
-  #copy:
-    #src=806.patch
-    #dest="{{ tmpdir }}/zmsetup.patch"
-    #owner="{{ user_name }}"
-    #group="{{ group_name }}"
-    #mode=0644
-  #when: 'pkg_version' == '8.0.6_GA_5922.RHEL6_64-20131203103753'
+- name: (POSTINSTALL) Copy zmsetup patch (8.0.6_GA_5922.RHEL6_64-20131203103753)
+  copy:
+    src=806.patch
+    dest="{{ tmpdir }}/zmsetup.patch"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+  when: 'pkg_version' == '8.0.6_GA_5922.RHEL6_64-20131203103753'
 
-#- name: (POSTINSTALL) Copy zmsetup patch (all others)
-  #copy:
-    #src=all.patch
-    #dest="{{ tmpdir }}/zmsetup.patch"
-    #owner="{{ user_name }}"
-    #group="{{ group_name }}"
-    #mode=0644
-  #when: 'pkg_version' != '8.0.6_GA_5922.RHEL6_64-20131203103753'
+- name: (POSTINSTALL) Copy zmsetup patch (all others)
+  copy:
+    src=all.patch
+    dest="{{ tmpdir }}/zmsetup.patch"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+  when: 'pkg_version' != '8.0.6_GA_5922.RHEL6_64-20131203103753'
 
-#- name: (POSTINSTALL) Patch zmsetup
-  #shell: "patch {{ install_dir }}/libexec/zmsetup.pl < {{ tmpdir }}/zmsetup.patch"
-  #ignore_errors: yes
+- name: (POSTINSTALL) Patch zmsetup
+  shell: "patch {{ install_dir }}/libexec/zmsetup.pl < {{ tmpdir }}/zmsetup.patch"
+  ignore_errors: yes
 
-###
-### Shut down services before continuing
-###
-#- name: (POSTINSTALL) Stop services
-  #service:
-    #name=zimbra
-    #state=stopped
-  #ignore_errors: yes
+##
+## Shut down services before continuing
+##
+- name: (POSTINSTALL) Stop services
+  service:
+    name=zimbra
+    state=stopped
+  ignore_errors: yes
 
-#- name: (POSTINSTALL) Kill any remaining slapd pids
-  #command: pkill slapd
-  #ignore_errors: yes
+- name: (POSTINSTALL) Kill any remaining slapd pids
+  command: pkill slapd
+  ignore_errors: yes
 
-#- name: (POSTINSTALL) Kill any remaining Zimbra pids
-  #command: pkill java
-  #ignore_errors: yes
+- name: (POSTINSTALL) Kill any remaining Zimbra pids
+  command: pkill java
+  ignore_errors: yes
 
-#- name: (POSTINSTALL) Kill any remaining Zimbra sessions
-  #command: killall -u zimbra
-  #ignore_errors: yes
+- name: (POSTINSTALL) Kill any remaining Zimbra sessions
+  command: killall -u zimbra
+  ignore_errors: yes
 
-###
-### Run zmsetup to apply configuration
-###
-###
-#- name: (POSTINSTALL) Run zmsetup
-  #command: "{{ install_dir }}/libexec/zmsetup.pl -d -c {{ install_dir }}/conf/unattended.conf"
+##
+## Run zmsetup to apply configuration
+##
+##
+- name: (POSTINSTALL) Run zmsetup
+  command: "{{ install_dir }}/libexec/zmsetup.pl -d -c {{ install_dir }}/conf/unattended.conf"
 
-###
-### Notify puppet after install
-### NOTE: We arent ignoring errors because if puppet fails so will zimbra
-###
-#- name: Notify puppet
-  #command: puppet agent -t
-  #ignore_errors: yes
+##
+## Notify puppet after install
+## NOTE: We arent ignoring errors because if puppet fails so will zimbra
+##
+- name: Notify puppet
+  command: puppet agent -t
+  ignore_errors: yes
 
-###
-### Update OpenSSL and java.security
-###
-#- name: (POSTINSTALL) Remove existing OpenSSL installation
-  #file:
-    #path="{{ install_dir }}/openssl-1.0.1f"
-    #state=absent
+##
+## Update OpenSSL and java.security
+##
+- name: (POSTINSTALL) Remove existing OpenSSL installation
+  file:
+    path="{{ install_dir }}/openssl-1.0.1f"
+    state=absent
 
-#- name: (POSTINSTALL) Synchronize OpenSSL update
-  #unarchive:
-    #copy=yes
-    #dest="{{ install_dir }}"
-    #group="{{ group_name }}"
-    #owner="{{ user_name }}"
-    #src="{{ playbook_dir }}/files/openssl-1.0.1f.tgz"
+- name: (POSTINSTALL) Synchronize OpenSSL update
+  unarchive:
+    copy=yes
+    dest="{{ install_dir }}"
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
+    src="{{ playbook_dir }}/files/openssl-1.0.1f.tgz"
 
-#- name: (POSTINSTALL) Copy java.security update to target host
-  #copy:
-    #src=java.security
-    #dest="{{ install_dir }}/java/jre/lib/security/java.security"
-    #owner="{{ user_name }}"
-    #group="{{ group_name }}"
-    #mode=0644
+- name: (POSTINSTALL) Copy java.security update to target host
+  copy:
+    src=java.security
+    dest="{{ install_dir }}/java/jre/lib/security/java.security"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
 
-###
-### fix permissions on install
-###
-#- name: (POSTINSTALL) Fix Zimbra permissions
-  #file:
-    #group="{{ group_name }}"
-    #owner="{{ user_name }}"
-    #path="{{ install_dir }}"
-    #recurse=yes
-    #state=directory
+##
+## fix permissions on install
+##
+- name: (POSTINSTALL) Fix Zimbra permissions
+  file:
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
+    path="{{ install_dir }}"
+    recurse=yes
+    state=directory
 
-###
-### Common configuration for all zimbra installations
-###
-#- name: (POSTINSTALL) Include Zimbra local configuration tasks
-  #include: common/localconfig.yml
+##
+## Common configuration for all zimbra installations
+##
+- name: (POSTINSTALL) Include Zimbra local configuration tasks
+  include: common/localconfig.yml
 
-###
-### Shut down services before continuing
-###
-#- name: (POSTINSTALL) Stop services
-  #service:
-    #name=zimbra
-    #state=stopped
+##
+## Shut down services before continuing
+##
+- name: (POSTINSTALL) Stop services
+  service:
+    name=zimbra
+    state=stopped
 
-#- name: (POSTINSTALL) Kill any remaining slapd pids
-  #command: pkill slapd
-  #ignore_errors: yes
+- name: (POSTINSTALL) Kill any remaining slapd pids
+  command: pkill slapd
+  ignore_errors: yes
 
-#- name: (POSTINSTALL) Kill any remaining Zimbra pids
-  #command: pkill java
-  #ignore_errors: yes
+- name: (POSTINSTALL) Kill any remaining Zimbra pids
+  command: pkill java
+  ignore_errors: yes
 
-#- name: (POSTINSTALL) Kill any remaining Zimbra sessions
-  #command: killall -u zimbra
-  #ignore_errors: yes
+- name: (POSTINSTALL) Kill any remaining Zimbra sessions
+  command: killall -u zimbra
+  ignore_errors: yes
 
-###
-### restart services
-###
-#- name: (POSTINSTALL) Start services
-  #service:
-    #name=zimbra
-    #state=restarted
+##
+## restart services
+##
+- name: (POSTINSTALL) Start services
+  service:
+    name=zimbra
+    state=restarted
 
-###
-### continue applying configuration changes
-###
-#- name: (POSTINSTALL) Include Zimbra global configuration tasks
-  #include: common/globalconfig.yml
+##
+## continue applying configuration changes
+##
+- name: (POSTINSTALL) Include Zimbra global configuration tasks
+  include: common/globalconfig.yml
 
-#- name: (POSTINSTALL) Include Zimbra server configuration tasks
-  #include: common/serverconfig.yml
+- name: (POSTINSTALL) Include Zimbra server configuration tasks
+  include: common/serverconfig.yml
 
-#- name: (POSTINSTALL) Enable mixed-mode
-  #include: common/ssl-redirect.yml
+- name: (POSTINSTALL) Enable mixed-mode
+  include: common/ssl-redirect.yml
 
-#- name: (POSTINSTALL) Turn off Zimbra backups
-  #command: "{{ install_dir }}/bin/zmschedulebackup -F"
-  #become: yes
-  #become_user: zimbra
-  #become_method: sudo
+- name: (POSTINSTALL) Turn off Zimbra backups
+  command: "{{ install_dir }}/bin/zmschedulebackup -F"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
 
-###
-### POP-specific config
-###
-#- name: (POSTINSTALL) Include reverse proxy configuration tasks
-  #include: pop/proxy.yml
-  #when: use_reverse_proxy|bool
+##
+## POP-specific config
+##
+- name: (POSTINSTALL) Include reverse proxy configuration tasks
+  include: pop/proxy.yml
+  when: use_reverse_proxy|bool
 
-###
-### Maildrop-specific config
-###
-#- name: (POSTINSTALL) Include Zimbra CoS tasks
-  #include: maildrop/cos.yml
-  #when: is_maildrop|bool
+##
+## Maildrop-specific config
+##
+- name: (POSTINSTALL) Include Zimbra CoS tasks
+  include: maildrop/cos.yml
+  when: is_maildrop|bool
 
-#- name: (POSTINSTALL) Add client data
-  #include: maildrop/add-client-data.yml
-  #when: is_maildrop|bool
+- name: (POSTINSTALL) Add client data
+  include: maildrop/add-client-data.yml
+  when: is_maildrop|bool
 
-#- name: (POSTINSTALL) Include maildrop store configuration tasks
-  #include: maildrop/storeconfig.yml
-  #when: is_maildrop|bool
+- name: (POSTINSTALL) Include maildrop store configuration tasks
+  include: maildrop/storeconfig.yml
+  when: is_maildrop|bool
 
 - name: (POSTINSTALL) Include monitoring account creation
   include: maildrop/createaccounts.yml
