@@ -10,7 +10,7 @@
   stat:
     path="{{ item }}"
   register: mount_exists
-  with_items: "{{ mountpoints }}"
+  with_items: "{{ mountpoints|default([]) }}"
 
 - name: (PREINSTALL) Create disks and filesystems
   include: disks/create-disks.yml
@@ -43,6 +43,4 @@
   yum:
     name="{{ item }}"
     state=present
-  with_items: "{{ system_packages }}"
-  when: system_packages is defined
-
+  with_items: "{{ system_packages|default([]) }}"

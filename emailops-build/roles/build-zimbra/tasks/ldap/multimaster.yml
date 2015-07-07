@@ -12,6 +12,7 @@
   become: yes
   become_user: zimbra
   become_method: sudo
+  when: is_multimaster|bool
 
 ##
 ## this needs to be done on EVERY host
@@ -21,8 +22,10 @@
   become: yes
   become_user: zimbra
   become_method: sudo
+  when: is_multimaster|bool
 
 - command: "{{ install_dir }}/bin/ldap restart"
   become: yes
   become_user: zimbra
   become_method: sudo
+  when: is_multimaster|bool

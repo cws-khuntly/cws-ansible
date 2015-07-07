@@ -8,7 +8,7 @@
 ##
 - name: (POSTINSTALL) Add client CoS
   command: "{{ install_dir }}/bin/zmprov cc {{ item }}"
-  with_items: "{{ cos_list }}"
+  with_items: "{{ cos_list|default([]) }}"
   become: yes
   become_user: zimbra
   become_method: sudo
@@ -25,7 +25,7 @@
     zimbraFeatureBriefcaseSpreadsheetEnabled FALSE zimbraFeatureBriefcasesEnabled FALSE zimbraFeatureChangePasswordEnabled FALSE zimbraPrefCalendarAlwaysShowMiniCal FALSE
     zimbraFeatureConfirmationPageEnabled TRUE zimbraFeatureIMEnabled FALSE zimbraFeatureMAPIConnectorEnabled FALSE zimbraFeatureMobileSyncEnabled FALSE zimbraFeatureMobilePolicyEnabled FALSE
     zimbraFeatureSkinChangeEnabled TRUE"
-  with_items: cos_listing.stdout_lines
+  with_items: "{{ cos_listing.stdout_lines|default([]) }}"
   become: yes
   become_user: zimbra
   become_method: sudo

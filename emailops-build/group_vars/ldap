@@ -1,24 +1,34 @@
 #=====  ANSIBLE   =============================================================
 #          NAME:  group_vars/ldap
-#   DESCRIPTION:  Variables that apply to Ecelerity MX servers
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
 #==============================================================================
 ---
-## These variables will be used to generate the unattended installation options file
-## Change to suit environment
-build_type: Zimbra LDAP Server
-install_packages: zimbra-core zimbra-ldap
-activate_license: FALSE
-use_reverse_proxy: FALSE
-
+##
 ## disks
+##
 mountpoints:
   - name: /opt
 
 ##
-## yum packages
+## installation data
+##
+build_type: Zimbra LDAP Server
+is_ldap: TRUE
+is_maildrop: FALSE
+is_pop: FALSE
+is_mta: FALSE
+create_default_accounts: FALSE
+setup_stores: FALSE
+use_scality: FALSE
+use_reverse_proxy: FALSE
+activate_license: FALSE
+do_create_domain: yes
+
+##
+## yum installs
 ##
 packages:
-  - "{{ base_packages }}"
+  - name: zimbra-core
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: zimbra-ldap
     version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-

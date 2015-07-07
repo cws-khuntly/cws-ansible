@@ -10,27 +10,32 @@
     mode=0755
     path="{{ install_dir }}/fstore"
     state=directory
+  when: setup_stores|bool
 
 - name: (POSTINSTALL) Notify Zimbra of store (primary)
   command: "{{ install_dir }}/bin/zmvolume --add --name fstore --type primaryMessage --compress false --path {{ install_dir }}/fstore"
   become: yes
   become_user: zimbra
   become_method: sudo
+  when: setup_stores|bool
 
 - name: (POSTINSTALL) Notify Zimbra of store (primary)
   command: "{{ install_dir }}/bin/zmvolume --id 3 --setCurrent"
   become: yes
   become_user: zimbra
   become_method: sudo
+  when: setup_stores|bool
 
 - name: (POSTINSTALL) Notify Zimbra of store (secondary)
   command: "{{ install_dir }}/bin/zmvolume --edit --id 1 --type secondaryMessage --compress true"
   become: yes
   become_user: zimbra
   become_method: sudo
+  when: setup_stores|bool
 
 - name: (POSTINSTALL) Notify Zimbra of store (secondary)
   command: "{{ install_dir }}/bin/zmvolume --setCurrent --id 1"
   become: yes
   become_user: zimbra
   become_method: sudo
+  when: setup_stores|bool

@@ -12,3 +12,4 @@
   become: yes
   become_user: zimbra
   become_method: sudo
+  when: client_domains is defined

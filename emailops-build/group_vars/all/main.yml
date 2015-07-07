@@ -23,18 +23,22 @@ domain: kevin.com
 datacenter: dev.opal
 
 ##
+## client-specific attributes
+##
+client_domains:
+ - kevin.com
+cos_list:
+ - mycos
+
+##
 ## Installation data
 ##
 system_packages:
-  - name: nc
+  - nc
 
 ##
 ## Installation data
 ##
-base_packages:
-  - name: zimbra-core
-    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-
 tmpdir: /var/tmp
 
 ##

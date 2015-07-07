@@ -5,32 +5,16 @@
 ---
 ## create monitoring accounts
 - name: (POSTINSTALL) Get Zimbra account settings
-  command: "{{ install_dir }}/bin/zimbraMailHost {{ hostvars[inventory_hostname] }} zimbraPrefGroupMailBy message zimbraPrefComposeFormat html"
+  command: "{{ install_dir }}/bin/zimbraMailHost {{ hostvars[inventory_hostname]['ansible_fqdn'] }} zimbraPrefGroupMailBy message zimbraPrefComposeFormat html"
   register: account_settings
   become: yes
   become_user: zimbra
   become_method: sudo
 
 - name: (POSTINSTALL) Create accounts
-  command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
+  command: "{{ install_dir }}/bin/zmprov ca {{ item.name }}@{{ domain }} {{ item.password }} {{ account_settings }}"
   become: yes
   become_user: zimbra
   become_method: sudo
-
-- name: (POSTINSTALL) Create accounts
-  command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-
-- name: (POSTINSTALL) Create accounts
-  command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-
-- name: (POSTINSTALL) Create accounts
-  command: "{{ install_dir }}/bin/zmprov ca synoc{{ maildrop_number }}@{{ domain }} {{ synoc_pass }} {{ account_settings }}"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
+  with_items: "{{ create_accounts|default([]) }}"
+  when: account_settings is defined and create_accounts is defined

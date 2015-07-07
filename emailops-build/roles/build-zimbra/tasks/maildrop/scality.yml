@@ -10,22 +10,23 @@
   service:
     name=scality-srestd
     status=restarted
-  when: zimbra_major_version == 7
+  when: zimbra_major_version == 7 and use_scality|bool
 
 - name: (POSTINSTALL) Restart lighttpd services
   service:
     name=lighttpd
     state=restarted
-  when: zimbra_major_version == 7
+  when: zimbra_major_version == 7 and use_scality|bool
 
 - name: (POSTINSTALL) Verify scality is running
   command: curl -0 -X HEAD http://localhost:81/srestd.fcgi?09E195C180884F7F2181FB639B5ED5066BCF8C30 -v
   register: scality_response
-  when: zimbra_major_version == 7
+  when: zimbra_major_version == 7 and use_scality|bool
 
 - name: (POSTINSTALL) Obtain Zimbra scality connector version
   command: rpm -qa zimbra_connector | sed 's/\.x86_64$//' | sed 's/-[0-9]$//'
   register: scality_version
+  when: use_scality|bool
 
 ##
 ## Determine if patch is necessary and apply as required
@@ -33,22 +34,23 @@
 - name: (POSTINSTALL) Determine if Scality patching is required
   command: "grep volume_id {{ install_dir }}/db/create_database.sql | grep -i \"varchar(40)\" | wc -l"
   register: patch_count
+  when: use_scality|bool
 
 - name: (POSTINSTALL) Apply patch as necessary
   shell: "cd ${INSTALL_ROOT}/db && patch -b -p0 < /usr/share/doc/{{ scality_version.sysout }}/create_database.sql.patch"
-  when: patch_count == 0
+  when: patch_count == 0 and use_scality|bool
 
 - name: (POSTINSTALL) List modifiable tables
   command: "{{ install_dir }}/bin/mysql -N -e \"show databases like 'mboxgroup%'\""
   register: mboxgroup
-  when: patch_count == 0
+  when: patch_count == 0 and use_scality|bool
 
 - name: (POSTINSTALL) Apply SQL fix as necessary
   command: "{{ install_dir }}/bin/mysql -N -e \"alter table {{ item }}.mail_item drop foreign key fk_mail_item_volume_id;
     alter table {{ item }}.mail_item modify volume_id VARCHAR(40);
     alter table {{ item }}.revision modify volume_id VARCHAR(40)\""
-  with_items: mboxgroup.stdout_lines
-  when: patch_count == 0
+  with_items: "{{ mboxgroup.stdout_lines|default([]) }}"
+  when: patch_count == 0 and use_scality|bool
 
 ##
 ## Make Zimbra scality-aware (z8)
@@ -59,7 +61,7 @@
   become: yes
   become_user: zimbra
   become_method: sudo
-  when: zimbra_major_version == 8
+  when: zimbra_major_version == 8 and use_scality|bool
 
 - name: (POSTINSTALL) Configuring Zimbra for Scality use (server config)
   command: "{{ install_dir }}/bin/zmprov ms {{ hostvars['{{ inventory_hostname }}'] }} zimbraMessageCacheSize 10000 zimbraMailFileDecommandorCacheSize 20000 -zimbraBackupSkipBlobs TRUE
@@ -68,7 +70,7 @@
   become: yes
   become_user: zimbra
   become_method: sudo
-  when: zimbra_major_version == 8
+  when: zimbra_major_version == 8 and use_scality|bool
 
 - name: (POSTINSTALL) Configuring Zimbra for Scality use (global config)
   command: "{{ install_dir }}/bin/zmprov mcf zimbraBackupSkipBlobs TRUE zimbraBackupSkipHsmBlobs TRUE zimbraMailboxMoveSkipBlobs TRUE zimbraMailboxMoveSkipHsmBlobs
@@ -76,3 +78,4 @@
   become: yes
   become_user: zimbra
   become_method: sudo
+  when: use_scality|bool

@@ -11,34 +11,37 @@ is_maildrop: TRUE
 is_pop: FALSE
 is_mta: FALSE
 create_default_accounts: TRUE
-create_maildrop_accounts: TRUE
 setup_stores: TRUE
 use_scality: TRUE
 use_reverse_proxy: FALSE
 activate_license: FALSE
 do_create_domain: no
-install_packages: zimbra-core zimbra-apache zimbra-spell zimbra-store
 ldap_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
 
 ##
 ## yum installs
 ##
 packages:
-  - "{{ base_packages }}"
+  - name: zimbra-core
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: zimbra-store
     version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: zimbra-apache
     version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: zimbra-spell
     version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-
-##
-## client-specific attributes
-##
-client_domains:
- - kevin.com
-cos_list:
- - mycos
+zimlets:
+  - zimbra-zimlet-generic-com_synacor_dnd
+  - zimbra-zimlet-generic-com_synacor_external_email
+  - zimbra-zimlet-generic-com_synacor_reference
+  - zimbra-zimlet-generic-com_synacor_spam
+  - zimbra-zimlet-generic-com_synacor_social
+  - zimbra-zimlet-generic-com_synacor_core_change
+  - zimbra-zimlet-generic-com_synacor_dynamic_ads
+skins:
+  #- zimbra-skin-synacor-synabase ## zimbra 7
+  - zimbra-skin-synacor-synabasev8 ## zimbra 8
+zimbra_pref_skin: synabasev8
 
 ##
 ## custom skins/zimlets as necessary
@@ -51,3 +54,12 @@ custom-skins:
   - zimbra-skin-viasat-viasatV8
   - zimbra-skin-viasat-wildblueV8
 
+create_accounts:
+  - name: "synoc{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
+    password: "synoc{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
+  - name: "synqa{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
+    password: "synqa{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
+  - name: "synmon_md{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
+    password: "synmon_md{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
+  - name: "synautotest{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
+    password: "synautotest{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"

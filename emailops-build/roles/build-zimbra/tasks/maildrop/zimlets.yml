@@ -3,75 +3,27 @@
 #   DESCRIPTION:  Install and configure Zimbra zimlets
 #==============================================================================
 ---
-## zimlets
-- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_dnd)
+##
+## install zimlets
+##
+- name: (POSTINSTALL) Install zimlets
   yum:
     disable_gpg_check=yes
-    name=zimbra-zimlet-generic-com_synacor_dnd
+    name="{{ item }}"
     state=present
-
-- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_external_email)
-  yum:
-    disable_gpg_check=yes
-    name=zimbra-zimlet-generic-com_synacor_external_email
-    state=present
-
-- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_reference)
-  yum:
-    disable_gpg_check=yes
-    name=zimbra-zimlet-generic-com_synacor_reference
-    state=present
-
-- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_spam)
-  yum:
-    disable_gpg_check=yes
-    name=zimbra-zimlet-generic-com_synacor_spam
-    state=present
-
-- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_social)
-  yum:
-    disable_gpg_check=yes
-    name=zimbra-zimlet-generic-com_synacor_social
-    state=present
-
-- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_core_change)
-  yum:
-    disable_gpg_check=yes
-    name=zimbra-zimlet-generic-com_synacor_core_change
-    state=present
-
-- name: (POSTINSTALL) Install zimlets (zimbra-zimlet-generic-com_synacor_dynamic_ads)
-  yum:
-    disable_gpg_check=yes
-    name=zimbra-zimlet-generic-com_synacor_dynamic_ads
-    state=present
+  with_items: "{{ zimlets|default([]) }}"
+  when: install_synacor_skins_zimlets|bool
 
 ##
-## zimbra 7 zimlets
+## install skins
 ##
-- name: (POSTINSTALL) Install zimlets (zimbra-skin-synacor-synabase)
+- name: (POSTINSTALL) Install skins
   yum:
     disable_gpg_check=yes
-    name=zimbra-skin-synacor-synabase
+    name="{{ item }}"
     state=present
-  when: zimbra_major_version == 7
-
-- name: (POSTINSTALL) Configure Zimbra zimlets ((COS) zimbraPrefSkin/synabase)
-  command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin synabase"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-  when: zimbra_major_version == 7
-
-##
-## zimbra 8 zimlets
-##
-- name: (POSTINSTALL) Install zimlets (zimbra-skin-synacor-synabasev8)
-  yum:
-    disable_gpg_check=yes
-    name=zimbra-skin-synacor-synabasev8
-    state=present
-  when: zimbra_major_version == 8
+  with_items: "{{ skins|default([]) }}"
+  when: install_synacor_skins_zimlets|bool
 
 ##
 ## custom skins/zimlets
@@ -81,24 +33,25 @@
     disable_gpg_check=yes
     name="{{ item }}"
     state=present
-  with_items: "{{ custom_zimlets }}"
+  with_items: "{{ custom_zimlets|default([]) }}"
+  when: install_synacor_skins_zimlets|bool
 
 - name: (POSTINSTALL) Install skins (client specific)
   yum:
     disable_gpg_check=yes
     name="{{ item }}"
     state=present
-  with_items: "{{ custom_skins }}"
+  with_items: "{{ custom_skins|default([]) }}"
+  when: install_synacor_skins_zimlets|bool
 
 ##
 ## set preferred skin
 ##
-- name: (POSTINSTALL) Configure Zimbra zimlets ((COS) zimbraPrefSkin/synabasev8)
-  command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin synabasev8"
+- name: (POSTINSTALL) Configure Zimbra zimlets
+  command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin {{ zimbra_pref_skin }}"
   become: yes
   become_user: zimbra
   become_method: sudo
-  when: zimbra_major_version == 8
 
 ##
 ## remove zimbra pre-installed skins

@@ -3,13 +3,15 @@
 #   DESCRIPTION:  Configure the Zimbra web application
 #==============================================================================
 ---
-## update webapps
 - name: (POSTINSTALL) Configure Zimbra web application
   command: "/usr/local/bin/replacer.pl --indir {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/classes/messages/ --outdir {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/classes/messages/"
 
 - name: (POSTINSTALL) Configure Zimbra web application
   command: "/usr/local/bin/replacer.pl --indir {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/classes/keys/ --outdir {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/classes/keys/"
 
+##
+## Update zimbrastore
+##
 - name: (POSTINSTALL) Check if zimbrastore.jar exists
   stat:
     path="{{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbrastore.jar"
@@ -28,7 +30,7 @@
   when: zimbrastore_precopy.stat.exists
 
 - name: (POSTINSTALL) verify file copy (zimbrastore.jar)
-  fail: "File copy FAILED for zimbrastore.jar'
+  fail: "File copy FAILED for zimbrastore.jar"
   when: zimbrastore_precopy.stat.md5 is not zimbrastore_postcopy.stat.md5
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar)
@@ -38,8 +40,9 @@
     mode=0644
     src="{{ install_dir }}/jetty/common/lib/zimbrastore.jar"
   when: zimbrastore_postcopy.stat.exists
-
-
+##
+## Update zimbrasoap
+##
 - name: (POSTINSTALL) Check if zimbrasoap.jar exists
   stat:
     path="{{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbrasoap.jar"
@@ -58,7 +61,7 @@
   when: zimbrasoap_precopy.stat.exists
 
 - name: (POSTINSTALL) verify file copy (zimbrasoap.jar)
-  fail: "File copy FAILED for zimbrasoap.jar'
+  fail: "File copy FAILED for zimbrasoap.jar"
   when: zimbrasoap_precopy.stat.md5 is not zimbrasoap_postcopy.stat.md5
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbrasoap.jar)
@@ -69,7 +72,9 @@
     src="{{ install_dir }}/jetty/common/lib/zimbrasoap.jar"
   when: zimbrasoap_postcopy.stat.exists
 
-
+##
+## Update zimbraclient
+##
 - name: (POSTINSTALL) Check if zimbraclient.jar exists
   stat:
     path="{{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbraclient.jar"
@@ -88,7 +93,7 @@
   when: zimbraclient_precopy.stat.exists
 
 - name: (POSTINSTALL) verify file copy (zimbraclient.jar)
-  fail: "File copy FAILED for zimbraclient.jar'
+  fail: "File copy FAILED for zimbraclient.jar"
   when: zimbraclient_precopy.stat.md5 is not zimbraclient_precopy.stat.md5
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbraclient.jar)
