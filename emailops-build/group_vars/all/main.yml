@@ -25,10 +25,15 @@ datacenter: dev.opal
 ##
 ## Installation data
 ##
-base_packages:
+system_packages:
   - name: nc
-  - name: "zimbra-core-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "meta-zimbra-baseline-1.0.3-1.noarch"
+
+##
+## Installation data
+##
+base_packages:
+  - name: zimbra-core
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
 
 tmpdir: /var/tmp
 

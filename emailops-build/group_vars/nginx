@@ -6,9 +6,25 @@
 ## These variables will be used to generate the unattended installation options file
 ## Change to suit environment
 build_type: POP/IMAP Proxy
-nginx_user: nginx
-nginx_group: nginx
-nginx_home: /var/lib/nginx
+
+##
+## accounting
+##
+group_id: 454
+group_name: nginx
+addl_groups: 
+home_dir: /opt/home/nginx
+user_name: nginx
+user_shell: /sbin/nologin
+user_uid: 454
+
+## disks
+mountpoints:
+  - name: /opt
+
+##
+## install data
+##
 nginx_conf: /etc/nginx/nginx.conf
 pkg_version: 1.2.7-2
 dhparam_keysize: 2048
@@ -16,6 +32,16 @@ dhparam_output: /etc/nginx/ssl/dhparams-nginx.pem
 install_packages: zimbra-core zimbra-memcached zimbra-proxy
 use_reverse_proxy: TRUE
 
-## disks
-mountpoints:
-  - name: /opt
+##
+## yum installs
+##
+packages:
+  - "{{ base_packages }}"
+  - name: nginx
+  - name: zimbra-proxy
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: zimbra-memcached
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: "scapi-dao-zimbra8.0.7.synacor-2.5.2-102.noarch"
+  - name: "scapi-zimbra-libs-8.0.7.synacor-1.noarch"
+

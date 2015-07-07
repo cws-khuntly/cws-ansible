@@ -6,27 +6,11 @@
 ##
 ## Run installation steps
 ##
-- name: (INSTALL) Install netcat
+- name: (INSTALL) Install selected packages
   yum:
-    name=nc
-    state=present
-
-- name: (INSTALL) Install zimbra core
-  yum:
-    name="zimbra-core-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-    state=present
-
-- name: (INSTALL) Include LDAP installation tasks
-  include: ldap/install.yml
-  when: is_ldap
-
-- name: (INSTALL) Include maildrop installation tasks
-  include: maildrop/install.yml
-  when: is_maildrop
-
-- name: (INSTALL) Include POP installation tasks
-  include: pop/install.yml
-  when: is_pop
+    name: "{{ item.name }}-{{ item.version }}"
+    state: present
+  with_items: "{{ packages }}"
 
 - name: Notify puppet
   command: puppet agent -t
@@ -35,3 +19,4 @@
 ##
 ## INSTALLATION COMPLETE
 ##
+

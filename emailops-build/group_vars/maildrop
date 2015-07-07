@@ -20,14 +20,34 @@ do_create_domain: no
 install_packages: zimbra-core zimbra-apache zimbra-spell zimbra-store
 ldap_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
 
+##
+## yum installs
+##
 packages:
-  - name: "zimbra-store-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-apache-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-spell-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - "{{ base_packages }}"
+  - name: zimbra-store
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: zimbra-apache
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: zimbra-spell
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
 
-## pop
-#packages:
-#  - name: "zimbra-proxy-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-#  - name: "zimbra-memcached-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-#  - name: "scapi-dao-zimbra8.0.7.synacor-2.5.2-102.noarch"
-#  - name: "scapi-zimbra-libs-8.0.7.synacor-1.noarch"
+##
+## client-specific attributes
+##
+client_domains:
+ - kevin.com
+cos_list:
+ - mycos
+
+##
+## custom skins/zimlets as necessary
+##
+custom-zimlets:
+  - zimbra-zimlet-wow-com_zimbra_rssfeeds_wow
+  - zimbra-zimlet-wow-com_synacor_search_wow
+
+custom-skins:
+  - zimbra-skin-viasat-viasatV8
+  - zimbra-skin-viasat-wildblueV8
+

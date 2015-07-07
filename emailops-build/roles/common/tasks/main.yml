@@ -36,3 +36,13 @@
     state=present
     system=yes
     uid="{{ user_uid }}"
+
+##
+## Install system packages, if any
+- name: Install necessary system packages
+  yum:
+    name="{{ item }}"
+    state=present
+  with_items: "{{ system_packages }}"
+  when: system_packages is defined
+

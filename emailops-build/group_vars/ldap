@@ -14,5 +14,11 @@ use_reverse_proxy: FALSE
 mountpoints:
   - name: /opt
 
+##
+## yum packages
+##
 packages:
-  - name: "zimbra-ldap-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - "{{ base_packages }}"
+  - name: zimbra-ldap
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+

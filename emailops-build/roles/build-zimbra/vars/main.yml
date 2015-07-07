@@ -28,7 +28,6 @@ mountpoints:
 install_dir: /opt/zimbra
 run_zmfixperms_extended: TRUE
 pkg_version: 8.0.7_GA_6021.RHEL6_64-20140408123937
-build_ecmgr: FALSE
 disable_fsck: FALSE
 mailboxd_java_options: "-XX:+UseConcMarkSweepGC -XX:PermSize=128m -XX:MaxPermSize=350m -XX:SoftRefLRUPolicyMSPerMB=1 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCApplicationStoppedTime -XX:-OmitStackTraceInFastThrow -XX:+UseParNewGC -XX:NewRatio=2 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/zimbra/store/log -XX:ErrorFile=/opt/zimbra/log/hs_err_pid%p.log"
 
@@ -46,14 +45,6 @@ admin_address: "admin@{{ client_name }}.{{ datacenter }}.synacor.com"
 is_multimaster: TRUE
 
 ##
-## client-specific attributes
-##
-client_domains:
- - kevin.com
-cos_list:
- - mycos
-
-##
 ## smtp
 ##
 smtp_host: "mailrelay.{{ client_name }}.{{ datacenter }}.synacor.com"
@@ -61,13 +52,3 @@ smtp_source:
 smtp_dest:
 email_dest: khuntly@synacor.com
 
-##
-## custom skins/zimlets as necessary
-##
-custom-zimlets:
-  - zimbra-zimlet-wow-com_zimbra_rssfeeds_wow
-  - zimbra-zimlet-wow-com_synacor_search_wow
-
-custom-skins:
-  - zimbra-skin-viasat-viasatV8
-  - zimbra-skin-viasat-wildblueV8
