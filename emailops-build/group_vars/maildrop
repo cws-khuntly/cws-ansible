@@ -10,11 +10,11 @@ is_ldap: FALSE
 is_maildrop: TRUE
 is_pop: FALSE
 is_mta: FALSE
-create_default_accounts: TRUE
+create_default_accounts: FALSE
 setup_stores: TRUE
 use_scality: TRUE
 use_reverse_proxy: FALSE
-activate_license: FALSE
+activate_license: TRUE
 do_create_domain: no
 ldap_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
 
@@ -55,11 +55,33 @@ custom-skins:
   - zimbra-skin-viasat-wildblueV8
 
 create_accounts:
-  - name: "synoc{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
-    password: "synoc{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
-  - name: "synqa{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
-    password: "synqa{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
-  - name: "synmon_md{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
-    password: "synmon_md{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
-  - name: "synautotest{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
-    password: "synautotest{{ hostvars[inventory_hostname]['ansible_fqdn'] }}[2:4]"
+  - name: "synoc{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+    password: "synoc{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+  - name: "synqa{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+    password: "synqa{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+  - name: "synmon_md{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+    password: "synmon_md{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+  - name: "synautotest{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+    password: "synautotest{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+
+clean_skins:
+  - zimlets/com_zimbra_linkedin.zip
+  - zimlets/com_zimbra_dnd.zip
+  - zimlets/com_zimbra_social.zip
+  - zimlets/com_zimbra_webex.zip
+  - jetty/webapps/zimbra/skins/bare
+  - jetty/webapps/zimbra/skins/beach
+  - jetty/webapps/zimbra/skins/waves
+  - jetty/webapps/zimbra/skins/twilight
+  - jetty/webapps/zimbra/skins/sand
+  - jetty/webapps/zimbra/skins/tree
+  - jetty/webapps/zimbra/skins/oasis
+  - jetty/webapps/zimbra/skins/lemongrass
+  - jetty/webapps/zimbra/skins/lake
+  - jetty/webapps/zimbra/skins/steel
+  - jetty/webapps/zimbra/skins/hotrod
+  - jetty/webapps/zimbra/skins/smoke
+  - jetty/webapps/zimbra/skins/pebble
+  - jetty/webapps/zimbra/skins/bones
+  - jetty/webapps/zimbra/skins/sky
+  - jetty/webapps/zimbra/skins/lavender

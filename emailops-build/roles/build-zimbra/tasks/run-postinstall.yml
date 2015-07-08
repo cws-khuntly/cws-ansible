@@ -4,6 +4,40 @@
 #==============================================================================
 ---
 ##
+## Update OpenSSL and java.security
+##
+- name: (POSTINSTALL) Remove existing OpenSSL installation
+  file:
+    path="{{ install_dir }}/openssl-1.0.1f"
+    state=absent
+
+- name: (POSTINSTALL) Synchronize OpenSSL update
+  unarchive:
+    copy=yes
+    dest="{{ install_dir }}"
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
+    src="{{ playbook_dir }}/files/openssl-1.0.1f.tgz"
+
+- name: (POSTINSTALL) Update java.security DNS cache timeout
+  replace:
+    backup=yes
+    dest="{{ install_dir }}/java/jre/lib/security/java.security"
+    group="{{ group_name }}"
+    mode=0644
+    owner="{{ user_name }}"
+    regexp='^#networkaddress.cache.ttl=-1$'
+    replace='networkaddress.cache.ttl=600'
+
+#- name: (POSTINSTALL) Copy java.security update to target host
+#  copy:
+#    src=java.security
+#    dest="{{ install_dir }}/java/jre/lib/security/java.security"
+#    owner="{{ user_name }}"
+#    group="{{ group_name }}"
+#    mode=0644
+
+##
 ## Run zmsetup after installation to configure
 ##
 - name: (POSTINSTALL) Create resource file for unattended installation
@@ -21,7 +55,7 @@
     owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
-  when: 'pkg_version' == '8.0.6_GA_5922.RHEL6_64-20131203103753'
+  when: "'{{ pkg_version }}' == '8.0.6_GA_5922.RHEL6_64-20131203103753'"
 
 - name: (POSTINSTALL) Copy zmsetup patch (all others)
   copy:
@@ -30,7 +64,7 @@
     owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
-  when: 'pkg_version' != '8.0.6_GA_5922.RHEL6_64-20131203103753'
+  when: "'{{ pkg_version }}' != '8.0.6_GA_5922.RHEL6_64-20131203103753'"
 
 - name: (POSTINSTALL) Patch zmsetup
   shell: "patch {{ install_dir }}/libexec/zmsetup.pl < {{ tmpdir }}/zmsetup.patch"
@@ -71,30 +105,6 @@
 - name: Notify puppet
   command: puppet agent -t
   ignore_errors: yes
-
-##
-## Update OpenSSL and java.security
-##
-- name: (POSTINSTALL) Remove existing OpenSSL installation
-  file:
-    path="{{ install_dir }}/openssl-1.0.1f"
-    state=absent
-
-- name: (POSTINSTALL) Synchronize OpenSSL update
-  unarchive:
-    copy=yes
-    dest="{{ install_dir }}"
-    group="{{ group_name }}"
-    owner="{{ user_name }}"
-    src="{{ playbook_dir }}/files/openssl-1.0.1f.tgz"
-
-- name: (POSTINSTALL) Copy java.security update to target host
-  copy:
-    src=java.security
-    dest="{{ install_dir }}/java/jre/lib/security/java.security"
-    owner="{{ user_name }}"
-    group="{{ group_name }}"
-    mode=0644
 
 ##
 ## fix permissions on install
@@ -159,6 +169,16 @@
   become_user: zimbra
   become_method: sudo
 
+#
+# Apply licensing
+#
+- name: (POSTINSTALL) Apply licensing
+  command: "{{ install_dir }}/bin/zmlicense -a"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+  when: activate_license|bool
+
 ##
 ## POP-specific config
 ##
@@ -166,9 +186,9 @@
   include: pop/proxy.yml
   when: use_reverse_proxy|bool
 
-##
-## Maildrop-specific config
-##
+#
+# Maildrop-specific config
+#
 - name: (POSTINSTALL) Include Zimbra CoS tasks
   include: maildrop/cos.yml
   when: is_maildrop|bool
@@ -234,27 +254,32 @@
 
 - name: (POSTINSTALL) JSP recompilation
   command: "{{ install_dir }}/libexec/zmjsprecompile"
-  when: is_maildrop|bool and zimbra_major_version == 8
-
-- name: (POSTINSTALL) Clear the Zimbra work directory
-  command: "{{ install_dir }}/jetty/work/*"
-  when: is_maildrop|bool and zimbra_major_version == 8
-
-- name: (POSTINSTALL) Set Zimbra permissions
-  command: "{{ install_dir }}/libexec/zmfixperms -extended"
-
-- name: (POSTINSTALL) Apply licensing
-  command: "{{ install_dir }}/bin/zmlicense -a"
   become: yes
   become_user: zimbra
   become_method: sudo
-  when: activate_license|bool
+  when: is_maildrop|bool and zimbra_major_version == 8
+
+- name: (POSTINSTALL) Clear the Jetty work directory
+  file:
+    path="{{ install_dir }}/jetty/work"
+    state=absent
+
+- name: (POSTINSTALL) Rebuild the Jetty work directory
+  file:
+    group="{{ group_name }}"
+    mode=0755
+    owner="{{ user_name }}"
+    path="{{ install_dir }}/jetty/work"
+    state=directory
+
+- name: (POSTINSTALL) Set Zimbra permissions
+  command: "{{ install_dir }}/libexec/zmfixperms -extended"
 
 - name: (POSTINSTALL) Turn off fsck
   command: "/sbin/tune2fs -c 0 -i 0 {{ install_dir }}"
   when: disable_fsck
 
-- name: Notify puppet
+- name: (POSTINSTALL) Notify puppet
   command: puppet agent -t
   ignore_errors: yes
 

@@ -6,13 +6,25 @@
 ##
 ## Generate 2048 bit DH key
 ##
-- name: Stop nginx (if running)
-  command: /etc/init.d/nginx stop
+- name: (POSTINSTALL) Stop nginx (if running)
+  service:
+    name=nginx
+    state=stopped
+  ignore_errors: yes
 
-- name: Generate 2048 bit DH key for nginx (logjam)
+- name: (POSTINSTALL) Stop Apache (if running)
+  service:
+    name=httpd
+    state=stopped
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Generate 2048 bit DH key for nginx (logjam)
   command: "/usr/bin/openssl dhparam -out {{ dhparam_output }} {{ dhparam_keysize }}"
 
-- name: Apply nginx configuration updates
+##
+## Update nginx config
+##
+- name: (POSTINSTALL) Apply nginx configuration updates
   template:
     src=nginx.j2
     dest="{{ nginx_conf }}"
@@ -20,10 +32,27 @@
     group="{{ group_owner }}"
     mode=0644
 
-- name: Apply auth.php
+- name: (POSTINSTALL) Apply auth.php
   template:
     src=auth.j2
     dest=/var/www/html
     owner="{{ file_owner }}"
     group="{{ group_owner }}"
     mode=0600
+
+- name: (POSTINSTALL) Fix onboard Apache
+  replace:
+    backup=yes
+    dest=/etc/httpd/conf/httpd.conf
+    regexp='^Listen 80'
+    replace='Listen 127.0.0.1:81'
+    validate="/usr/sbin/apachectl -f %s -t"
+
+##
+## Create a self-signed certificate if necessary
+##
+#- name: (POSTINSTALL) Create a self-signed certificate if necessary
+#  command: "openssl req -new -nodes -x509 -subj \"/C=US/ST=New York/L=Buffalo/O=Synacor, Inc/CN=\"mail.{{ domain }}\"\" -days 90 -keyout /etc/nginx/ssl/mail.{{ domain }}.key -out /etc/nginx/ssl/mail.{{ domain }}.crt -extensions v3_ca"
+#    creates=/etc/nginx/ssl/mail.{{ domain }}.crt
+#  notify: reload nginx
+#  when: create_ssl_cert|bool

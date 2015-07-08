@@ -31,15 +31,16 @@
 
 - name: (POSTINSTALL) verify file copy (zimbrastore.jar)
   fail: "File copy FAILED for zimbrastore.jar"
-  when: zimbrastore_precopy.stat.md5 is not zimbrastore_postcopy.stat.md5
+  when: zimbrastore_precopy.stat.md5 != zimbrastore_postcopy.stat.md5
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar)
   file:
-    owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
-    src="{{ install_dir }}/jetty/common/lib/zimbrastore.jar"
+    owner="{{ user_name }}"
+    path="{{ install_dir }}/jetty/common/lib/zimbrastore.jar"
   when: zimbrastore_postcopy.stat.exists
+
 ##
 ## Update zimbrasoap
 ##
@@ -62,14 +63,14 @@
 
 - name: (POSTINSTALL) verify file copy (zimbrasoap.jar)
   fail: "File copy FAILED for zimbrasoap.jar"
-  when: zimbrasoap_precopy.stat.md5 is not zimbrasoap_postcopy.stat.md5
+  when: zimbrasoap_precopy.stat.md5 != zimbrasoap_postcopy.stat.md5
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbrasoap.jar)
   file:
-    owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
-    src="{{ install_dir }}/jetty/common/lib/zimbrasoap.jar"
+    owner="{{ user_name }}"
+    path="{{ install_dir }}/jetty/common/lib/zimbrasoap.jar"
   when: zimbrasoap_postcopy.stat.exists
 
 ##
@@ -94,13 +95,13 @@
 
 - name: (POSTINSTALL) verify file copy (zimbraclient.jar)
   fail: "File copy FAILED for zimbraclient.jar"
-  when: zimbraclient_precopy.stat.md5 is not zimbraclient_precopy.stat.md5
+  when: zimbraclient_precopy.stat.md5 != zimbraclient_precopy.stat.md5
 
 - name: (POSTINSTALL) Update Zimbra webapp (zimbraclient.jar)
   file:
-    owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
-    src="{{ install_dir }}/jetty/common/lib/zimbraclient.jar"
+    owner="{{ user_name }}"
+    path="{{ install_dir }}/jetty/common/lib/zimbraclient.jar"
   when: zimbraclient_precopy.stat.exists
 

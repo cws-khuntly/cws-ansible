@@ -67,12 +67,8 @@
 ##
 ## cleanup after removal
 ##
-- name: (POSTINSTALL) Remove unused data
-  command: "rm -rf {{ application_home }}/zimlets/com_zimbra_linkedin.zip {{ install_dir }}/zimlets/com_zimbra_dnd.zip
-    {{ install_dir }}/zimlets/com_zimbra_social.zip {{ install_dir }}/zimlets/com_zimbra_webex.zip
-    {{ install_dir }}/jetty/webapps/zimbra/skins/bare/ {{ install_dir }}/jetty/webapps/zimbra/skins/beach/ {{ install_dir }}/jetty/webapps/zimbra/skins/waves/
-    {{ install_dir }}/jetty/webapps/zimbra/skins/twilight/ {{ install_dir }}/jetty/webapps/zimbra/skins/sand/ {{ install_dir }}/jetty/webapps/zimbra/skins/tree/
-    {{ install_dir }}/jetty/webapps/zimbra/skins/oasis/ {{ install_dir }}/jetty/webapps/zimbra/skins/lemongrass/ {{ install_dir }}/jetty/webapps/zimbra/skins/lake/
-    {{ install_dir }}/jetty/webapps/zimbra/skins/steel/ {{ install_dir }}/jetty/webapps/zimbra/skins/hotrod/ {{ install_dir }}/jetty/webapps/zimbra/skins/smoke/
-    {{ install_dir }}/jetty/webapps/zimbra/skins/pebble/ {{ install_dir }}/jetty/webapps/zimbra/skins/bones/ {{ install_dir }}/jetty/webapps/zimbra/skins/sky/
-    {{ install_dir }}/jetty/webapps/zimbra/skins/lavender/"
+- name: (POSTINSTALL) Remove unused skins/themes
+  file:
+    path="{{ install_dir }}/{{ item }}"
+    state=absent
+  with_items: "{{ clean_skins|default([]) }}"    
