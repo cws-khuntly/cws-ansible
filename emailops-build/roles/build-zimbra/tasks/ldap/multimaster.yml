@@ -12,7 +12,7 @@
   become: yes
   become_user: zimbra
   become_method: sudo
-  when: is_multimaster|bool
+  when: is_multimaster|bool and promote|bool
 
 ##
 ## this needs to be done on EVERY host
