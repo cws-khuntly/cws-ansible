@@ -18,6 +18,12 @@
     state=stopped
   ignore_errors: yes
 
+- name: (POSTINSTALL) Stop Zimbra (if running)
+  service:
+    name=zimbra
+    state=stopped
+  ignore_errors: yes
+
 - name: (POSTINSTALL) Generate 2048 bit DH key for nginx (logjam)
   command: "/usr/bin/openssl dhparam -out {{ dhparam_output }} {{ dhparam_keysize }}"
 
@@ -49,10 +55,43 @@
     validate="/usr/sbin/apachectl -f %s -t"
 
 ##
+## Apply proxy config
+##
+- name: Apply Zimbra proxy configuration
+  command: "{{ install_dir }}/libexec/zmproxyconfig -w -e -u -a 0:80:0:443 -x both -H {{ hostvars[inventory_hostname]['ansible_fqdn'] }}"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+##
 ## Create a self-signed certificate if necessary
 ##
 #- name: (POSTINSTALL) Create a self-signed certificate if necessary
-#  command: "openssl req -new -nodes -x509 -subj \"/C=US/ST=New York/L=Buffalo/O=Synacor, Inc/CN=\"mail.{{ domain }}\"\" -days 90 -keyout /etc/nginx/ssl/mail.{{ domain }}.key -out /etc/nginx/ssl/mail.{{ domain }}.crt -extensions v3_ca"
-#    creates=/etc/nginx/ssl/mail.{{ domain }}.crt
-#  notify: reload nginx
-#  when: create_ssl_cert|bool
+#  command: "openssl req -new -nodes -x509 -subj {{ self_signed_cn }} -days 90 -keyout /etc/nginx/ssl/mail.{{ domain }}.key -out /etc/nginx/ssl/mail.{{ domain }}.crt -extensions v3_ca" creates="/etc/nginx/ssl/mail.{{ domain }}.crt"
+#  when: self_signed_enabled|bool
+
+##
+## Start everything back up
+##
+
+- name: (POSTINSTALL) Restart nginx
+  service:
+    name=nginx
+    state=started
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Restart Apache
+  service:
+    name=httpd
+    state=started
+  ignore_errors: yes
+
+- name: (POSTINSTALL) Restart Zimbra
+  service:
+    name=zimbra
+    state=started
+  ignore_errors: yes
+
+##
+## POSTINSTALL COMPLETE
+##

@@ -9,7 +9,7 @@
 group_id: 454
 group_name: zimbra
 addl_groups: adm,tty,postfix
-home_dir: /opt/home/zimbra
+home_dir: /opt/zimbra
 user_name: zimbra
 user_shell: /bin/bash
 user_uid: 454

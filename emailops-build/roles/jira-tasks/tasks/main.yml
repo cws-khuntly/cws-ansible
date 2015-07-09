@@ -1,0 +1,20 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/main.yml
+#   DESCRIPTION:  Entry point for the Zimbra build play
+#==============================================================================
+---
+##
+## Create JIRA tickets
+##
+- name: Create JIRA ticket to get VIPs
+  jira:
+    uri="{{ jira_hostname }}"
+    username="{{ jira_username }}"
+    password="{{ jira_password }}"
+    project="{{ jira_project }}"
+    operation=create
+    summary="{{ jira_summary }}"
+    description="{{ jira_description }}"
+    issuetype="{{ jira_issue_type }}"
+    assignee="{{ jira_assignee }}"
+  delegate_to: 127.0.0.1

@@ -12,7 +12,7 @@
     key_options="{{ key_options }}"
     state=present
   with_file:
-    - "{{ ansible_env.HOME }}/.ssh/id_rsa.pub"
+    - "/home/khuntly/.ssh/id_rsa.pub"
 
 - name: update ssh config
   template:

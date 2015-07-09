@@ -5,8 +5,8 @@
 ##
 ## local vars
 ##
-username: "{{ ansible_env.LOGNAME }}"
-dotfiles: "{{ ansible_env.HOME }}/.dotfiles"
+username: "khuntly"
+dotfiles: "/home/khuntly/.dotfiles"
 
 ##
 ## remote vars
@@ -18,7 +18,7 @@ remote_home: "/home/{{ remote_user }}"
 ##
 ## git checkout
 ##
-ssh_key: "{{ ansible_env.HOME }}/.ssh/id_cws-khuntly"
+ssh_key: "/home/khuntly/.ssh/id_cws-khuntly"
 dotfiles_repo: git://github.com/cws-khuntly/dotfiles.git
 version: HEAD
 

@@ -1,6 +1,6 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/tasks/run-install.yml
-#   DESCRIPTION:  Performs base Zimbra installation for maildrop/LDAP
+#          NAME:  build-zimbra/tasks/run-installation.yml
+#   DESCRIPTION:  Perform software installation
 #==============================================================================
 ---
 ##
@@ -19,4 +19,3 @@
 ##
 ## INSTALLATION COMPLETE
 ##
-

@@ -154,3 +154,13 @@ nginx_conf: /etc/nginx/nginx.conf
 dhparam_keysize: 2048
 dhparam_output: /etc/nginx/ssl/dhparams-nginx.pem
 use_reverse_proxy: TRUE
+
+##
+## JIRA
+##
+jira_hostname: jira.corp.synacor.com
+jira_username: khuntly
+jira_password: !T7K1vcttdrkftbjjvctfbldkfiiikcbd
+jira_project: IT Email Ops Request
+jira_issue_type: Task
+jira_assignee: {{ username }}

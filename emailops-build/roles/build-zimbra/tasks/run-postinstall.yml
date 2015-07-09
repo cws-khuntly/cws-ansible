@@ -29,14 +29,6 @@
     regexp='^#networkaddress.cache.ttl=-1$'
     replace='networkaddress.cache.ttl=600'
 
-#- name: (POSTINSTALL) Copy java.security update to target host
-#  copy:
-#    src=java.security
-#    dest="{{ install_dir }}/java/jre/lib/security/java.security"
-#    owner="{{ user_name }}"
-#    group="{{ group_name }}"
-#    mode=0644
-
 ##
 ## Run zmsetup after installation to configure
 ##
@@ -73,7 +65,7 @@
 ##
 ## Shut down services before continuing
 ##
-- name: (POSTINSTALL) Stop services
+- name: (POSTINSTALL) Stop services before running zmsetup
   service:
     name=zimbra
     state=stopped
@@ -126,10 +118,11 @@
 ##
 ## Shut down services before continuing
 ##
-- name: (POSTINSTALL) Stop services
+- name: (POSTINSTALL) Stop services after applying localconfig
   service:
     name=zimbra
     state=stopped
+  ignore_errors: yes
 
 - name: (POSTINSTALL) Kill any remaining slapd pids
   command: pkill slapd

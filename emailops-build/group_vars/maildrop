@@ -85,3 +85,9 @@ clean_skins:
   - jetty/webapps/zimbra/skins/bones
   - jetty/webapps/zimbra/skins/sky
   - jetty/webapps/zimbra/skins/lavender
+
+##
+## JIRA
+##
+jira_summary: "Request for SOAP VIP: {{ client_name }}/{{ datacenter }}"
+jira_description: "Please create webmail.{{ client_name }}.{{ datacenter }} .caspersbox.comVIP with targets {{ address }}"

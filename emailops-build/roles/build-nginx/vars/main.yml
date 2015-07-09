@@ -1,0 +1,7 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-nginx/vars/main.yml
+#   DESCRIPTION:  nginx variables
+#==============================================================================
+---
+self_signed_enabled: TRUE
+self_signed_cn: "/C=US/ST=New York/L=Buffalo/O=Synacor, Inc/CN=mail.{{ domain }}"

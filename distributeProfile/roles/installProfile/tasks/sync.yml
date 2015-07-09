@@ -5,7 +5,7 @@
 ---
 - name: Synchronize profile across hosts
   synchronize:
-    src="{{ ansible_env.HOME }}/dotfiles"
+    src="/home/khuntly/dotfiles"
     dest="{{ remote_home }}"
     archive=yes
     checksum=yes
@@ -14,13 +14,13 @@
     perms=yes
     recursive=yes
     rsync_timeout=0
-    rsync_opts="-avr --exclude-from={{ ansible_env.HOME }}/.etc/excludes --no-motd --stats --progress"
+    rsync_opts="-avr --exclude-from=/home/khuntly/.etc/excludes --no-motd --stats --progress"
   notify:
     - install
 
 - name: Copy/create files
   copy:
-    src="{{ ansible_env.HOME }}/.etc/sudo"
+    src="/home/khuntly/.etc/sudo"
     dest="{{ remote_home }}/.etc/sudo"
     owner="{{ remote_user }}"
     group="{{ remote_group }}"

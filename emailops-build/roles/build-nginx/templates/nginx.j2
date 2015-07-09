@@ -24,7 +24,6 @@ mail {
         proxy                       on;
         starttls                    on;
 
-        ssl                         on;
         ssl_certificate             "/etc/nginx/ssl/mail.{{ domain }}.crt";
         ssl_certificate_key         "/etc/nginx/ssl/mail.{{ domain }}.key";
         ssl_protocols               TLSv1 TLSv1.1 TLSv1.2;
@@ -37,8 +36,8 @@ mail {
         listen                      143;
         protocol                    imap;
         proxy                       on;
+        starttls                    on;
 
-        ssl                         on;
         ssl_certificate             "/etc/nginx/ssl/mail.{{ domain }}.crt";
         ssl_certificate_key         "/etc/nginx/ssl/mail.{{ domain }}.key";
         ssl_protocols               TLSv1 TLSv1.1 TLSv1.2;

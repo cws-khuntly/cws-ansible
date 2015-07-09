@@ -8,19 +8,19 @@ localhost ansible_connection=local
 md01.khuntly.dev.opal.synacor.com
 
 [smtp]
-smtp01.khuntly.dev.opal.synacor.com
+xfer01.khuntly.dev.opal.synacor.com
 
 [mx]
-mx01.khuntly.dev.opal.synacor.com
+xfer01.khuntly.dev.opal.synacor.com
 
 [nginx]
-pop01.khuntly.dev.opal.synacor.com
+pop02.khuntly.dev.opal.synacor.com
 
 [ldap]
 ldap01.khuntly.dev.opal.synacor.com
 
 [ecmgr]
-ecmgr01.khuntly.dev.opal.synacor.com
+xfer01.khuntly.dev.opal.synacor.com
 
 [opal:children]
 maildrop
