@@ -6,7 +6,7 @@
 - name: check out current repository
   git:
     clone=yes
-    dest="/home/khuntly/.dotfiles"
+    dest="{{ checkout_to }}"
     key_file="{{ ssh_key }}"
     recursive=yes
     repo="{{ dotfiles_repo }}"

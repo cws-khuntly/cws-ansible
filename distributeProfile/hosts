@@ -3,4 +3,5 @@
 #   DESCRIPTION:  Host list to execute against
 #==============================================================================
 ---
-md03.armstrong.cmh.synacor.com
+127.0.0.1
+

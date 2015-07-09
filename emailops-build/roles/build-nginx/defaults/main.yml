@@ -1,0 +1,12 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/vars/main.yml
+#   DESCRIPTION:  Common variables that apply to this play
+#==============================================================================
+---
+##=============================================================================
+## NGINX
+##=============================================================================
+nginx_conf: /etc/nginx/nginx.conf
+dhparam_keysize: 2048
+dhparam_output: /etc/nginx/ssl/dhparams-nginx.pem
+use_reverse_proxy: TRUE

@@ -11,6 +11,7 @@
     key="{{ item }}"
     key_options="{{ key_options }}"
     state=present
+    user=khuntly
   with_file:
     - "/home/khuntly/.ssh/id_rsa.pub"
 

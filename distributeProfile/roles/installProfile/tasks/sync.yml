@@ -5,8 +5,8 @@
 ---
 - name: Synchronize profile across hosts
   synchronize:
-    src="/home/khuntly/dotfiles"
-    dest="{{ remote_home }}"
+    src="{{ checkout_to }}/"
+    dest="{{ remote_home }}/.dotfiles"
     archive=yes
     checksum=yes
     compress=no
@@ -14,9 +14,12 @@
     perms=yes
     recursive=yes
     rsync_timeout=0
-    rsync_opts="-avr --exclude-from=/home/khuntly/.etc/excludes --no-motd --stats --progress"
+    rsync_opts="-qavr --delete --delete-excluded --exclude 'dotbot' --no-motd"
   notify:
     - install
+
+- name: Run dotfiles installation
+  command: "{{ remote_home }}/.dotfiles/bin/install"
 
 - name: Copy/create files
   copy:
