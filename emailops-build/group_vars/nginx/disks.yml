@@ -1,0 +1,10 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/nginx.yml
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
+#==============================================================================
+---
+##
+## disks
+##
+mountpoints:
+  - name: /opt

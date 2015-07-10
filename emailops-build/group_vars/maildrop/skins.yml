@@ -1,0 +1,13 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/maildrop.yml
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
+#==============================================================================
+---
+skins:
+  #- zimbra-skin-synacor-synabase ## zimbra 7
+  - zimbra-skin-synacor-synabasev8 ## zimbra 8
+custom-skins:
+  - zimbra-skin-viasat-viasatV8
+  - zimbra-skin-viasat-wildblueV8
+
+zimbra_pref_skin: synabasev8

@@ -1,0 +1,20 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/maildrop.yml
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
+#==============================================================================
+---
+zimlets:
+  - zimbra-zimlet-generic-com_synacor_dnd
+  - zimbra-zimlet-generic-com_synacor_external_email
+  - zimbra-zimlet-generic-com_synacor_reference
+  - zimbra-zimlet-generic-com_synacor_spam
+  - zimbra-zimlet-generic-com_synacor_social
+  - zimbra-zimlet-generic-com_synacor_core_change
+  - zimbra-zimlet-generic-com_synacor_dynamic_ads
+
+##
+## custom skins/zimlets as necessary
+##
+custom-zimlets:
+  - zimbra-zimlet-wow-com_zimbra_rssfeeds_wow
+  - zimbra-zimlet-wow-com_synacor_search_wow

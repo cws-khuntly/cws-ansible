@@ -1,0 +1,23 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/nginx.yml
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
+#==============================================================================
+---
+##
+## yum installs
+##
+packages:
+  - name: nginx
+    version: "{{ nginx_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: zimbra-core
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: zimbra-proxy
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: zimbra-memcached
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: scapi-consumers
+    version: 2.5.2-102.noarch
+  - name: scapi-core
+    version: 2.5.2-102.noarch
+  - name: scapi-dao-zimbra8.0.7.synacor
+    version: 2.5.2-102.noarch

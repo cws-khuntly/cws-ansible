@@ -1,0 +1,13 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/ldap
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
+#==============================================================================
+---
+##
+## yum installs
+##
+packages:
+  - name: zimbra-core
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: zimbra-ldap
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
