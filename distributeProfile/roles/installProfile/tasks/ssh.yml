@@ -6,7 +6,7 @@
 ##
 ## Send public keys
 ##
-- name: Set up authorized_keys
+- name: Set up authorized_keys (with key options)
   authorized_key:
     key="{{ item }}"
     key_options="{{ key_options }}"
@@ -14,6 +14,16 @@
     user=khuntly
   with_file:
     - "/home/khuntly/.ssh/id_rsa.pub"
+  when: add_key_options|bool
+
+- name: Set up authorized_keys (without key options)
+  authorized_key:
+    key="{{ item }}"
+    state=present
+    user=khuntly
+  with_file:
+    - "/home/khuntly/.ssh/id_rsa.pub"
+  when: not add_key_options|bool
 
 - name: update ssh config
   template:

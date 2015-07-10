@@ -15,10 +15,11 @@ Esmtp_Listener {
     Idle_Time = 300
 
     # Internal relays
-    Listen ":25" {
-        TLS_Certificate = "/opt/msys/ecelerity/etc/conf/default/ssl/mail.{{ domain }}.crt"
-        TLS_Key = "/opt/msys/ecelerity/etc/conf/default/ssl/mail.{{ domain }}.key"
-        TLS_Client_CA = "/opt/msys/ecelerity/etc/conf/default/ssl/mail.{{ domain }}.chain"
+    <% for host in hosts %>
+    Listen ":{{ host.port }}" {
+        TLS_Certificate = "{{ install_dir }}/etc/conf/default/ssl/mail.{{ host.domain }}.crt"
+        TLS_Key = "{{ install_dir }}/etc/conf/default/ssl/mail.{{ host.domain }}.key"
+        TLS_Client_CA = "{{ install_dir }}/etc/conf/default/ssl/mail.{{ host.domain }}.chain"
         TLS_Ciphers = "DEFAULT"
         SMTP_Extensions = (
             "ENHANCEDSTATUSCODES"
@@ -29,9 +30,11 @@ Esmtp_Listener {
             mx = "true"
         ]
 
-        banner_hostname = "{{ server_type }}.{{ domain }}"
-        received_hostname = "{{ server_type }}.{{ domain }}"
-  }
+        banner_hostname = "{{ server_type }}.{{ host.domain }}"
+        received_hostname = "{{ server_type }}.{{ host.domain }}"
+    }
+
+    <% endfor %>
 }
 
 # Hosts from which you will accept mail.  Format is a list of
@@ -544,97 +547,23 @@ scriptlet "scriptlet" {
     script "boot" {
         source = "msys.boot"
     }
-    script "{{ client_name }}auth" {
-        source = "/opt/msys/ecelerity/etc/conf/default/lua/auth"
+    <% for script in authscripts %>
+    script "{{ script.name }}" {
+        source = "{{ script.path }}"
     }
+
+    <% endfor %>
 }
 
 ## Data Sources ##
-Datasource "ldap_bind_auth" {
-    uri = ( "ldap://{{ ldap_host }}:389/????" )
-    cache_size = 300000
-    cache_life = 900
+<% for datasource in datasources %>
+Datasource "{{ datasource.name }}" {
+    uri = ( "{{ datasource.uri }}" )
+    cache_size = "{{ datasource.cache-size }}"
+    cache_life = 900 {{ datasource.cache-life }}"
 }
-Datasource "ldap_auth" {
-    uri = ( "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}" )
-    cache_size = 300000
-    cache_life = 900
-}
-Datasource "user_check" {
-    uri = ( "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}" )
-    #cache_size = 300000
-    #cache_life = 3600
-}
-Datasource "domain_check" {
-    uri = ( "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}" )
-    cache_size = 3000
-    cache_life = 3600
-}
-Datasource "md_check" {
-    uri = ( "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}" )
-    #cache_size = 300000
-    #cache_life = 3600
-}
-Datasource "catch_all_check" {
-    uri = ( "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}" )
-    cache_size = 300000
-    cache_life = 3600
-}
-Datasource "bind_check" {
-    uri = ( "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}" )
-    cache_size = 300000
-    cache_life = 3600
-}
-Datasource "cidr" {
-    uri = ( "sqlite:/opt/msys/ecelerity/etc/conf/global/ec_lists.db" )
-    cache_size = 100000
-    cache_life = 1800
-}
-Datasource "global" {
-    uri = ( "sqlite:/opt/msys/ecelerity/etc/conf/global/ec_lists.db" )
-    cache_size = 100000
-    cache_life = 1800
-}
-Datasource "internal" {
-    uri = ( "sqlite:/opt/msys/ecelerity/etc/conf/global/ec_lists.db" )
-    cache_size = 100000
-    cache_life = 1800
-}
-Datasource "conn" {
-    uri = ( "sqlite:/opt/msys/ecelerity/etc/conf/global/ec_lists.db" )
-    cache_size = 100000
-    cache_life = 1800
-}
-Datasource "wlbl" {
-    uri = ( "sqlite:/opt/msys/ecelerity/etc/conf/global/synacor.db" )
-    cache_size = 10000
-    cache_life = 360
-}
-Datasource "rate_limit" {
-    uri = ( "sqlite:/opt/msys/ecelerity/etc/conf/global/synacor.db" )
-    cache_size = 100000
-    cache_life = 60
-}
-Datasource "fail_check" {
-    uri = ( "sqlite:/opt/msys/ecelerity/etc/conf/global/synacor.db" )
-    cache_size = 100000
-    cache_life = 60
-}
-Datasource "relays" {
-    uri = ( "sqlite:/opt/msys/ecelerity/etc/conf/global/synacor.db" )
-    cache_size = 10000
-    cache_life = 60
-}
-Datasource "biz" {
-    uri = ( "sqlite:/opt/msys/ecelerity/etc/conf/global/synacor.db" )
-    cache_size = 10000
-    cache_life = 60
-}
-Datasource "outbind" {
-    uri = ( "sqlite:/opt/msys/ecelerity/etc/conf/global/synacor.db" )
-    cache_size = 10
-    cache_life = 60
-}
+
+<% endfor %>
 
 # Audit series monitors
 inbound_audit {
@@ -653,31 +582,31 @@ cloudmark {
 
 sieve "sieve1" {
     script connect_phase1 {
-        source = "/opt/msys/ecelerity/etc/conf/global/siv/connect.siv"
+        source = "{{ install_dir }}/etc/conf/global/siv/connect.siv"
     }
 
     script mailfrom_phase1 {
-        source = "/opt/msys/ecelerity/etc/conf/global/siv/mailfrom.siv"
+        source = "{{ install_dir }}/etc/conf/global/siv/mailfrom.siv"
     }
 
     script rcptto_phase1 {
-        source = "/opt/msys/ecelerity/etc/conf/global/siv/rcptto.siv"
+        source = "{{ install_dir }}/etc/conf/global/siv/rcptto.siv"
     }
 
     script data_phase1 {
-        source = "/opt/msys/ecelerity/etc/conf/global/siv/data.siv"
+        source = "{{ install_dir }}/etc/conf/global/siv/data.siv"
     }
 
     script each_rcpt_phase1 {
-        source = "/opt/msys/ecelerity/etc/conf/global/siv/policy_spool.siv"
+        source = "{{ install_dir }}/etc/conf/global/siv/policy_spool.siv"
     }
 
     script set_binding_phase1 {
-        source ="/opt/msys/ecelerity/etc/conf/global/siv/binding_phase.siv"
+        source ="{{ install_dir }}/etc/conf/global/siv/binding_phase.siv"
     }
 }
 
-include "/opt/msys/ecelerity/etc/conf/default/default_policy.conf"
+include "{{ install_dir }}/etc/conf/default/default_policy.conf"
 
 Binding "premig.{{ domain }}" {
     Max_Outbound_Connections = 100

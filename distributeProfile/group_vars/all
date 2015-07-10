@@ -25,9 +25,10 @@ version: HEAD
 ##
 ## ssh opts
 ##
+add_key_options: FALSE
 key_options: hosts="127.0.0.1"
 ssh_keyfiles:
-  - id_rsa
+  - /home/khuntly/.ssh/cmh/admin/id_rsa.pub
 
 ##
 ## replacement variables for eSolutionsCore/ServiceConfig.xml

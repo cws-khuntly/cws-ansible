@@ -1,21 +1,42 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/vars/main.yml
+#          NAME:  build-ecelerity/default/main.yml
 #   DESCRIPTION:  Common variables that apply to this play
+#          NOTE:  Variables housed in this document are the *least* preferred
 #==============================================================================
 ---
-#=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/tasks/run-postinstall.yml
-#   DESCRIPTION:  Configure Zimbra maildrop post-installation
+#==============================================================================
+# BEGIN ${PLAYBOOK_DIR}/ROLES/${ROLE_NAME}/VARS/MAIN.YML
+# Highest preference, wins against all except command line
+#==============================================================================
+
+#==============================================================================
+# END ${PLAYBOOK_DIR}/ROLES/${ROLE_NAME}/VARS/MAIN.YML
+#==============================================================================
+
+#==============================================================================
+# BEGIN ${PLAYBOOK_DIR}/HOST_VARS/${HOSTNAME}
+# Second preference, wins against all except above
+#==============================================================================
+
+#==============================================================================
+# END ${PLAYBOOK_DIR}/HOST_VARS/${HOSTNAME}
+#==============================================================================
+
+#==============================================================================
+# BEGIN ${PLAYBOOK_DIR}/GROUP_VARS/${GROUP}/*
+# Third preference, wins against all except above
 #==============================================================================
 ##
-## Ansible variables
+## accounting
 ##
-ansible_become: true
-ansible_become_method: sudo
+group_id: 454
+group_name: ecuser
+addl_groups: 
+home_dir: /opt/home/ecuser
+user_name: ecuser
+user_shell: /bin/bash
+user_uid: 454
 
-##=============================================================================
-## COMMON
-##=============================================================================
 ##
 ## disks
 ##
@@ -23,110 +44,98 @@ mountpoints:
   - name: /opt
 
 ##
-## accounting
+## template updates
 ##
-group_id: 454
-group_name: zimbra
-addl_groups: adm,tty,postfix
-home_dir: /opt/home/zimbra
-user_name: zimbra
-user_shell: /bin/bash
-user_uid: 454
+install_dir: /opt/msys/ecelerity
+manager_hostname: "ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com"
+manager_ipaddr: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+cluster_group: ec_cluster
+control_group: ec_console
+
+maildrops:
+ - list
+ - of
+ - drops
 
 ##
-## client/datacenter information
+## subversion!
 ##
-client_name: khuntly
-domain: kevin.com
-datacenter: dev.opal
-client_domains:
- - kevin.com
-cos_list:
- - mycos
+inbound.svn.host: "https://ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com:2027/config/inbound/boot"
+outbound.svn.host: "https://ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com:2027/config/outbound/boot"
 
 ##
-## install data
+## datasource config
 ##
-admin_address: "admin@{{ client_name }}.{{ datacenter }}.synacor.com"
-build_type: Zimbra Collaboration Suite / Generic
-install_dir: /opt/zimbra
-run_zmfixperms_extended: TRUE
-pkg_version: 8.0.7_GA_6021.RHEL6_64-20140408123937
-build_ecmgr: FALSE
-disable_fsck: FALSE
-mailboxd_java_options: "-XX:+UseConcMarkSweepGC -XX:PermSize=128m -XX:MaxPermSize=350m -XX:SoftRefLRUPolicyMSPerMB=1 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCApplicationStoppedTime -XX:-OmitStackTraceInFastThrow -XX:+UseParNewGC -XX:NewRatio=2 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/zimbra/store/log -XX:ErrorFile=/opt/zimbra/log/hs_err_pid%p.log"
-activate_license: FALSE
-tmpdir: /var/tmp
-install_packages: zimbra-core zimbra-ldap zimbra-apache zimbra-spell zimbra-store zimbra-memcached zimbra-proxy
-zimbra_version: 807
-zimbra_major_version: 8
-smtp_host: "mailrelay.{{ client_name }}.{{ datacenter }}.synacor.com"
-smtp_source:
-smtp_dest:
-email_dest: khuntly@synacor.com
+datasources:
+  - name: ldap_bind_auth
+    uri: "ldap://{{ ldap_host }}:389/????"
+    cache-size: 300000
+    cache-life: 900
+  - name: ldap_auth
+    uri: "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}"
+    cache-size: 300000
+    cache-life: 360
+  - name: user_check
+    uri: "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}"
+    cache-size: 300000
+    cache-life: 360
+  - name: domain_check
+    uri: "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}"
+    cache-size: 300000
+    cache-life: 360
+  - name: md_check
+    uri: "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}"
+    cache-size: 300000
+    cache-life: 360
+  - name: catch_all_check
+    uri: "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}"
+    cache-size: 300000
+    cache-life: 360
+  - name: bind_check
+    uri: "ldap://{{ ldap_host }}:389/????bindname=uid=zimbra%2ccn=admins%2ccn=zimbra,x-bindpw={{ ldap_admin_pass }}"
+    cache-size: 300000
+    cache-life: 360
+  - name: cidr
+    uri: "sqlite:{{ install_dir }}/etc/conf/global/ec_lists.db"
+    cache-size: 100000
+    cache-life: 1800
+  - name: global
+    uri: "sqlite:{{ install_dir }}/etc/conf/global/ec_lists.db"
+    cache-size: 100000
+    cache-life: 1800
+  - name: internal
+    uri: "sqlite:{{ install_dir }}/etc/conf/global/ec_lists.db"
+    cache-size: 100000
+    cache-life: 1800
+  - name: conn
+    uri: "sqlite:{{ install_dir }}/etc/conf/global/ec_lists.db"
+    cache-size: 100000
+    cache-life: 1800
+  - name: wlbl
+    uri: "sqlite:{{ install_dir }}/etc/conf/global/synacor.db"
+    cache-size: 10000
+    cache-life: 360
+  - name: rate_limit
+    uri: "sqlite:{{ install_dir }}/etc/conf/global/synacor.db"
+    cache-size: 100000
+    cache-life: 60
+  - name: fail_check
+    uri: "sqlite:{{ install_dir }}/etc/conf/global/synacor.db"
+    cache-size: 100000
+    cache-life: 60
+  - name: relays
+    uri: "sqlite:{{ install_dir }}/etc/conf/global/synacor.db"
+    cache-size: 10000
+    cache-life: 60
+  - name: biz
+    uri: "sqlite:{{ install_dir }}/etc/conf/global/synacor.db"
+    cache-size: 10000
+    cache-life: 60
+  - name: outbind
+    uri: "sqlite:{{ install_dir }}/etc/conf/global/synacor.db"
+    cache-size: 10
+    cache-life: 60
 
-##
-## PACKAGING
-##
-base_packages:
-  - name: nc
-  - name: "zimbra-core-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-ldap-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-store-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-apache-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-spell-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-core-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-memcached-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-proxy-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "nginx-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-
-##
-## SSL
-##
-exclude_ciphers:
-  - "!aNULL"
-  - "!eNULL"
-  - "!EXPORT"
-  - "!DES"
-  - "!RC4"
-  - "!MD5"
-  - "!PSK"
-  - "!aECDH"
-  - "!EDH-DSS-DES-CBC3-SHA"
-  - "!EDH-RSA-DES-CBC3-SHA"
-  - "!KRB5-DES-CBC3-SHA"
-include_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"
-
-##=============================================================================
-## LDAP
-##=============================================================================
-is_ldap: TRUE
-is_multimaster: TRUE
-is_master_ldap: TRUE
-do_create_domain: yes
-promote: FALSE
-
-ldap_host: "ldap01.{{ client_name }}.{{ datacenter }}.synacor.com"
-ldap_master_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap02.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap03.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap04.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
-ldap_rid: 100
-ldap_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
-
-##=============================================================================
-## MAILDROP
-##=============================================================================
-is_maildrop: TRUE
-create_default_accounts: TRUE
-create_maildrop_accounts: TRUE
-setup_stores: TRUE
-use_scality: TRUE
-use_reverse_proxy: FALSE
-customizations:
-  - zimlet1
-  - skin1
-
-##=============================================================================
-## ECELERITY
-##=============================================================================
 inbound_hosts:
   - name: "mx01.{{ client_name }}.{{ datacenter }}.synacor.com"
     address: <ipaddr>
@@ -134,33 +143,19 @@ inbound_hosts:
     address: <ipaddr>
 
 outbound_hosts:
-  - name: "smtp01.{{ client_name }}.{{ datacenter }}.synacor.com"
+  - name: "{{ hostvars[inventory_hostname]['ansible_fqdn'] }}"
     address: <ipaddr>
   - name: "smtp01.{{ client_name }}.{{ datacenter }}.synacor.com"
     address: <ipaddr>
-manager_hostname: "ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com"
-manager_ipaddr: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-cluster_group: ec_cluster
-control_group: ec_cosole
-maildrops:
-  - list
-  - of
-  - drops
+#==============================================================================
+# END ${PLAYBOOK_DIR}/GROUP_VARS/${GROUP}/*
+#==============================================================================
 
-##=============================================================================
-## NGINX
-##=============================================================================
-nginx_conf: /etc/nginx/nginx.conf
-dhparam_keysize: 2048
-dhparam_output: /etc/nginx/ssl/dhparams-nginx.pem
-use_reverse_proxy: TRUE
+#==============================================================================
+# BEGIN ${PLAYBOOK_DIR}/GROUP_VARS/ALL
+# Fourth preference, wins against all except above
+#==============================================================================
 
-##
-## JIRA
-##
-jira_hostname: jira.corp.synacor.com
-jira_username: khuntly
-jira_password: !T7K1vcttdrkftbjjvctfbldkfiiikcbd
-jira_project: IT Email Ops Request
-jira_issue_type: Task
-jira_assignee: {{ username }}
+#==============================================================================
+# END ${PLAYBOOK_DIR}/GROUP_VARS/ALL
+#==============================================================================

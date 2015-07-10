@@ -3,9 +3,6 @@
 #   DESCRIPTION:  Primary entry point for this play
 #==============================================================================
 ---
-- name: Include github checkout
-  include: checkout.yml
-
 - name: Set up SSH
   include: ssh.yml
 
@@ -14,9 +11,3 @@
 
 - name: Set up configuration files for Java apps
   include: update-config.yml
-
-- name: Remove checkout directory on completion
-  file:
-    path="{{ checkout_to }}"
-    state=absent
-  delegate_to: 127.0.0.1

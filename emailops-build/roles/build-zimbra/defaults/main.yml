@@ -1,11 +1,13 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/vars/main.yml
+#          NAME:  build-zimbra/default/main.yml
 #   DESCRIPTION:  Common variables that apply to this play
+#          NOTE:  Variables housed in this document are the *least* preferred
 #==============================================================================
 ---
-##
-## client/datacenter information
-##
+#==============================================================================
+# BEGIN ${PLAYBOOK_DIR}/ROLES/${ROLE_NAME}/VARS/MAIN.YML
+# Highest preference, wins against all except command line
+#==============================================================================
 client_name: khuntly
 domain: kevin.com
 datacenter: dev.opal
@@ -14,11 +16,7 @@ client_domains:
 cos_list:
  - mycos
 
-##
-## install data
-##
 admin_address: "admin@{{ client_name }}.{{ datacenter }}.synacor.com"
-build_type: Zimbra Collaboration Suite / Generic
 install_dir: /opt/zimbra
 run_zmfixperms_extended: TRUE
 pkg_version: 8.0.7_GA_6021.RHEL6_64-20140408123937
@@ -34,25 +32,12 @@ smtp_host: "mailrelay.{{ client_name }}.{{ datacenter }}.synacor.com"
 smtp_source:
 smtp_dest:
 email_dest: khuntly@synacor.com
+enforce_ssl: FALSE
 
-##
-## PACKAGING
-##
 base_packages:
   - name: nc
   - name: "zimbra-core-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-ldap-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-store-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-apache-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-spell-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-core-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-memcached-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "zimbra-proxy-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: "nginx-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
 
-##
-## SSL
-##
 exclude_ciphers:
   - "!aNULL"
   - "!eNULL"
@@ -66,30 +51,126 @@ exclude_ciphers:
   - "!EDH-RSA-DES-CBC3-SHA"
   - "!KRB5-DES-CBC3-SHA"
 include_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"
+#==============================================================================
+# END ${PLAYBOOK_DIR}/ROLES/${ROLE_NAME}/VARS/MAIN.YML
+#==============================================================================
 
-##=============================================================================
-## LDAP
-##=============================================================================
-is_ldap: TRUE
-is_multimaster: TRUE
-is_master_ldap: TRUE
-do_create_domain: yes
-promote: FALSE
-
-ldap_host: "ldap01.{{ client_name }}.{{ datacenter }}.synacor.com"
-ldap_master_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap02.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap03.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap04.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
-ldap_rid: 100
-ldap_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
-
-##=============================================================================
-## MAILDROP
-##=============================================================================
-is_maildrop: TRUE
+#==============================================================================
+# BEGIN ${PLAYBOOK_DIR}/HOST_VARS/${HOSTNAME}
+# Second preference, wins against all except above
+#==============================================================================
+## This should only be done on ONE host. Multiple will issue failures.
 create_default_accounts: TRUE
-create_maildrop_accounts: TRUE
+
+## This is only required on one host, though multiple won't fail.
+activate_license: TRUE
+
+## This is only required on one host, though multiple won't fail.
+apply_global_config: TRUE
+#==============================================================================
+# END ${PLAYBOOK_DIR}/HOST_VARS/${HOSTNAME}
+#==============================================================================
+
+#==============================================================================
+# BEGIN ${PLAYBOOK_DIR}/GROUP_VARS/MAILDROP/*
+# Third preference, wins against all except above
+#==============================================================================
+build_type: Zimbra Collaboration Server / Maildrop ## Should
+is_ldap: FALSE
+is_maildrop: TRUE
+is_pop: FALSE
+is_mta: FALSE
+create_default_accounts: FALSE
 setup_stores: TRUE
 use_scality: TRUE
 use_reverse_proxy: FALSE
-customizations:
-  - zimlet1
-  - skin1
+activate_license: FALSE
+do_create_domain: no
+apply_global_config: FALSE
+ldap_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
+
+##
+## yum installs
+##
+packages:
+  - name: zimbra-core
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: zimbra-store
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: zimbra-apache
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: zimbra-spell
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+zimlets:
+  - zimbra-zimlet-generic-com_synacor_dnd
+  - zimbra-zimlet-generic-com_synacor_external_email
+  - zimbra-zimlet-generic-com_synacor_reference
+  - zimbra-zimlet-generic-com_synacor_spam
+  - zimbra-zimlet-generic-com_synacor_social
+  - zimbra-zimlet-generic-com_synacor_core_change
+  - zimbra-zimlet-generic-com_synacor_dynamic_ads
+skins:
+  #- zimbra-skin-synacor-synabase ## zimbra 7
+  - zimbra-skin-synacor-synabasev8 ## zimbra 8
+zimbra_pref_skin: synabasev8
+
+##
+## custom skins/zimlets as necessary
+##
+custom-zimlets:
+  - zimbra-zimlet-wow-com_zimbra_rssfeeds_wow
+  - zimbra-zimlet-wow-com_synacor_search_wow
+
+custom-skins:
+  - zimbra-skin-viasat-viasatV8
+  - zimbra-skin-viasat-wildblueV8
+
+create_accounts:
+  - name: "synoc{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+    password: "synoc{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+  - name: "synqa{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+    password: "synqa{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+  - name: "synmon_md{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+    password: "synmon_md{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+  - name: "synautotest{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+    password: "synautotest{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+
+clean_skins:
+  - zimlets/com_zimbra_linkedin.zip
+  - zimlets/com_zimbra_dnd.zip
+  - zimlets/com_zimbra_social.zip
+  - zimlets/com_zimbra_webex.zip
+  - jetty/webapps/zimbra/skins/bare
+  - jetty/webapps/zimbra/skins/beach
+  - jetty/webapps/zimbra/skins/waves
+  - jetty/webapps/zimbra/skins/twilight
+  - jetty/webapps/zimbra/skins/sand
+  - jetty/webapps/zimbra/skins/tree
+  - jetty/webapps/zimbra/skins/oasis
+  - jetty/webapps/zimbra/skins/lemongrass
+  - jetty/webapps/zimbra/skins/lake
+  - jetty/webapps/zimbra/skins/steel
+  - jetty/webapps/zimbra/skins/hotrod
+  - jetty/webapps/zimbra/skins/smoke
+  - jetty/webapps/zimbra/skins/pebble
+  - jetty/webapps/zimbra/skins/bones
+  - jetty/webapps/zimbra/skins/sky
+  - jetty/webapps/zimbra/skins/lavender
+
+##
+## JIRA
+##
+jira_summary: "Request for SOAP VIP: {{ client_name }}/{{ datacenter }}"
+jira_description: "Please create webmail.{{ client_name }}.{{ datacenter }} .caspersbox.comVIP with targets {{ address }}"
+#==============================================================================
+# END ${PLAYBOOK_DIR}/GROUP_VARS/MAILDROP
+#==============================================================================
+
+#==============================================================================
+# BEGIN ${PLAYBOOK_DIR}/GROUP_VARS/ALL
+# Fourth preference, wins against all except above
+#==============================================================================
+
+#==============================================================================
+# END ${PLAYBOOK_DIR}/GROUP_VARS/ALL
+#==============================================================================

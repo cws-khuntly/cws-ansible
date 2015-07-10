@@ -48,7 +48,7 @@
     // Extract client IP
     $client_ip = $_SERVER["HTTP_CLIENT_IP"];
 
-    $blacklisted_ips = file('/opt/zimbra/conf/nginx/blacklisted_ips.txt');
+    $blacklisted_ips = file('{{ blacklist_file }}');
     foreach ($blacklisted_ips as $ip)
     {
         $ip = rtrim($ip);
@@ -78,7 +78,7 @@
     // I did some cut and paste here just to make the code easier to follow
     $octets = explode('.', $client_ip);
 
-    if ($attr_cos == 'a5055b14-57e9-46d0-8ce7-41357a3904af')
+    if ($attr_cos == '{{ cos_id }}')
     {
         $target_ip   = gethostbyname($attr_host);
         $target_port = ($auth_proto == "imap") ? 7143 : 7110;
@@ -133,7 +133,7 @@
         $filter = "(&(mail=$user@$dns)(zimbraMailStatus=enabled))";
         $ds = ldap_connect ($host, 389) or die("Couldn't connect to LDAP server: $host");
         ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
-        $r=ldap_bind($ds,"uid=zimbra,cn=admins,cn=zimbra",$pass) or die("Couldn't bind to LDAP with password.")
+        $r=ldap_bind($ds,"uid=zimbra,cn=admins,cn=zimbra",$pass) or die("Couldn't bind to LDAP with password.");
         $sr=ldap_search($ds, $bdn, $filter, array("zimbraMailHost","userPassword","zimbraCOSId","zimbraImapEnabled","mail")) or die("Couldn't execute LDAP search.");
         $attrs = ldap_get_entries($ds, $sr);
 

@@ -8,7 +8,7 @@
 ##
 jira_hostname: jira.corp.synacor.com
 jira_username: khuntly
-jira_password: !T7K1vcttdrkftbjjvctfbldkfiiikcbd
-jira_project: IT Email Ops Request
+jira_password: "NL71icvlncdfcetbtdhgchgkhfderthn"
+jira_project: "IT Email Ops Request"
 jira_issue_type: Task
-jira_assignee: {{ username }}
+jira_assignee: "{{ username }}"

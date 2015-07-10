@@ -4,6 +4,17 @@
 #==============================================================================
 ---
 ##
+## FIRST THINGS FIRST. Correct perms on /opt/zimbra
+##
+- name: Correct permissions on /opt/zimbra
+  file:
+    path=/opt/zimbra
+    group=zimbra
+    owner=zimbra
+    recurse=yes
+    state=directory
+
+##
 ## Update OpenSSL and java.security
 ##
 - name: (POSTINSTALL) Remove existing OpenSSL installation
@@ -155,6 +166,7 @@
 
 - name: (POSTINSTALL) Enable mixed-mode
   include: common/ssl-redirect.yml
+  when: enforce_ssl|bool
 
 - name: (POSTINSTALL) Turn off Zimbra backups
   command: "{{ install_dir }}/bin/zmschedulebackup -F"

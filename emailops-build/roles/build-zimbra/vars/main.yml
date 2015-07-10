@@ -9,57 +9,63 @@
 group_id: 454
 group_name: zimbra
 addl_groups: adm,tty,postfix
-home_dir: /opt/zimbra
+home_dir: /opt/home/zimbra
 user_name: zimbra
 user_shell: /bin/bash
 user_uid: 454
 
 ##
-## disks
+## client/datacenter information
 ##
-mountpoints:
-  - name: /opt/zimbra
-  - name: /opt/zimbra/index
-  - name: /opt/zimbra/db
+client_name: khuntly
+domain: kevin.com
+datacenter: dev.opal
+client_domains:
+ - kevin.com
+cos_list:
+ - mycos
 
 ##
 ## install data
 ##
+admin_address: "admin@{{ client_name }}.{{ datacenter }}.synacor.com"
 install_dir: /opt/zimbra
 run_zmfixperms_extended: TRUE
 pkg_version: 8.0.7_GA_6021.RHEL6_64-20140408123937
+build_ecmgr: FALSE
 disable_fsck: FALSE
-install_synacor_skins_zimlets: TRUE
-
-##
-## Generic JVM arguments
-mailboxd_java_options: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -XX:PermSize=128m -XX:MaxPermSize=350m -XX:SoftRefLRUPolicyMSPerMB=1 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCApplicationStoppedTime -XX:-OmitStackTraceInFastThrow -XX:+UseParNewGC -XX:NewRatio=2 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/zimbra/store/log -XX:ErrorFile=/opt/zimbra/log/hs_err_pid%p.log"
-new_java_options: "-XX:+ScavengeBeforeFullGC -XX:+UseGCOverheadLimit -XX:-UseParallelGC -XX:-UseParallelOldGC -XX:+AggressiveOpts -XX:+UseLargePages -XX:+UseStringCache -XX:+UseCompressedStrings -XX:+OptimizeStringConcat"
-
-##
-## JMX
-##
-jmx_java_options: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/usr/lib/jvm/jre/lib/management/jmxremote.password -Dcom.sun.management.jmxremote.port=9121"
-
-##
-## version info
-##
+mailboxd_java_options: "-XX:+UseConcMarkSweepGC -XX:PermSize=128m -XX:MaxPermSize=350m -XX:SoftRefLRUPolicyMSPerMB=1 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCApplicationStoppedTime -XX:-OmitStackTraceInFastThrow -XX:+UseParNewGC -XX:NewRatio=2 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/zimbra/store/log -XX:ErrorFile=/opt/zimbra/log/hs_err_pid%p.log"
+activate_license: FALSE
+tmpdir: /var/tmp
+install_packages: zimbra-core zimbra-ldap zimbra-apache zimbra-spell zimbra-store zimbra-memcached zimbra-proxy
 zimbra_version: 807
 zimbra_major_version: 8
-
-##
-## LDAP
-##
-ldap_master_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap02.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap03.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap04.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
-admin_address: "admin@{{ client_name }}.{{ datacenter }}.synacor.com"
-is_multimaster: TRUE
-
-##
-## smtp
-##
 smtp_host: "mailrelay.{{ client_name }}.{{ datacenter }}.synacor.com"
 smtp_source:
 smtp_dest:
 email_dest: khuntly@synacor.com
+enforce_ssl: FALSE
 
-default_account_settings: "zimbraMailHost {{ hostvars[inventory_hostname]['ansible_fqdn'] }} zimbraPrefGroupMailBy message zimbraPrefComposeFormat html"
+##
+## PACKAGING
+##
+base_packages:
+  - name: nc
+  - name: "zimbra-core-{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+
+##
+## SSL
+##
+exclude_ciphers:
+  - "!aNULL"
+  - "!eNULL"
+  - "!EXPORT"
+  - "!DES"
+  - "!RC4"
+  - "!MD5"
+  - "!PSK"
+  - "!aECDH"
+  - "!EDH-DSS-DES-CBC3-SHA"
+  - "!EDH-RSA-DES-CBC3-SHA"
+  - "!KRB5-DES-CBC3-SHA"
+include_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"

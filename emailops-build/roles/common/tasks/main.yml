@@ -23,7 +23,6 @@
   group:
     gid="{{ group_id }}"
     name="{{ group_name }}"
-    state=present
     system=yes
 
 - name: (PREINSTALL) Create user account
@@ -34,7 +33,6 @@
     name="{{ user_name }}"
     shell="{{ user_shell }}"
     state=present
-    system=yes
     uid="{{ user_uid }}"
 
 ##

@@ -44,7 +44,9 @@ tmpdir: /var/tmp
 ##
 ## LDAP
 ##
-ldap_host: "ldap01.{{ client_name }}.{{ datacenter }}.synacor.com"
+ldap_host: "ldap01-a.{{ client_name }}.{{ datacenter }}.synacor.com"
+ldap_url: "ldap://ldap01-a.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap01-b.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap01-c.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap01-d.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
+ldap_master_url: "ldap://ldap01-a.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap01-b.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap01-c.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap01-d.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
 
 ##
 ## ssl
