@@ -1,6 +1,6 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-nginx/vars/main.yml
-#   DESCRIPTION:  nginx variables
+#          NAME:  group_vars/ecmgr
+#   DESCRIPTION:  Variables that apply to Ecelerity Cluster managers
 #==============================================================================
 ---
 

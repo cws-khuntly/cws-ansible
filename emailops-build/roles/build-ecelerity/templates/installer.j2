@@ -1,0 +1,58 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-ecelerity/templates/installer.j2
+#   DESCRIPTION:  "{{ ansible_managed }}"
+#==============================================================================
+$selections = {
+  'cloudmark' => 'y',
+  'beik' => 'n',
+  {% if server_type is ecmgr %} 'mobility' => 'n', {% endif %} ## ecmgr only
+  {% if server_type is ecmgr %} 'dbroot' => '{{ db_root }}', {% endif %} ## ecmgr only
+  'db_init' => {% if server_type is mta %} n, {% else %} y, {% endif %} ## y for ecmgr, n for mta
+  'lbu' => 'y',
+  'adapt_lu' => 'y',
+  'db_init' => 'n',
+  'expurgate' => 'n',
+  'brightmail' => 'n',
+  {% if server_type is mta %} 'MTA' => 'y', {% endif %} ## only for mta
+  'csapi' => 'n',
+  'ctasd' => 'n',
+  'devel' => 'y',
+  {% if server_type is ecmgr %} 'scope' => 'n', {% endif %} ## only for ecmgr
+  'roles' => {
+    'database' => {% if server_type is mta %} 0, {% else %} 1, {% endif %}, ## 1 for ecmgr, 0 for mta
+    'web' => {% if server_type is mta %} 0, {% else %} 1, {% endif %}, ## 1 for ecmgr, 0 for mta
+    'mta' => {% if server_type is mta %} 1, {% else %} 0, {% endif %}, ## 0 for ecmgr, 0 for mta
+    'singlenode' => 0, 
+    'manager' => {% if server_type is mta %} 0, {% else %} 1, {% endif %}  ## 1 for ecmgr, 0 for mta
+  },
+  'dbhost' => '{{ manager_hostname }}',
+  {% if server_type is mta %} 'cluster' => 'y', {% endif %} ## mta only
+  'cluster' => 'y',
+  'validation-tools' => 'y',
+  {% if server_type is mta %} 'mgrhost' => '{{ manager_hostname }}', {% endif %} ## mta only
+  'encryption' => 'n',
+  {% if server_type is mta %} 'momentum-receiving' => 'y', {% endif %} ## mta only
+  'svcpasswd' => '{{ svcpasswd }}'
+  {% if server_type is ecmgr %}
+  'cluster-mgr' => 'y',
+  'DB' => 'y', ## only for ecmgr
+  'pgssl' => 'n', ## ecmgr only
+  'ssl' => 'n', ## ecmgr only
+  'adminpass' => '{{ adminpass }}',
+  'subclusters' => {
+    'inbound' => {
+      {% for entry in inbound_hosts %}
+        '{{ entry.name }}' => '{{ entry.ipaddr }}'
+      {% endfor %}
+    },
+    'outbound' => {
+      {% for entry in outbound_hosts %}
+        '{{ entry.name }}' => '{{ entry.ipaddr }}'
+      {% endfor %}
+    },
+    'manager' => {
+      '{{ manager_hostname }}' => '{{ manager_ipaddr }}'
+    }
+  }
+  {% endif %}
+};

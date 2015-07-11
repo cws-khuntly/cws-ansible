@@ -9,28 +9,14 @@
     dest="{{ tmpdir }}"
     copy=yes
 
-- name: Create script file for unattended installation (ecmgr)
+- name: Create script file for unattended installation
   template:
-    src=ecmgr.j2
-    dest="{{ tmpdir }}/ecmgr"
+    src=installer.j2
+    dest="{{ tmpdir }}/installer.conf"
     owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
-  when: is_ecmgr
-
-- name: Create script file for unattended installation (mta)
-  template:
-    src=mta.j2
-    dest="{{ tmpdir }}/ecelerity/mta"
-    owner="{{ user_name }}"
-    group="{{ group_name }}"
-    mode=0644
-  when: is_smtp or is_mx
 
 - name: Process installation
-  command: "{{ tmpdir }}/ecelerity/installer --option-file {{ tmpdir }}/ecelerity/ecmgr"
-  when: is_ecmgr
+  command: "{{ tmpdir }}/ecelerity/installer --option-file {{ tmpdir }}/installer.conf"
 
-- name: Process installation
-  command: "{{ tmpdir }}/ecelerity/installer --option-file {{ tmpdir }}/ecelerity/mta"
-  when: is_smtp or is_mx

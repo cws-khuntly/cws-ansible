@@ -99,6 +99,21 @@ cos_id: b1d6a2cb-d4bb-4479-a613-c45736d7986c
 blacklist_file: /opt/zimbra/conf/nginx/blacklisted_ips.txt
 
 ##
+## ssl certs
+##
+self_signed_enabled: TRUE
+openssl_self_signed:
+  - name: 'mail.{{ domain }}'
+    domain_name: 'mail.{{ domain }}'
+    country: 'US'
+    state: 'New York'
+    city: 'Buffalo'
+    organization: 'Synacor, Inc.'
+    unit: 'Email Operations'
+    email: 'emailops@synacor.com'
+    days: 90
+
+##
 ## JIRA
 ##
 jira_summary: "Request for Proxy VIP: {{ client_name }}/{{ datacenter }}"

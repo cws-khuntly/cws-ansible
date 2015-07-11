@@ -3,10 +3,14 @@
 #   DESCRIPTION:  Service restart handler
 #==============================================================================
 ---
-- name: restart-service
+- name: restart service
   service:
     name=ecelerity
     state=restarted
 
-- name: sync-puppet
-  command: /usr/bin/puppet agent -t
+- name: sync puppet
+  command: puppet agent -t
+
+- name: reload sysctl
+  command: sysctl -p
+

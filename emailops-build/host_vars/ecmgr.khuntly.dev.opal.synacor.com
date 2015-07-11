@@ -1,11 +1,11 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  group_vars/ecmgr
-#   DESCRIPTION:  Variables that apply to Ecelerity Cluster managers
+#          NAME:  host_vars/${HOSTNAME}
+#   DESCRIPTION:  Configuration file for specific target host within playbook
 #==============================================================================
 ---
 ## These variables will be used to generate the unattended installation options file
 ## Change to suit environment
-build_type: MessageSystems Console
+build_type: MessageSystems Cluster Manager
 
 inbound_hosts:
   - name: "mx01.{{ client_name }}.{{ datacenter }}.synacor.com"
@@ -18,3 +18,4 @@ outbound_hosts:
     address: <ipaddr>
   - name: "smtp01.{{ client_name }}.{{ datacenter }}.synacor.com"
     address: <ipaddr>
+

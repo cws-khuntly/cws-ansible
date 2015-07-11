@@ -12,32 +12,18 @@
     - restart-service
   when: is_ecmgr
 
-- name: Run ecelerity installation steps (mx)
+- name: Run ecelerity installation steps (MTA)
   vars_files:
     - mta.yml
   include: run-postinstall.yml
   notify:
     - sync-puppet
     - restart-service
-  when: is_mx
+  when: is_mta
 
-- name: Run ecelerity installation steps (smtp)
-  vars_files:
-    - mta.yml
-  include: run-postinstall.yml
-  notify:
-    - sync-puppet
-    - restart-service
-  when: is_smtp
-
-- name: Remove installer options file (ecmgr)
+- name: Remove installer options file
   file:
-    path="{{ tmpdir }}/ecmgr"
-    state=absent
-
-- name: Remove installer options file (mta)
-  file:
-    path="{{ tmpdir }}/mta"
+    path="{{ tmpdir }}/installer.conf"
     state=absent
 
 - name: Remove install archive

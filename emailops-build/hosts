@@ -2,30 +2,23 @@
 #          NAME:  hosts
 #   DESCRIPTION:  Host list for ansible playbook
 #==============================================================================
-localhost ansible_connection=local
+[ldap]
+ldap01.khuntly.dev.opal.synacor.com
 
 [maildrop]
 md01.khuntly.dev.opal.synacor.com
 
-[smtp]
-xfer01.khuntly.dev.opal.synacor.com
-
-[mx]
-xfer01.khuntly.dev.opal.synacor.com
+[ecelerity]
+ecmgr01.khuntly.dev.opal.synacor.com
+smtp01.khuntly.dev.opal.synacor.com
+mx01.khuntly.dev.opal.synacor.com
 
 [nginx]
-pop02.khuntly.dev.opal.synacor.com
-
-[ldap]
-ldap01.khuntly.dev.opal.synacor.com
-
-[ecmgr]
-xfer01.khuntly.dev.opal.synacor.com
+pop01.khuntly.dev.opal.synacor.com
 
 [opal:children]
-maildrop
-mx
-smtp
-ecmgr
-nginx
 ldap
+maildrop
+ecelerity
+nginx
+

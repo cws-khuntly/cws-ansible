@@ -3,15 +3,146 @@
 #   DESCRIPTION:  Perform post-installation configuration
 #==============================================================================
 ---
-- name: Fix installation permissions/directories
-  include: fix-installation.yml
+- name: Check if /opt/ecelerity exists
+  stat:
+    path=/opt/ecelerity
+    get_md5=no
+  register: exists
 
-- name: Synchronize puppet
-  command: puppet agent -t
+- name: If /opt/ecelerity exists, move its content to /opt/msys/ecelerity
+  command: mv /opt/ecelerity/bin/* /opt/msys/ecelerity/bin
+  when: exists
 
-- name: Include ecelerity configuration steps
-  include: apply-configuration.yml
+- name: Remove /opt/ecelerity
+  file:
+    path=/opt/ecelerity
+    state=absent
+  when: exists
+
+- name: Create symlink /opt/ecelerity => /opt/msys/ecelerity
+  file:
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
+    path=/opt/ecelerity
+    src=/opt/msys/ecelerity
+    state=link
+
+- name: Change permissions on /opt/msys
+  file:
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
+    path=/opt/msys
+    recurse=yes
+    state=directory
+
+- name: Change permissions on /var/log/ecelerity
+  file:
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
+    path=/var/log/ecelerity
+    recurse=yes
+    state=directory
+
+##
+## SVN checkout
+##
+- name: (POSTINSTALL) Check out current configuration from cluster manager (SMTP)
+  subversion:
+    dest=/opt/msys/ecelerity/conf
+    password="{{ svn_password }}"
+    repo="{% if server_type is smtp %} {{ outbound.svn.host }} {% else %} {{ inbound.svn.host }} {% endif %}"
+    revision=HEAD
+    username=admin
+  when: is_mta|bool
+
+##
+## Copy updated global configuration
+##
+- name: (POSTINSTALL) Apply configuration files (global)
+  synchronize:
+    src="global"
+    dest="{{ install_dir }}/etc/conf/"
+    archive=yes
+    checksum=yes
+    compress=no
+    mode=push
+    perms=yes
+    recursive=yes
+    rsync_timeout=0
+    rsync_opts="-avr --delete --no-motd --stats --progress"
+
+##
+## copy default (domain-specific) configuration
+##
+- name: (POSTINSTALL) Apply configuration files (default)
+  synchronize:
+    src="default/{{ server_type }}"
+    dest="{{ install_dir }}/etc/conf/default"
+    archive=yes
+    checksum=yes
+    compress=no
+    mode=push
+    perms=yes
+    recursive=yes
+    rsync_timeout=0
+    rsync_opts="-avr --delete --no-motd --stats --progress"
+
+##
+## Copy customizations to config
+##
+- name: (POSTINSTALL) Create eccluster.conf
+  template:
+    src=eccluster.j2
+    dest="/opt/msys/ecelerity/etc/conf/global"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+
+- name: (POSTINSTALL) Create ecelerity-cluster.conf
+  template:
+    src=ecelerity-cluster.j2
+    dest="/opt/msys/ecelerity/etc/conf/global"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+
+- name: (POSTINSTALL) Create ecelerity.conf
+  template:
+    src=ecelerity.j2
+    dest="/opt/msys/ecelerity/etc/conf/global"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+
+- name: (POSTINSTALL) Create client_vars.siv
+  template:
+    src=client_vars.j2
+    dest="/opt/msys/ecelerity/etc/conf/default/siv"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0600
+
+- name: (POSTINSTALL) Create auth.lua
+  template:
+    src=auth.j2
+    dest="/opt/msys/ecelerity/etc/conf/default/lua"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+
+##
+## update sysctl
+##
+- name: (POSTINSTALL) Copy sysctl configuration
+  copy:
+    src="10-ecelerity.conf"
+    dest="/etc/sysctl.d/10-ecelerity.conf"
+    owner="root"
+    group="root"
+    mode=0644
   notify:
-    - sync-puppet
-    - restart-service
-    - ecelerity-build-complete
+    - reload sysctl
+    - sync puppet
+    - restart service
+    - notify complete
+

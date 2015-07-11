@@ -1,0 +1,20 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/nginx/ssl-certs.yml
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
+#==============================================================================
+---
+##
+## ssl certs
+##
+self_signed_enabled: TRUE
+openssl_self_signed:
+  - name: 'mail.{{ domain }}'
+    domain_name: 'mail.{{ domain }}'
+    country: 'US'
+    state: 'New York'
+    city: 'Buffalo'
+    organization: 'Synacor, Inc.'
+    unit: 'Email Operations'
+    email: 'emailops@synacor.com'
+    days: 90
+

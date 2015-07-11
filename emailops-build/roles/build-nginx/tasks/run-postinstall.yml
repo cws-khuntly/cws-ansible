@@ -66,6 +66,20 @@
 ##
 ## Create a self-signed certificate if necessary
 ##
+- name: (POSTINSTALL) Creating self-signed server SSL cert
+  command:
+    openssl req -new
+      -x509
+      -nodes
+      -extensions v3_ca
+      -days {{ item.days|default(30) }}
+      -subj "/C={{ item.country|default('US') }}/ST={{ item.state|default('New York') }}/L={{ item.city|default('Buffalo') }}/O={{ item.organization|default('Synacor, Inc') }}/OU={{ item.unit|default('Email Operations') }}/CN={{ item.name }}/emailAddress={{ item.email|default('emailops@synacor.com') }}"
+      -keyout {{ openssl_keys_path }}/{{ item.name }}.key
+      -out {{ openssl_certs_path }}/{{ item.name }}.crt
+  args:
+    creates: "{{ openssl_certs_path }}/{{ item.name }}.crt"
+  with_items: openssl_self_signed
+  when: self_signed_enabled|bool
 #- name: (POSTINSTALL) Create a self-signed certificate if necessary
 #  command: "openssl req -new -nodes -x509 -subj {{ self_signed_cn }} -days 90 -keyout /etc/nginx/ssl/mail.{{ domain }}.key -out /etc/nginx/ssl/mail.{{ domain }}.crt -extensions v3_ca" creates="/etc/nginx/ssl/mail.{{ domain }}.crt"
 #  when: self_signed_enabled|bool

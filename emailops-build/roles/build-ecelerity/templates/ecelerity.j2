@@ -14,6 +14,20 @@ Esmtp_Listener {
     #
     Idle_Time = 300
 
+    {% if server_type is smtp %}
+    Peer "10.0.0.0/8" {
+        SMTP_Extensions = (
+            "ENHANCEDSTATUSCODES"
+            "XDUMPCONTEXT"
+        )
+        Context = [
+            trusted = "yes"
+        ]
+
+        Open_Relay = "true"
+    }
+    {% endif %}
+
     # Internal relays
     <% for host in hosts %>
     Listen ":{{ host.port }}" {
@@ -27,7 +41,12 @@ Esmtp_Listener {
             "STARTTLS"
         )
         Context = [
-            mx = "true"
+            {% if server_type is smtp %}
+                smtp = "true"
+                listener_domain = "{{ host.domain }}"
+            {% else %}
+                mx = "true"
+            { % endif %}
         ]
 
         banner_hostname = "{{ server_type }}.{{ host.domain }}"
