@@ -3,14 +3,8 @@
 #   DESCRIPTION:  Primary entry point for this play
 #==============================================================================
 ---
-- name: Install software
-  include: software.yml
-
-- name: Set up SSH
-  include: ssh.yml
-
-- name: Include sync
-  include: sync.yml
-
-- name: Set up configuration files for Java apps
-  include: update-config.yml
+- name: Add desired packages
+  raw: yum -y install python-simplejson htop iotop
+  become: yes
+  become_user: root
+  become_method: sudo

@@ -3,6 +3,16 @@
 #   DESCRIPTION:  Install and configure Zimbra zimlets
 #==============================================================================
 ---
+
+yum -y install zimbra-zimlet-generic-com_synacor*
+sudo -u 'zmzimletctl ldapDeploy com_synacor_carbyn'
+sudo -u 'zmzimletctl enable com_synacor_carbyn'
+sudo -u '[ -f /opt/zimbra/zimlets-deployed/com_synacor_carbyn/config_template.xml ] && zmzimletctl configure /opt/zimbra/zimlets-deployed/com_synacor_carbyn/config_template.xml'
+sudo -u 'zmzimletctl ldapDeploy com_synacor_alias'
+sudo -u 'zmzimletctl enable com_synacor_alias'
+sudo -u '[ -f /opt/zimbra/zimlets-deployed/com_synacor_alias/config_template.xml ] && zmzimletctl configure /opt/zimbra/zimlets-deployed/com_synacor_alias/config_template.xml'
+
+
 ##
 ## install zimlets
 ##

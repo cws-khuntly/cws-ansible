@@ -9,12 +9,25 @@
       git:
         clone=yes
         dest="{{ checkout_to }}"
-        key_file="{{ ssh_key }}"
+        key_file="{{ git_ssh_key }}"
         recursive=yes
         repo="{{ dotfiles_repo }}"
         track_submodules=yes
         update=yes
         version="{{ version }}"
+  become: no
+
+- hosts: localhost
+  tasks:
+    - name: clean up git checkout
+      file:
+        path="{{ checkout_to }}/.git"
+        state=absent
+    - name: clean up git checkout
+      file:
+        path="{{ checkout_to }}/dotbot"
+        state=absent
+  become: no
 
 - hosts: all
   gather_facts: false

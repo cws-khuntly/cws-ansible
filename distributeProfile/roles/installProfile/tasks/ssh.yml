@@ -6,24 +6,14 @@
 ##
 ## Send public keys
 ##
-- name: Set up authorized_keys (with key options)
-  authorized_key:
-    key="{{ item }}"
-    key_options="{{ key_options }}"
-    state=present
-    user=khuntly
-  with_file:
-    - "/home/khuntly/.ssh/id_rsa.pub"
-  when: add_key_options|bool
-
-- name: Set up authorized_keys (without key options)
+- name: Set up authorized_keys
   authorized_key:
     key="{{ item }}"
     state=present
     user=khuntly
+    exclusive=yes
   with_file:
-    - "/home/khuntly/.ssh/id_rsa.pub"
-  when: not add_key_options|bool
+    - "{{ ssh_keyfile }}"
 
 - name: update ssh config
   template:
@@ -32,3 +22,8 @@
     owner="{{ remote_user }}"
     group="{{ remote_group }}"
     mode=0644
+
+- name: Remove existing known_hosts file
+  file:
+    path: /home/khuntly/.ssh/known_hosts
+    state: absent

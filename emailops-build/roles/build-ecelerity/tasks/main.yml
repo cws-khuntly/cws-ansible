@@ -3,27 +3,25 @@
 #   DESCRIPTION:  Primary entry point for play
 #==============================================================================
 ---
-- name: Run ecelerity installation steps (ecmgr)
+- name: Run ecelerity installation steps
   include: run-installation.yml
-  vars_files:
-    - ecmgr.yml
   notify:
     - sync-puppet
     - restart-service
-  when: is_ecmgr
 
-- name: Run ecelerity installation steps (MTA)
-  vars_files:
-    - mta.yml
+- name: Run ecelerity post-installation steps
   include: run-postinstall.yml
   notify:
     - sync-puppet
     - restart-service
-  when: is_mta
 
 - name: Remove installer options file
   file:
     path="{{ tmpdir }}/installer.conf"
+
+- name: Remove installer options file (ecmgr)
+  file:
+    path="{{ tmpdir }}/ecelerity"
     state=absent
 
 - name: Remove install archive
