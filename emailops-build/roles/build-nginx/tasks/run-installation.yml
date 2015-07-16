@@ -6,7 +6,7 @@
 ##
 ## Run installation steps
 ##
-- name: (INSTALL) Install selected packages
+- name: (INSTALL) Install selected packages (NGINX)
   yum:
     name: "{{ item.name }}-{{ item.version }}"
     state: present

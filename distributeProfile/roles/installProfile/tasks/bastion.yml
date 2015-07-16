@@ -13,21 +13,18 @@
     user=khuntly
     exclusive=yes
   with_file:
-    - "{{ ssh_keyfile }}"
+    - "{{ ansible_env.HOME }}/.ssh/known_hosts"
 
 - name: Remove existing known_hosts file
   file:
     path=/home/khuntly/.ssh/known_hosts
     state=absent
 
-- name: Remove any keyfiles found
-  file:
-    path="/home/khuntly/.ssh/{{ item }}"
-    state=absent
-  with_items:
-    - id_rsa
-    - id_rsa.pub
-    - id_dsa
-    - id_dsa.pub
-    - id_ecdsa
-    - id_ecdsa.pub
+- name: update esol-core service config
+  template:
+    src=ssh/config.j2
+    dest="{{ remote_home }}/.ssh/config"
+    owner="{{ remote_user }}"
+    group="{{ remote_group }}"
+    mode=0644
+

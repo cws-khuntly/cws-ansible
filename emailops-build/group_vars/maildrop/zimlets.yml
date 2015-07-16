@@ -34,10 +34,12 @@ zimlets:
     version: 2013.03.25.14.07-1.noarch
   - name: zimbra-zimlet-generic-com_synacor_spam_ecelerity
     version: 2015.05.13.12.43-1.noarch
+  - name: zimbra-skin-synacor-synabasev8 ## zimbra 8
+    version: 2015.07.09.10.45-1.noarch
 
 ##
 ## custom skins/zimlets as necessary
 ##
 custom-zimlets:
-  - zimbra-zimlet-wow-com_zimbra_rssfeeds_wow
-  - zimbra-zimlet-wow-com_synacor_search_wow
+  #- name:
+  #  version:

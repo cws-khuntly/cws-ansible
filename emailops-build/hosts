@@ -14,7 +14,7 @@ smtp01.khuntly.dev.opal.synacor.com
 mx01.khuntly.dev.opal.synacor.com
 
 [nginx]
-pop01.khuntly.dev.opal.synacor.com
+pop02.khuntly.dev.opal.synacor.com
 
 [opal:children]
 ldap

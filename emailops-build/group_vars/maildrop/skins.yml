@@ -4,10 +4,11 @@
 #==============================================================================
 ---
 skins:
-  #- zimbra-skin-synacor-synabase ## zimbra 7
-  - zimbra-skin-synacor-synabasev8 ## zimbra 8
+  #- name:
+  #  version:
+
 custom-skins:
-  - zimbra-skin-viasat-viasatV8
-  - zimbra-skin-viasat-wildblueV8
+  #- name:
+  #  version:
 
 zimbra_pref_skin: synabasev8

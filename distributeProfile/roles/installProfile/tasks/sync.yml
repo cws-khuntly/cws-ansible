@@ -15,7 +15,6 @@
     recursive=yes
     rsync_timeout=0
     rsync_opts="-qavr --delete --delete-excluded --exclude 'dotbot' --exclude '.git' --no-motd"
-    use_ssh_args=yes
   notify:
     - install
 

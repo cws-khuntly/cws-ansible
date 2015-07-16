@@ -24,6 +24,11 @@
     state=stopped
   ignore_errors: yes
 
+- name: (POSTINSTALL) Create nginx SSL directory
+  file:
+    path=/etc/nginx/ssl
+    state=directory
+
 - name: (POSTINSTALL) Generate 2048 bit DH key for nginx (logjam)
   command: "/usr/bin/openssl dhparam -out {{ dhparam_output }} {{ dhparam_keysize }}"
 
@@ -80,6 +85,7 @@
     creates: "{{ openssl_certs_path }}/{{ item.name }}.crt"
   with_items: openssl_self_signed
   when: self_signed_enabled|bool
+
 #- name: (POSTINSTALL) Create a self-signed certificate if necessary
 #  command: "openssl req -new -nodes -x509 -subj {{ self_signed_cn }} -days 90 -keyout /etc/nginx/ssl/mail.{{ domain }}.key -out /etc/nginx/ssl/mail.{{ domain }}.crt -extensions v3_ca" creates="/etc/nginx/ssl/mail.{{ domain }}.crt"
 #  when: self_signed_enabled|bool

@@ -34,7 +34,7 @@ Esmtp_Listener {
         TLS_Certificate = "{{ install_dir }}/etc/conf/default/ssl/mail.{{ host.domain }}.crt"
         TLS_Key = "{{ install_dir }}/etc/conf/default/ssl/mail.{{ host.domain }}.key"
         TLS_Client_CA = "{{ install_dir }}/etc/conf/default/ssl/mail.{{ host.domain }}.chain"
-        TLS_Ciphers = "DEFAULT"
+        TLS_Ciphers = "{{ include_ciphers }}"
         SMTP_Extensions = (
             "ENHANCEDSTATUSCODES"
             "XDUMPCONTEXT"
