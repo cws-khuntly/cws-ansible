@@ -6,6 +6,7 @@
 ## These variables will be used to generate the unattended installation options file
 ## Change to suit environment
 build_type: MessageSystems Console MX server
+server_type: mx
 
 ##
 ## ssl certs
@@ -27,4 +28,3 @@ openssl_self_signed:
 ##
 jira_summary: "Request for MX VIP: {{ client_name }}/{{ datacenter }}"
 jira_description: "Please create mx.{{ client_name }}.{{ datacenter }} .caspersbox.comVIP with targets {{ address }}"
-

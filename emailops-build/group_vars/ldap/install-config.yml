@@ -3,18 +3,5 @@
 #   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
 #==============================================================================
 ---
-##
-## installation data
-##
 build_type: Zimbra Collaboration Server / LDAP
 is_ldap: TRUE
-is_maildrop: FALSE
-is_pop: FALSE
-is_mta: FALSE
-create_default_accounts: FALSE
-setup_stores: FALSE
-use_scality: FALSE
-use_reverse_proxy: FALSE
-activate_license: FALSE
-do_create_domain: no
-apply_global_config: FALSE

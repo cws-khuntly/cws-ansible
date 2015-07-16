@@ -49,6 +49,44 @@ ldap_url: "ldap://ldap01-a.{{ client_name }}.{{ datacenter }}.synacor.com:389/ l
 ldap_master_url: "ldap://ldap01-a.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap01-b.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap01-c.{{ client_name }}.{{ datacenter }}.synacor.com:389/ ldap://ldap01-d.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
 
 ##
+## zimbra unattended.conf
+##
+ldap_host: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
+smtp_dest: admin@{{ hostvars[inventory_hostname]['ansible_fqdn'] }}
+smtp_source: admin@{{ hostvars[inventory_hostname]['ansible_fqdn'] }}
+do_create_domain: no
+smtp_host: "mailrelay.{{ client_name }}.{{ datacenter }}.synacor.com"
+
+##
+## zimbra standard install config
+##
+build_type: Zimbra Collaboration Server
+is_ldap: FALSE
+is_maildrop: FALSE
+is_pop: FALSE
+is_mta: FALSE
+setup_stores: FALSE
+use_scality: FALSE
+use_reverse_proxy: FALSE
+activate_license: FALSE
+do_create_domain: no
+apply_global_config: FALSE
+admin_address: "admin@{{ client_name }}.{{ datacenter }}.synacor.com"
+install_dir: /opt/zimbra
+run_zmfixperms_extended: TRUE
+pkg_version: 8.0.7_GA_6021.RHEL6_64-20140408123937
+build_ecmgr: FALSE
+disable_fsck: FALSE
+mailboxd_java_options: "-XX:+UseConcMarkSweepGC -XX:PermSize=128m -XX:MaxPermSize=350m -XX:SoftRefLRUPolicyMSPerMB=1 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCApplicationStoppedTime -XX:-OmitStackTraceInFastThrow -XX:+UseParNewGC -XX:NewRatio=2 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/opt/zimbra/store/log -XX:ErrorFile=/opt/zimbra/log/hs_err_pid%p.log"
+tmpdir: /var/tmp
+install_packages: zimbra-core zimbra-ldap zimbra-apache zimbra-spell zimbra-store zimbra-memcached zimbra-proxy
+zimbra_version: 807
+zimbra_major_version: 8
+email_dest: khuntly@synacor.com
+enforce_ssl: FALSE
+create_default_accounts: FALSE
+
+##
 ## ssl ciphers
 ##
 exclude_ciphers:
@@ -72,3 +110,11 @@ exclude_ciphers:
   - SSL_RSA_WITH_DES_CBC_SHA
 include_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA:!SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA:!SSL_DHE_DSS_WITH_DES_CBC_SHA:!SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA:!SSL_DHE_RSA_WITH_DES_CBC_SHA:!SSL_RSA_EXPORT_WITH_DES40_CBC_SHA:!SSL_RSA_EXPORT_WITH_RC4_40_MD5:!SSL_RSA_WITH_DES_CBC_SHA"
 
+##
+## base packaging
+##
+base_packages:
+  - name: nc
+    version: "*"
+  - name: zimbra-core
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"

@@ -9,8 +9,6 @@
 packages:
   - name: nginx
     version: "{{ nginx_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
-  - name: zimbra-core
-    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: zimbra-proxy
     version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: zimbra-memcached

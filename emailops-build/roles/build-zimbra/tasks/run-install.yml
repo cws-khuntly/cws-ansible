@@ -10,7 +10,9 @@
   yum:
     name: "{{ item.name }}-{{ item.version }}"
     state: present
-  with_items: "{{ packages|default([]) }}"
+  with_items:
+    - "{{ base_packages|default([]) }}"
+    - "{{ packages|default([]) }}"
 
 - name: Notify puppet
   command: puppet agent -t

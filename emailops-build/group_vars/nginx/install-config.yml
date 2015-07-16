@@ -11,7 +11,6 @@ nginx_conf: /etc/nginx/nginx.conf
 nginx_version: 1.4.7-3
 dhparam_keysize: 2048
 dhparam_output: /etc/nginx/ssl/dhparams-nginx.pem
-install_packages: zimbra-core zimbra-memcached zimbra-proxy
 is_ldap: FALSE
 is_maildrop: FALSE
 is_pop: TRUE
@@ -22,5 +21,12 @@ setup_stores: FALSE
 use_scality: FALSE
 use_reverse_proxy: TRUE
 activate_license: FALSE
-do_create_domain: no
-ldap_url: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
+blacklist_file: /opt/zimbra/conf/nginx/blacklisted_ips.txt
+hosts:
+  - domain: default.com
+    port.pop3: 110
+    port.pop3s: 995
+    port.imap: 143
+    port.imaps: 993
+
+cos_id: b1d6a2cb-d4bb-4479-a613-c45736d7986c

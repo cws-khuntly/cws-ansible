@@ -3,17 +3,5 @@
 #   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
 #==============================================================================
 ---
-## These variables will be used to generate the unattended installation options file
-## Change to suit environment
 build_type: Zimbra Collaboration Server / Maildrop
-is_ldap: FALSE
 is_maildrop: TRUE
-is_pop: FALSE
-is_mta: FALSE
-create_default_accounts: FALSE
-setup_stores: TRUE
-use_scality: TRUE
-use_reverse_proxy: FALSE
-activate_license: FALSE
-do_create_domain: no
-apply_global_config: FALSE

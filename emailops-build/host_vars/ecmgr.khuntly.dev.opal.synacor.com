@@ -6,6 +6,7 @@
 ## These variables will be used to generate the unattended installation options file
 ## Change to suit environment
 build_type: MessageSystems Cluster Manager
+server_type: ecmgr
 
 inbound_hosts:
   - name: "mx01.{{ client_name }}.{{ datacenter }}.synacor.com"
@@ -18,4 +19,3 @@ outbound_hosts:
     address: <ipaddr>
   - name: "smtp01.{{ client_name }}.{{ datacenter }}.synacor.com"
     address: <ipaddr>
-

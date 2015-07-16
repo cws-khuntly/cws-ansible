@@ -3,4 +3,13 @@
 #   DESCRIPTION:  nginx variables
 #==============================================================================
 ---
-
+##
+## accounting
+##
+group_id: 454
+group_name: nginx
+addl_groups:
+home_dir: /var/lib/nginx
+user_name: nginx
+user_shell: /sbin/nologin
+user_uid: 454

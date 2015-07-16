@@ -7,8 +7,6 @@
 ## yum installs
 ##
 packages:
-  - name: zimbra-core
-    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: zimbra-store
     version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: zimbra-apache

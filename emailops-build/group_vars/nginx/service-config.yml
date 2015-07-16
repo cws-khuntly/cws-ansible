@@ -3,15 +3,3 @@
 #   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
 #==============================================================================
 ---
-##
-## configuration
-##
-hosts:
-  - domain: default.com
-    port.pop3: 110
-    port.pop3s: 995
-    port.imap: 143
-    port.imaps: 993
-
-cos_id: b1d6a2cb-d4bb-4479-a613-c45736d7986c
-blacklist_file: /opt/zimbra/conf/nginx/blacklisted_ips.txt
