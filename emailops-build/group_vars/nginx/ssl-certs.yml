@@ -6,6 +6,9 @@
 ##
 ## ssl certs
 ##
+nginx_ssl_dir: /etc/nginx/ssl
+dhparam_keysize: 2048
+dhparam_output: "{{ nginx_ssl_dir }}/dhparams-nginx.pem"
 self_signed_enabled: TRUE
 openssl_self_signed:
   - name: 'mail.{{ domain }}'
