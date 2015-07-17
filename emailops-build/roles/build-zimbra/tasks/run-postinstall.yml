@@ -85,6 +85,7 @@
 - name: (POSTINSTALL) Kill any remaining slapd pids
   command: pkill slapd
   ignore_errors: yes
+  when: is_ldap|bool
 
 - name: (POSTINSTALL) Kill any remaining Zimbra pids
   command: pkill java
@@ -127,47 +128,27 @@
   include: common/localconfig.yml
 
 ##
-## Shut down services before continuing
-##
-- name: (POSTINSTALL) Stop services after applying localconfig
-  service:
-    name=zimbra
-    state=stopped
-  ignore_errors: yes
-
-- name: (POSTINSTALL) Kill any remaining slapd pids
-  command: pkill slapd
-  ignore_errors: yes
-
-- name: (POSTINSTALL) Kill any remaining Zimbra pids
-  command: pkill java
-  ignore_errors: yes
-
-- name: (POSTINSTALL) Kill any remaining Zimbra sessions
-  command: killall -u zimbra
-  ignore_errors: yes
-
-##
-## restart services
-##
-- name: (POSTINSTALL) Start services
-  service:
-    name=zimbra
-    state=restarted
-
-##
-## continue applying configuration changes
+## global zimbra configuration (applies to all nodes)
 ##
 - name: (POSTINSTALL) Include Zimbra global configuration tasks
   include: common/globalconfig.yml
 
+##
+## server zimbra configuration (applies to THIS node)
+##
 - name: (POSTINSTALL) Include Zimbra server configuration tasks
   include: common/serverconfig.yml
 
+##
+## enforce ssl authentication
+##
 - name: (POSTINSTALL) Enable mixed-mode
   include: common/ssl-redirect.yml
   when: enforce_ssl|bool
 
+##
+## disable zimbra backups
+##
 - name: (POSTINSTALL) Turn off Zimbra backups
   command: "{{ install_dir }}/bin/zmschedulebackup -F"
   become: yes
@@ -196,7 +177,7 @@
 #
 - name: (POSTINSTALL) Include Zimbra CoS tasks
   include: maildrop/cos.yml
-  when: is_maildrop|bool
+  when: is_maildrop|bool and apply_cos|bool
 
 - name: (POSTINSTALL) Add client data
   include: maildrop/add-client-data.yml
@@ -248,6 +229,7 @@
 - name: (POSTINSTALL) Kill any remaining slapd pids
   command: pkill slapd
   ignore_errors: yes
+  when: is_ldap|bool
 
 - name: (POSTINSTALL) Kill any remaining Zimbra pids
   command: pkill java
@@ -295,6 +277,7 @@
   service:
     name=zimbra
     state=restarted
+  when: not is_pop|bool
 
 ##
 ## POSTINSTALL COMPLETE

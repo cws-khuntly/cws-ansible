@@ -85,6 +85,8 @@ zimbra_major_version: 8
 email_dest: khuntly@synacor.com
 enforce_ssl: FALSE
 create_default_accounts: FALSE
+apply_cos: FALSE
+apply_global_config: TRUE
 
 ##
 ## ssl ciphers

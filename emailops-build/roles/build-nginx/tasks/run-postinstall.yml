@@ -32,6 +32,8 @@
 - name: (POSTINSTALL) Generate 2048 bit DH key for nginx (logjam)
   command: "/usr/bin/openssl dhparam -out {{ dhparam_output }} {{ dhparam_keysize }}"
 
+- debug: var="{{ group_name }}"
+
 ##
 ## Update nginx config
 ##
@@ -39,16 +41,18 @@
   template:
     src=nginx.j2
     dest="{{ nginx_conf }}"
-    owner="{{ file_owner }}"
-    group="{{ group_owner }}"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
     mode=0644
+
+- debug: var="{{ group_name }}"
 
 - name: (POSTINSTALL) Apply auth.php
   template:
     src=auth.j2
     dest=/var/www/html
-    owner="{{ file_owner }}"
-    group="{{ group_owner }}"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
     mode=0600
 
 - name: (POSTINSTALL) Fix onboard Apache

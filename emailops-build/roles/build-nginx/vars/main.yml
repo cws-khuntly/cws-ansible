@@ -13,3 +13,23 @@ home_dir: /var/lib/nginx
 user_name: nginx
 user_shell: /sbin/nologin
 user_uid: 454
+
+##
+## server config
+##
+servers:
+  - domain: kevin.com
+    port_pop3: 110
+    port_imap: 143
+    port_pop3s: 995
+    port_imaps: 993
+
+openssl_self_signed:
+  - name: "{{ client_domain }}"
+    days: 30
+    country: US
+    state: New York
+    city: Buffalo
+    organization: Synacor, Inc.
+    unit: Email Operations
+    email: emailops@synacor.com

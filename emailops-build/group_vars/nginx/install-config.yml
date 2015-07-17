@@ -9,6 +9,7 @@
 build_type: POP/IMAP Proxy
 nginx_conf: /etc/nginx/nginx.conf
 nginx_version: 1.4.7-3
+nginx_user: nginx
 dhparam_keysize: 2048
 dhparam_output: /etc/nginx/ssl/dhparams-nginx.pem
 is_ldap: FALSE
