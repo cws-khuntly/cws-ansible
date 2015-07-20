@@ -32,8 +32,6 @@
 - name: (POSTINSTALL) Generate 2048 bit DH key for nginx (logjam)
   command: "/usr/bin/openssl dhparam -out {{ dhparam_output }} {{ dhparam_keysize }}"
 
-- debug: var="{{ group_name }}"
-
 ##
 ## Update nginx config
 ##
@@ -45,12 +43,10 @@
     group="{{ group_name }}"
     mode=0644
 
-- debug: var="{{ group_name }}"
-
 - name: (POSTINSTALL) Apply auth.php
   template:
     src=auth.j2
-    dest=/var/www/html
+    dest=/var/www/html/auth.php
     owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0600
@@ -81,23 +77,20 @@
       -x509
       -nodes
       -extensions v3_ca
-      -days {{ item.days|default(30) }}
-      -subj "/C={{ item.country|default('US') }}/ST={{ item.state|default('New York') }}/L={{ item.city|default('Buffalo') }}/O={{ item.organization|default('Synacor, Inc') }}/OU={{ item.unit|default('Email Operations') }}/CN={{ item.name }}/emailAddress={{ item.email|default('emailops@synacor.com') }}"
-      -keyout {{ nginx_ssl_dir }}/{{ item.name }}.key
-      -out {{ nginx_ssl_dir }}/{{ item.name }}.crt
+      -days {{ item.0.days|default(30) }}
+      -subj "/C={{ item.0.country|default('US') }}/ST={{ item.0.state|default('New York') }}/L={{ item.0.city|default('Buffalo') }}/O={{ item.0.organization|default('Synacor, Inc') }}/OU={{ item.0.unit|default('Email Operations') }}/CN={{ item.1.domain }}/emailAddress={{ item.0.email|default('emailops@synacor.com') }}"
+      -keyout {{ nginx_ssl_dir }}/{{ item.1.domain }}.key
+      -out {{ nginx_ssl_dir }}/{{ item.1.domain }}.crt
   args:
-    creates: "{{ nginx_ssl_dir }}/{{ item.name }}.crt"
-  with_items: openssl_self_signed
+    creates: "{{ nginx_ssl_dir }}/{{ item.1.domain }}.crt"
+  with_together:
+    - "{{ openssl_self_signed|default([]) }}"
+    - "{{ hosts|default([]) }}"
   when: self_signed_enabled|bool
-
-#- name: (POSTINSTALL) Create a self-signed certificate if necessary
-#  command: "openssl req -new -nodes -x509 -subj {{ self_signed_cn }} -days 90 -keyout /etc/nginx/ssl/mail.{{ domain }}.key -out /etc/nginx/ssl/mail.{{ domain }}.crt -extensions v3_ca" creates="/etc/nginx/ssl/mail.{{ domain }}.crt"
-#  when: self_signed_enabled|bool
 
 ##
 ## Start everything back up
 ##
-
 - name: (POSTINSTALL) Restart nginx
   service:
     name=nginx

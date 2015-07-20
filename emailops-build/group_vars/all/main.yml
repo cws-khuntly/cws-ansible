@@ -51,7 +51,6 @@ ldap_master_url: "ldap://ldap01-a.{{ client_name }}.{{ datacenter }}.synacor.com
 ##
 ## zimbra unattended.conf
 ##
-ldap_host: "ldap://ldap01.{{ client_name }}.{{ datacenter }}.synacor.com:389/"
 smtp_dest: admin@{{ hostvars[inventory_hostname]['ansible_fqdn'] }}
 smtp_source: admin@{{ hostvars[inventory_hostname]['ansible_fqdn'] }}
 do_create_domain: no
@@ -118,5 +117,3 @@ include_ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDH
 base_packages:
   - name: nc
     version: "*"
-  - name: zimbra-core
-    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"

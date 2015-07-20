@@ -10,9 +10,9 @@ nginx_ssl_dir: /etc/nginx/ssl
 dhparam_keysize: 2048
 dhparam_output: "{{ nginx_ssl_dir }}/dhparams-nginx.pem"
 self_signed_enabled: TRUE
+
 openssl_self_signed:
-  - name: 'mail.{{ domain }}'
-    domain_name: 'mail.{{ domain }}'
+  - name: 'mail'
     country: 'US'
     state: 'New York'
     city: 'Buffalo'
@@ -20,4 +20,3 @@ openssl_self_signed:
     unit: 'Email Operations'
     email: 'emailops@synacor.com'
     days: 90
-

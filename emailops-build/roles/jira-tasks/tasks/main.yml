@@ -18,3 +18,4 @@
     issuetype="{{ jira_issue_type }}"
     assignee="{{ jira_assignee }}"
   delegate_to: 127.0.0.1
+  with_items: "{{ vip_listing|default([]) }}"

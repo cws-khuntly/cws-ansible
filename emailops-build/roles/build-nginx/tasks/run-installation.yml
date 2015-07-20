@@ -10,7 +10,7 @@
   yum:
     name: "{{ item.name }}-{{ item.version }}"
     state: present
-  with_items: "{{ packages|default([]) }}"
+  with_items: "{{ nginx_packages|default([]) }}"
 
 - name: Notify puppet
   command: puppet agent -t

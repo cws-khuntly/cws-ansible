@@ -6,13 +6,17 @@
 ##
 ## yum installs
 ##
-packages:
-  - name: nginx
-    version: "{{ nginx_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+zimbra_packages:
+  - name: zimbra-core
+    version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: zimbra-proxy
     version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: zimbra-memcached
     version: "{{ pkg_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+
+nginx_packages:
+  - name: nginx
+    version: "{{ nginx_version }}.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
   - name: scapi-consumers
     version: 2.5.2-102.noarch
   - name: scapi-core
