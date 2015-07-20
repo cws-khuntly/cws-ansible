@@ -18,7 +18,7 @@
   when: apply_global_config|bool
 
 - name: (POSTINSTALL) Update exclude cipher list (global config)
-  command: "{{ install_dir }}/bin/zmprov mcf zimbraReverseProxySSLCiphers +{{ item }}"
+  command: "{{ install_dir }}/bin/zmprov mcf +zimbraSSLExcludeCipherSuites {{ item }}"
   with_items: "{{ exclude_ciphers|default([]) }}"
   become: yes
   become_user: zimbra
