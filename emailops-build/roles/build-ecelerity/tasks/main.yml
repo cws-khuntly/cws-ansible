@@ -3,11 +3,11 @@
 #   DESCRIPTION:  Primary entry point for play
 #==============================================================================
 ---
-#- name: Run ecelerity installation steps
-#  include: run-installation.yml
-#  notify:
-#    - sync-puppet
-#    - restart-service
+- name: Run ecelerity installation steps
+  include: run-installation.yml
+  notify:
+    - sync-puppet
+    - restart-service
 
 - name: Run ecelerity post-installation steps
   include: run-postinstall.yml
