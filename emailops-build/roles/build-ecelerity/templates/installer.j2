@@ -5,49 +5,49 @@
 $selections = {
   'cloudmark' => 'y',
   'beik' => 'n',
-  {% if server_type is ecmgr %} 'mobility' => 'n', {% endif %} ## ecmgr only
-  {% if server_type is ecmgr %} 'dbroot' => '{{ db_root }}', {% endif %} ## ecmgr only
-  'db_init' => {% if server_type is mta %} n, {% else %} y, {% endif %} ## y for ecmgr, n for mta
+  'mobility' => 'n',
+  {% if server_type == 'ecmgr' %}'dbroot' => '{{ db_root }}',{% endif %} {# only required for cluster manager #}
+  'db_init' => '{{ db_init }}',
   'lbu' => 'y',
   'adapt_lu' => 'y',
   'db_init' => 'n',
   'expurgate' => 'n',
   'brightmail' => 'n',
-  {% if server_type is mta %} 'MTA' => 'y', {% endif %} ## only for mta
+  'MTA' => '{{ is_mta }}',
   'csapi' => 'n',
   'ctasd' => 'n',
   'devel' => 'y',
-  {% if server_type is ecmgr %} 'scope' => 'n', {% endif %} ## only for ecmgr
+  {% if server_type == 'ecmgr' %}'scope' => 'n',{% endif %} {# only required for cluster manager #}
   'roles' => {
-    'database' => {% if server_type is mta %} 0, {% else %} 1, {% endif %}, ## 1 for ecmgr, 0 for mta
-    'web' => {% if server_type is mta %} 0, {% else %} 1, {% endif %}, ## 1 for ecmgr, 0 for mta
-    'mta' => {% if server_type is mta %} 1, {% else %} 0, {% endif %}, ## 0 for ecmgr, 0 for mta
+    'database' => {{ database }},
+    'web' => {{ web }},
+    'mta' => {{ mta }},
     'singlenode' => 0, 
-    'manager' => {% if server_type is mta %} 0, {% else %} 1, {% endif %}  ## 1 for ecmgr, 0 for mta
+    'manager' => {{ manager }}
   },
   'dbhost' => '{{ manager_hostname }}',
-  {% if server_type is mta %} 'cluster' => 'y', {% endif %} ## mta only
+  {% if server_type == 'mta' %}'cluster' => 'y',{% endif %} {# only required for mta #}
   'cluster' => 'y',
   'validation-tools' => 'y',
-  {% if server_type is mta %} 'mgrhost' => '{{ manager_hostname }}', {% endif %} ## mta only
+  {% if server_type == 'mta' %}'mgrhost' => '{{ manager_hostname }}',{% endif %} {# only required for mta #}
   'encryption' => 'n',
-  {% if server_type is mta %} 'momentum-receiving' => 'y', {% endif %} ## mta only
-  'svcpasswd' => '{{ svcpasswd }}'
-  {% if server_type is ecmgr %}
+  {% if server_type == 'mta' %}'momentum-receiving' => 'y',{% endif %} {# only required for mta #}
+  'svcpasswd' => '{{ svcpasswd }}',
+  {% if server_type == 'ecmgr' %}
   'cluster-mgr' => 'y',
-  'DB' => 'y', ## only for ecmgr
-  'pgssl' => 'n', ## ecmgr only
-  'ssl' => 'n', ## ecmgr only
+  'DB' => 'y',
+  'pgssl' => 'n',
+  'ssl' => 'n',
   'adminpass' => '{{ adminpass }}',
   'subclusters' => {
     'inbound' => {
       {% for entry in inbound_hosts %}
-        '{{ entry.name }}' => '{{ entry.ipaddr }}'
+      '{{ entry.name }}' => '{{ entry.address }}',
       {% endfor %}
     },
     'outbound' => {
       {% for entry in outbound_hosts %}
-        '{{ entry.name }}' => '{{ entry.ipaddr }}'
+      '{{ entry.name }}' => '{{ entry.address }}',
       {% endfor %}
     },
     'manager' => {

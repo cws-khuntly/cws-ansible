@@ -7,11 +7,12 @@
 ## global config
 ##
 - name: (POSTINSTALL) Apply Zimbra configuration (global config)
-  command: "{{ install_dir }}/bin/zmprov mcf zimbraHttpDebugHandlerEnabled FALSE zimbraRedoLogDeleteOnRollover TRUE zimbraVersionCheckInterval 0
-    zimbraVersionCheckSendNotifications FALSE zimbraLmtpNumThreads 250 zimbraHttpNumThreads 500 zimbraImapNumThreads 600 zimbraPop3NumThreads 600
-    zimbraImapMaxRequestSize 10240 zimbraImapMaxConnections 600 zimbraReverseProxySSLCiphers '{{ include_ciphers }}'
-    +zimbraAccountExtraObjectClass synacorEmailAccount +zimbraAccountExtraObjectClass synacorPortalAccount +zimbraDomainExtraObjectClass synacorEmailDomain
-    +zimbraDomainExtraObjectClass synacorPortalDomain +zimbraCosExtraObjectClass synacorEmailCOS"
+  command: "{{ install_dir }}/bin/zmprov mcf +zimbraAccountExtraObjectClass synacorEmailAccount +zimbraAccountExtraObjectClass synacorPortalAccount
+    +zimbraCosExtraObjectClass synacorEmailCOS +zimbraDomainExtraObjectClass synacorEmailDomain +zimbraDomainExtraObjectClass synacorPortalDomain
+    zimbraHttpDebugHandlerEnabled FALSE zimbraImapCleartextLoginEnabled TRUE zimbraPop3CleartextLoginEnabled TRUE zimbraLmtpNumThreads 250
+    zimbraHttpNumThreads 500 zimbraImapNumThreads 600 zimbraPop3NumThreads 600 zimbraImapMaxRequestSize 10240 zimbraImapMaxConnections 600
+    zimbraRedoLogDeleteOnRollover TRUE zimbraVersionCheckInterval 0 zimbraVersionCheckSendNotifications FALSE
+    zimbraReverseProxySSLCiphers '{{ include_ciphers }}'"
   become: yes
   become_user: zimbra
   become_method: sudo

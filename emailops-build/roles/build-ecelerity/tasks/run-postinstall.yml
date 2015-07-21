@@ -3,89 +3,30 @@
 #   DESCRIPTION:  Perform post-installation configuration
 #==============================================================================
 ---
-- name: Check if /opt/ecelerity exists
-  stat:
-    path=/opt/ecelerity
-    get_md5=no
-  register: exists
-
-- name: If /opt/ecelerity exists, move its content to /opt/msys/ecelerity
-  command: mv /opt/ecelerity/bin/* /opt/msys/ecelerity/bin
-  when: exists
-
-- name: Remove /opt/ecelerity
-  file:
-    path=/opt/ecelerity
-    state=absent
-  when: exists
-
-- name: Create symlink /opt/ecelerity => /opt/msys/ecelerity
-  file:
-    group="{{ group_name }}"
-    owner="{{ user_name }}"
-    path=/opt/ecelerity
-    src=/opt/msys/ecelerity
-    state=link
-
-- name: Change permissions on /opt/msys
-  file:
-    group="{{ group_name }}"
-    owner="{{ user_name }}"
-    path=/opt/msys
-    recurse=yes
-    state=directory
-
-- name: Change permissions on /var/log/ecelerity
-  file:
-    group="{{ group_name }}"
-    owner="{{ user_name }}"
-    path=/var/log/ecelerity
-    recurse=yes
-    state=directory
-
-##
-## SVN checkout
-##
-- name: (POSTINSTALL) Check out current configuration from cluster manager (SMTP)
-  subversion:
-    dest=/opt/msys/ecelerity/conf
-    password="{{ svn_password }}"
-    repo="{% if server_type is smtp %} {{ outbound.svn.host }} {% else %} {{ inbound.svn.host }} {% endif %}"
-    revision=HEAD
-    username=admin
-  when: is_mta|bool
 
 ##
 ## Copy updated global configuration
 ##
 - name: (POSTINSTALL) Apply configuration files (global)
   synchronize:
-    src="global"
+    delete=yes
     dest="{{ install_dir }}/etc/conf/"
-    archive=yes
-    checksum=yes
-    compress=no
-    mode=push
-    perms=yes
     recursive=yes
     rsync_timeout=0
     rsync_opts="-avr --delete --no-motd --stats --progress"
+    src=global
 
 ##
 ## copy default (domain-specific) configuration
 ##
 - name: (POSTINSTALL) Apply configuration files (default)
   synchronize:
-    src="default/{{ server_type }}"
-    dest="{{ install_dir }}/etc/conf/default"
-    archive=yes
-    checksum=yes
-    compress=no
-    mode=push
-    perms=yes
+    delete=yes
+    dest="{{ install_dir }}/etc/conf/"
     recursive=yes
     rsync_timeout=0
     rsync_opts="-avr --delete --no-motd --stats --progress"
+    src=default
 
 ##
 ## Copy customizations to config

@@ -6,38 +6,54 @@
 ##
 ## Check for appropriate disks
 ##
-- name: (PREINSTALL) Ensure mountpoints exist
+- name: (PREINSTALL/COMMON) Ensure mountpoints exist
   stat:
     path="{{ item }}"
   register: mount_exists
   with_items: "{{ mountpoints|default([]) }}"
 
-- name: (PREINSTALL) Create disks and filesystems
+- name: (PREINSTALL/COMMON) Create disks and filesystems
   include: disks/create-disks.yml
   when: not mount_exists
 
 ##
+## Create home directory path
+##
+- name: (PREINSTALL/COMMON) Create home directory base
+  file:
+    path=/opt/home
+    state=directory
+
+##
+## Generate password
+##
+- name: (PREINSTALL/COMMON) Generate account password
+  shell: /usr/bin/env date +%s | /usr/bin/env sha256sum | /usr/bin/env base64 | /usr/bin/env head -c 32
+  register: acct_password
+
+##
 ## Create user group/account
 ##
-- name: (PREINSTALL) Create user group
+- name: (PREINSTALL/COMMON) Create user group
   group:
     gid="{{ group_id }}"
     name="{{ group_name }}"
     system=yes
 
-- name: (PREINSTALL) Create user account
+- name: (PREINSTALL/COMMON) Create user account
   user:
     group="{{ group_name }}"
     groups="{{ addl_groups }}"
     home="{{ home_dir }}"
     name="{{ user_name }}"
+    password="{{ acct_password.stdout }}"
     shell="{{ user_shell }}"
     state=present
     uid="{{ user_uid }}"
 
 ##
 ## Install system packages, if any
-- name: Install necessary system packages
+- name: (PREINSTALL/COMMON) Install necessary system packages
   yum:
     name="{{ item }}"
     state=present

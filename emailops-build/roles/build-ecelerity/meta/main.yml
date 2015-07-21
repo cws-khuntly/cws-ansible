@@ -3,6 +3,6 @@
 #   DESCRIPTION:  Entry point for the Zimbra build play
 #==============================================================================
 ---
-dependencies:
-  - { role: system-update }
-  - { role: common }
+#dependencies:
+#  - { role: system-update }
+#  - { role: common }

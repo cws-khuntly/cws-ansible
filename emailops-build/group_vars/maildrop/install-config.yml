@@ -5,3 +5,6 @@
 ---
 build_type: Zimbra Collaboration Server / Maildrop
 is_maildrop: TRUE
+apply_default_cos: TRUE
+imap_throttle_acct_limit: 2000
+pop3_throttle_account_limit: 1000

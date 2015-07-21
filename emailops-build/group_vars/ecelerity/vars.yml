@@ -13,15 +13,19 @@ mountpoints:
 ## template updates
 ##
 install_dir: /opt/msys/ecelerity
-manager_hostname: "ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com"
+manager_hostname: "xfer01.{{ client_name }}.{{ datacenter }}.synacor.com"
 manager_ipaddr: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
 cluster_group: ec_cluster
 control_group: ec_console
 
 maildrops:
- - list
- - of
- - drops
+ - md01.email.dev.opal.synacor.com
+ - md02.email.dev.opal.synacor.com
+
+##
+## installer conf
+##
+db_root: /var/db/msyspg
 
 ##
 ## subversion!

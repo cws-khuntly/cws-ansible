@@ -18,5 +18,11 @@
     mode=0644
 
 - name: Process installation
-  command: "{{ tmpdir }}/ecelerity/installer --option-file {{ tmpdir }}/installer.conf"
+  command: "/usr/bin/env perl {{ tmpdir }}/ecelerity/installer --option-file {{ tmpdir }}/installer.conf --start-services y"
+  args:
+    chdir: "{{ tmpdir }}/ecelerity"
+  become: yes
+  become_user: root
+  become_method: sudo
 
+#shell: "cd {{ tmpdir }}; /usr/bin/env perl {{ tmpdir }}/ecelerity/installer --option-file {{ tmpdir }}/installer.conf"

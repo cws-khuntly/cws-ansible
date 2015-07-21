@@ -44,12 +44,37 @@
   with_items: "{{ custom_skins|default([]) }}"
   when: install_synacor_skins_zimlets|bool
 
-#sudo -u 'zmzimletctl ldapDeploy com_synacor_carbyn'
-#sudo -u 'zmzimletctl enable com_synacor_carbyn'
-#sudo -u '[ -f /opt/zimbra/zimlets-deployed/com_synacor_carbyn/config_template.xml ] && zmzimletctl configure /opt/zimbra/zimlets-deployed/com_synacor_carbyn/config_template.xml'
-#sudo -u 'zmzimletctl ldapDeploy com_synacor_alias'
-#sudo -u 'zmzimletctl enable com_synacor_alias'
-#sudo -u '[ -f /opt/zimbra/zimlets-deployed/com_synacor_alias/config_template.xml ] && zmzimletctl configure /opt/zimbra/zimlets-deployed/com_synacor_alias/config_template.xml'
+- name: (POSTINSTALL) Configure zimlet (standard)
+  shell: "{{ install_dir }}/bin/zmzimletctl ldapDeploy {{ item.configure_zimlet }}"
+  with_items: "{{ zimlets|default([]) }}"
+
+- name: (POSTINSTALL) Configure zimlets (custom)
+  shell: "{{ install_dir }}/bin/zmzimletctl ldapDeploy {{ item.configure_zimlet }}"
+  with_items: "{{ custom-zimlets|default([]) }}"
+
+- name: (POSTINSTALL) Enable zimlets (standard)
+  shell: "{{ install_dir }}/bin/zmzimletctl enable {{ item.configure_zimlet }}"
+  with_items: "{{ zimlets|default([]) }}"
+
+- name: (POSTINSTALL) Enable zimlets (custom)
+  shell: "{{ install_dir }}/bin/zmzimletctl enable {{ item.configure_zimlet }}"
+  with_items: "{{ zimlets|default([]) }}"
+
+- name: (POSTINSTALL) Ensure there is a configuration template for the zimlet (standard)
+  file:
+    path="{{ install_dir }}/zimlets-deployed/{{ item.configure_zimlet }}/config_template.xml"
+  register: zimlet_config_exists
+  with_items: "{{ zimlets|default([]) }}"
+
+- name: (POSTINSTALL) Configure zimlet via template (standard)
+  shell: "{{ install_dir }}/bin/zmzimletctl {{ install_dir }}/zimlets-deployed/{{ item.configure_zimlet }}/config_template.xml"
+  with_items: "{{ zimlets|default([]) }}"
+  when: zimlet_config_exists.stat.exists|bool
+
+- name: (POSTINSTALL) Configure zimlet via template (custom)
+  shell: "{{ install_dir }}/bin/zmzimletctl {{ install_dir }}/zimlets-deployed/{{ item.configure_zimlet }}/config_template.xml"
+  with_items: "{{ custom-zimlets|default([]) }}"
+  when: zimlet_config_exists.stat.exists|bool
 
 ##
 ## set preferred skin

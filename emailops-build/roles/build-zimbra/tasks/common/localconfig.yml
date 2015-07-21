@@ -10,7 +10,8 @@
   command: "{{ install_dir }}/bin/zmlocalconfig -e ssl_allow_untrusted_certs=TRUE ldap_url=\"{{ ldap_url }}\" ldap_master_url=\"{{ ldap_master_url }}\"
     mailboxd_java_options=\"{{ mailboxd_java_options }}\" zimbra_require_interprocess_security=0 ldap_connect_pool_timeout=30000 ldap_connect_pool_debug=TRUE
     ldap_starttls_supported=0 ldap_starttls_required=FALSE ldap_common_require_tls=0 zmmtaconfig_enable_config_restarts=FALSE zmdbintegrityreport_disabled=TRUE
-    zimbra_mysql_connector_maxActive=200 smtp_destination=\"{{ email_dest }}\""
+    zimbra_mysql_connector_maxActive=200 smtp_destination=\"{{ email_dest }}\" imap_throttle_acct_limit={{ imap_throttle_acct_limit }}
+    pop3_throttle_account_limit={{ pop3_throttle_account_limit }}"
   become: yes
   become_user: zimbra
   become_method: sudo

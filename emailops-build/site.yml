@@ -11,7 +11,6 @@
     is_pop: false
   roles:
     - build-zimbra
-    - jira-tasks
   tags:
     - build-ldap
 
@@ -23,30 +22,27 @@
     is_pop: false
   roles:
     - build-zimbra
-    - jira-tasks
   tags:
     - build-maildrop
 
-- hosts: ecmgr
+- hosts: ecelerity
   gather_facts: true
   roles:
     - build-ecelerity
   tags:
     - build-ecmgr
 
-- hosts: smtp
+- hosts: ecelerity
   gather_facts: true
   roles:
     - build-ecelerity
-    - jira-tasks
   tags:
     - build-smtp
 
-- hosts: mx
+- hosts: ecelerity
   gather_facts: true
   roles:
     - build-ecelerity
-    - jira-tasks
   tags:
     - build-mx
 
@@ -58,6 +54,5 @@
     is_pop: true
   roles:
     - build-nginx
-    - jira-tasks
   tags:
     - build-nginx

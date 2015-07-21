@@ -26,6 +26,7 @@
     zimbraFeatureConfirmationPageEnabled TRUE zimbraFeatureIMEnabled FALSE zimbraFeatureMAPIConnectorEnabled FALSE zimbraFeatureMobileSyncEnabled FALSE zimbraFeatureMobilePolicyEnabled FALSE
     zimbraFeatureSkinChangeEnabled TRUE"
   with_items: "{{ cos_listing.stdout_lines|default([]) }}"
+  when: apply_default_cos|bool
   become: yes
   become_user: zimbra
   become_method: sudo
