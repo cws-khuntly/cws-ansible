@@ -26,21 +26,21 @@ ec_logger "ec_logger_cluster" {
 ### Synacor's Custom Cluster Logging ###
 
 custom_logger "custom_delivery" {
-    delivery_format = "%t{%Y%m%d.%H%M%S} msg-id=%i host=%H from=%m@%M to=%r@%R subject='%vctx_mess{subject}' size=%B binding=%b delay=%T CMAE-Score=%vctx_mess{cmae-score} CMAE-Analysis=<%vctx_mess{cmae-analysis}>"
+    {% raw %}delivery_format = "%t{%Y%m%d.%H%M%S} msg-id=%i host=%H from=%m@%M to=%r@%R subject='%vctx_mess{subject}' size=%B binding=%b delay=%T CMAE-Score=%vctx_mess{cmae-score} CMAE-Analysis=<%vctx_mess{cmae-analysis}>"{% endraw %}
     delivery_logfile = "cluster:///var/log/ecelerity/delivery_log.cluster=>master"
     delivery_log_mode = "0644"
     sanitize = "yes"
 }
 
 custom_logger "custom_reception" {
-    reception_format = "%t{%Y%m%d.%H%M%S} msg-id=%i host=%H from=%m@%M to=%r@%R subject='%vctx_mess{subject}' size=%B binding=%b delay=%T CMAE-Score=%vctx_mess{cmae-score} CMAE-Analysis=<%vctx_mess{cmae-analysis}> Auth=%U"
+    {% raw %}reception_format = "%t{%Y%m%d.%H%M%S} msg-id=%i host=%H from=%m@%M to=%r@%R subject='%vctx_mess{subject}' size=%B binding=%b delay=%T CMAE-Score=%vctx_mess{cmae-score} CMAE-Analysis=<%vctx_mess{cmae-analysis}> Auth=%U"{% endraw %}
     reception_logfile = "cluster:///var/log/ecelerity/reception_log.cluster=>master"
     reception_log_mode = "0644"
     sanitize = "yes"
 }
 
 custom_logger "custom_transient" {
-    transient_failure_format = "%t{%Y%m%d.%H%M%S} msg-id=%i host=%H from=%m@%M to=%r@%R size=%B binding=%b delay=%T reason=<%n>"
+    {% raw %}transient_failure_format = "%t{%Y%m%d.%H%M%S} msg-id=%i host=%H from=%m@%M to=%r@%R size=%B binding=%b delay=%T reason=<%n>"{% endraw %}
     transient_failure_logfile = "cluster:///var/log/ecelerity/tempfail_log.cluster=>master"
     reception_log_mode = "0644"
     sanitize = "yes"

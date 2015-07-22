@@ -3,22 +3,6 @@
 #   DESCRIPTION:  Perform post-installation configuration
 #==============================================================================
 ---
-- name: Check if /opt/ecelerity exists
-  stat:
-    path=/opt/ecelerity
-    get_md5=no
-  register: dir_exists
-
-- name: If /opt/ecelerity exists, move its content to /opt/msys/ecelerity
-  command: mv /opt/ecelerity/bin/* /opt/msys/ecelerity/bin
-  when: dir_exists.stat.exists
-
-- name: Remove /opt/ecelerity
-  file:
-    path=/opt/ecelerity
-    state=absent
-  when: dir_exists.stat.exists
-
 - name: Create symlink /opt/ecelerity => /opt/msys/ecelerity
   file:
     group="{{ group_name }}"
@@ -43,6 +27,19 @@
     recurse=yes
     state=directory
 
+- name: Remove files placed in global
+  file:
+    path="{{ install_dir }}/etc/conf/default/{{ item }}"
+    state=absent
+  with_items:
+    - webui-common.conf
+    - mobile.conf
+    - messagescope_remediation.conf
+    - messagescope.conf
+    - ecelerity-cluster.conf
+    - eccluster.conf
+    - ecelerity.conf
+
 ##
 ## SVN checkout
 ##
@@ -53,18 +50,17 @@
     repo="{{ svn.host }}"
     revision=HEAD
     username=admin
-  when: is_mta|bool
+  when: not is_ecmgr|bool
 
 ##
 ## Copy updated global configuration (global)
 ##
 - name: (POSTINSTALL) Apply configuration files (global)
-  synchronize:
-    delete=yes
+  copy:
+    backup=no
     dest="{{ install_dir }}/etc/conf/"
-    recursive=yes
-    rsync_timeout=0
-    rsync_opts="-avr --delete --no-motd --stats --progress"
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
     src=global
 
 ##
@@ -78,15 +74,33 @@
     rsync_timeout=0
     rsync_opts="-avr --delete --no-motd --stats --progress"
     src=default
-  when: is_mta|bool
+  when: not is_ecmgr|bool
 
 ##
 ## Copy customizations to config
 ##
+- name: (POSTINSTALL) Create auth.lua
+  template:
+    src=auth.j2
+    dest="{{ install_dir }}/etc/conf/default/lua/auth.lua"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+  when: not is_ecmgr|bool
+
+- name: (POSTINSTALL) Create client_vars.siv
+  template:
+    src=client_vars.j2
+    dest="{{ install_dir }}/etc/conf/default/siv/client_vars.siv"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+  when: not is_ecmgr|bool
+
 - name: (POSTINSTALL) Create eccluster.conf
   template:
     src=eccluster.j2
-    dest="{{ install_dir }}/etc/conf/global"
+    dest="{{ install_dir }}/etc/conf/global/eccluster.conf"
     owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
@@ -94,50 +108,37 @@
 - name: (POSTINSTALL) Create ecelerity-cluster.conf
   template:
     src=ecelerity-cluster.j2
-    dest="{{ install_dir }}/etc/conf/global"
+    dest="{{ install_dir }}/etc/conf/global/ecelerity-cluster.conf"
     owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
 
-- name: (POSTINSTALL) Create ecelerity.conf (Cluster Manager)
+- name: (POSTINSTALL) Create ecelerity.conf
   template:
     src=ecelerity.j2
-    dest="{{ install_dir }}/etc/conf/default"
+    dest="{{ install_dir }}/etc/conf/global/ecelerity.conf"
     owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
-  when: is_ecmgr|bool
 
-- name: (POSTINSTALL) Create ecelerity.conf (MTA)
+- name: (POSTINSTALL) Create msgc_server.conf
   template:
-    src=ecelerity.j2
-    dest="{{ install_dir }}/etc/conf/default"
+    src=msgc_server.j2
+    dest="{{ install_dir }}/etc/conf/global/msgc_server.conf"
     owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
-  when: is_mta|bool
-
-- name: (POSTINSTALL) Create client_vars.siv
-  template:
-    src=client_vars.j2
-    dest="{{ install_dir }}/etc/conf/default/siv"
-    owner="{{ user_name }}"
-    group="{{ group_name }}"
-    mode=0600
-  when: is_mta|bool
-
-- name: (POSTINSTALL) Create auth.lua
-  template:
-    src=auth.j2
-    dest="{{ install_dir }}/etc/conf/default/lua"
-    owner="{{ user_name }}"
-    group="{{ group_name }}"
-    mode=0644
-  when: is_mta|bool
 
 ##
 ## update sysctl
 ##
+- name: (POSTINSTALL) Create /etc/sysctl.d
+  file:
+    group=root
+    owner=root
+    path=/etc/sysctl.d
+    state=directory
+
 - name: (POSTINSTALL) Copy sysctl configuration
   copy:
     src="10-ecelerity.conf"
@@ -150,4 +151,3 @@
     - sync puppet
     - restart service
     - notify complete
-

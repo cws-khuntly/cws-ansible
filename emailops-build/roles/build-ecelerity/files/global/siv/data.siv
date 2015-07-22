@@ -1,7 +1,7 @@
 ### Data Phase ###
 
 # Include client variables
-ec_include "siv/client_vars.siv";
+ec_include "/opt/msys/ecelerity/etc/conf/default/siv/client_vars.siv";
 
 # this is checked in connect and incremented here, in DATA
 audit_series_add "transmission_limit" "300,6" "1";

@@ -28,32 +28,36 @@ Esmtp_Listener {
     }
     {% endif %}
 
+    {% if server_type != 'ecmgr' %}
     # Internal relays
-    <% for host in hosts %>
+    {% for host in hosts %}
     Listen ":{{ host.port }}" {
         TLS_Certificate = "{{ install_dir }}/etc/conf/default/ssl/{{ server_type }}.{{ host.domain }}.crt"
         TLS_Key = "{{ install_dir }}/etc/conf/default/ssl/{{ server_type }}.{{ host.domain }}.key"
         TLS_Client_CA = "{{ install_dir }}/etc/conf/default/ssl/{{ server_type }}.{{ host.domain }}.chain"
         TLS_Ciphers = "{{ include_ciphers }}"
+
         SMTP_Extensions = (
             "ENHANCEDSTATUSCODES"
             "XDUMPCONTEXT"
             "STARTTLS"
         )
+
         Context = [
             {% if server_type == 'smtp' %}
             smtp = "true"
             listener_domain = "{{ host.domain }}"
             {% else %}
             mx = "true"
-            { % endif %}
+            {% endif %}
         ]
 
         banner_hostname = "{{ server_type }}.{{ host.domain }}"
         received_hostname = "{{ server_type }}.{{ host.domain }}"
     }
 
-    <% endfor %>
+    {% endfor %}
+    {% endif %}
 }
 
 # Hosts from which you will accept mail.  Format is a list of
@@ -103,6 +107,7 @@ Control_Listener {
   Listen "/tmp/2025" {
     Enable_Authentication = "false"
   }
+
   Listen "127.0.0.1:2025" {
   }
 }
@@ -566,23 +571,27 @@ scriptlet "scriptlet" {
     script "boot" {
         source = "msys.boot"
     }
-    <% for script in authscripts %>
+
+    {% if server_type != 'ecmgr' %}
+    {% for script in authscripts %}
     script "{{ script.name }}" {
         source = "{{ script.path }}"
     }
 
-    <% endfor %>
+    {% endfor %}
+    {% endif %}
 }
 
+{% if server_type != 'ecmgr' %}
 ## Data Sources ##
-<% for datasource in datasources %>
+{% for datasource in datasources %}
 Datasource "{{ datasource.name }}" {
     uri = ( "{{ datasource.uri }}" )
     cache_size = "{{ datasource.cache-size }}"
     cache_life = 900 {{ datasource.cache-life }}"
 }
 
-<% endfor %>
+{% endfor %}
 
 # Audit series monitors
 inbound_audit {
@@ -641,6 +650,7 @@ Binding "premig.{{ domain }}" {
   }
 
 {% endfor %}
+{% endif %}
 
 # Pull in auxillary information prepared by the installer; this must be the
 # last thing in the top level ecelerity.conf file, as it is intended to overlay

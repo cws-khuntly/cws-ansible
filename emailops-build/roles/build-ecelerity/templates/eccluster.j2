@@ -21,7 +21,7 @@ Security {
 
 # Centralized logs are deposited here
 Logs {
-    logfile = "/var/log/ecelerity/%Y/%m/%d/%{l}/%{s}/%{n}"
+    {% raw %}logfile = "/var/log/ecelerity/%Y/%m/%d/%{l}/%{s}/%{n}"{% endraw %}
     file_mode = "0640"
     dir_mode = "0755"
 }

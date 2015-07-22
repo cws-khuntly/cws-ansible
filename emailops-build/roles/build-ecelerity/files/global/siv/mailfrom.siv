@@ -1,11 +1,11 @@
 ### Mail From Phase ###
 
 # Include client variables
-ec_include "siv/client_vars.siv";
+ec_include "/opt/msys/ecelerity/etc/conf/default/siv/client_vars.siv";
 
 # As_logger includes
-ec_include "siv/in_def_audit_series.siv";
-ec_include "siv/out_def_audit_series.siv";
+ec_include "/opt/msys/ecelerity/etc/conf/global/siv/in_def_audit_series.siv";
+ec_include "/opt/msys/ecelerity/etc/conf/global/siv/out_def_audit_series.siv";
 
 # grab mail from address
 $mail_from = "%{vctx_mess:mailfrom_localpart}@%{vctx_mess:mailfrom_domain}";

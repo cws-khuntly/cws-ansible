@@ -7,6 +7,12 @@
 ## Change to suit environment
 build_type: MessageSystems Cluster Manager
 server_type: ecmgr
+is_ecmgr: TRUE
+db_init: y
+database: 1
+web: 1
+mta: 0
+manager: 1
 
 ##
 ## installer conf

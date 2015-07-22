@@ -7,10 +7,17 @@
 ## template updates
 ##
 install_dir: /opt/msys/ecelerity
-manager_hostname: "ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com"
+manager_hostname: "xfer01.{{ client_name }}.{{ datacenter }}.synacor.com"
 manager_ipaddr: "1.2.3.4"
 cluster_group: ec_cluster
 control_group: ec_console
+db_init: n
+database: 0
+web: 0
+mta: 1
+manager: 0
+is_ecmgr: FALSE
+
 maildrops:
   - md01.email.dev.opal.synacor.com
   - md02.email.dev.opal.synacor.com

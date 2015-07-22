@@ -1,7 +1,7 @@
 ### Receipt to Phase ###
 
 # Include client variables
-ec_include "siv/client_vars.siv";
+ec_include "/opt/msys/ecelerity/etc/conf/default/siv/client_vars.siv";
 
 $recipient = envelope :all "to";
 $sender = envelope "from";
@@ -9,8 +9,8 @@ $rcpt_domain = envelope :domain "to";
 $rcpt_localpart = envelope :localpart "to";
 
 # As_logger includes
-ec_include "siv/in_def_audit_series.siv";
-ec_include "siv/out_def_audit_series.siv";
+ec_include "/opt/msys/ecelerity/etc/conf/global/siv/in_def_audit_series.siv";
+ec_include "/opt/msys/ecelerity/etc/conf/global/siv/out_def_audit_series.siv";
 
 if not vctx :is "as_wl" "true" {
     if vctx :is "mx" "true" {
