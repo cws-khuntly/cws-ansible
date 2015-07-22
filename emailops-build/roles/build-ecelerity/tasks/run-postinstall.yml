@@ -43,14 +43,13 @@
 ##
 ## SVN checkout
 ##
-- name: (POSTINSTALL) Check out current configuration from cluster manager (MTA)
+- name: (POSTINSTALL) Check out current configuration
   subversion:
     dest="{{ install_dir }}/conf/"
     password="{{ svn_password }}"
     repo="{{ svn.host }}"
     revision=HEAD
     username=admin
-  when: not is_ecmgr|bool
 
 ##
 ## Copy updated global configuration (global)
@@ -128,6 +127,13 @@
     owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
+
+##
+## Check in all changes
+##
+- name: (POSTINSTALL) Check out current configuration from cluster manager (MTA)
+  shell: "cd {{ install_dir }}/etc/conf; /opt/msys/3rdparty/bin/svn commit --message 'Initial Commit, build via {uid}/Ansible' --no-auth-cache
+    --non-interactive --username admin --password {{ svn_password }} --recursive"
 
 ##
 ## update sysctl

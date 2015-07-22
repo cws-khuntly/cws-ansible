@@ -15,6 +15,11 @@ mta: 0
 manager: 1
 
 ##
+## subversion!
+##
+svn.host: "https://ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com:2027/config/manager/boot"
+
+##
 ## installer conf
 ##
 db_root: /var/db/msyspg
