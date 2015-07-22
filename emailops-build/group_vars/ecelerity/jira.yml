@@ -1,0 +1,11 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/jira.yml
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
+#==============================================================================
+---
+##
+## JIRA
+##
+jira_summary: "Request for {{ server_type }} VIP: {{ client_name }}/{{ datacenter }}"
+jira_description: "Please create {{ server_type }}.{{ client_name }}.{{ datacenter }} .caspersbox.comVIP with targets {{ address }}"
+

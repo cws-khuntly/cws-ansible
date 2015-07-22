@@ -9,22 +9,7 @@ build_type: MessageSystems SMTP Server
 server_type: smtp
 
 ##
-## ssl certs
+## subversion!
 ##
-self_signed_enabled: TRUE
-openssl_self_signed:
-  - name: 'smtp.{{ domain }}'
-    domain_name: 'smtp.{{ domain }}'
-    country: 'US'
-    state: 'New York'
-    city: 'Buffalo'
-    organization: 'Synacor, Inc.'
-    unit: 'Email Operations'
-    email: 'emailops@synacor.com'
-    days: 90
+svn.host: "https://ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com:2027/config/outbound/boot"
 
-##
-## JIRA
-##
-jira_summary: "Request for SMTP VIP: {{ client_name }}/{{ datacenter }}"
-jira_description: "Please create mailrelay.{{ client_name }}.{{ datacenter }} .caspersbox.comVIP with targets {{ address }}"

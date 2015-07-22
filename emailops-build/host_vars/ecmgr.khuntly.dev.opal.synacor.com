@@ -8,6 +8,11 @@
 build_type: MessageSystems Cluster Manager
 server_type: ecmgr
 
+##
+## installer conf
+##
+db_root: /var/db/msyspg
+
 inbound_hosts:
   - name: "mx01.{{ client_name }}.{{ datacenter }}.synacor.com"
     address: <ipaddr>

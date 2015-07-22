@@ -1,38 +1,8 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  group_vars/ecmgr
-#   DESCRIPTION:  Variables that apply to Ecelerity Cluster managers
+#          NAME:  group_vars/datasources.yml
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
 #==============================================================================
 ---
-##
-## disks
-##
-mountpoints:
-  - name: /opt
-
-##
-## template updates
-##
-install_dir: /opt/msys/ecelerity
-manager_hostname: "xfer01.{{ client_name }}.{{ datacenter }}.synacor.com"
-manager_ipaddr: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-cluster_group: ec_cluster
-control_group: ec_console
-
-maildrops:
- - md01.email.dev.opal.synacor.com
- - md02.email.dev.opal.synacor.com
-
-##
-## installer conf
-##
-db_root: /var/db/msyspg
-
-##
-## subversion!
-##
-inbound.svn.host: "https://ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com:2027/config/inbound/boot"
-outbound.svn.host: "https://ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com:2027/config/outbound/boot"
-
 ##
 ## datasource config
 ##

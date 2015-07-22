@@ -14,7 +14,7 @@ Esmtp_Listener {
     #
     Idle_Time = 300
 
-    {% if server_type is smtp %}
+    {% if server_type == 'smtp' %}
     Peer "10.0.0.0/8" {
         SMTP_Extensions = (
             "ENHANCEDSTATUSCODES"
@@ -31,9 +31,9 @@ Esmtp_Listener {
     # Internal relays
     <% for host in hosts %>
     Listen ":{{ host.port }}" {
-        TLS_Certificate = "{{ install_dir }}/etc/conf/default/ssl/mail.{{ host.domain }}.crt"
-        TLS_Key = "{{ install_dir }}/etc/conf/default/ssl/mail.{{ host.domain }}.key"
-        TLS_Client_CA = "{{ install_dir }}/etc/conf/default/ssl/mail.{{ host.domain }}.chain"
+        TLS_Certificate = "{{ install_dir }}/etc/conf/default/ssl/{{ server_type }}.{{ host.domain }}.crt"
+        TLS_Key = "{{ install_dir }}/etc/conf/default/ssl/{{ server_type }}.{{ host.domain }}.key"
+        TLS_Client_CA = "{{ install_dir }}/etc/conf/default/ssl/{{ server_type }}.{{ host.domain }}.chain"
         TLS_Ciphers = "{{ include_ciphers }}"
         SMTP_Extensions = (
             "ENHANCEDSTATUSCODES"
@@ -41,11 +41,11 @@ Esmtp_Listener {
             "STARTTLS"
         )
         Context = [
-            {% if server_type is smtp %}
-                smtp = "true"
-                listener_domain = "{{ host.domain }}"
+            {% if server_type == 'smtp' %}
+            smtp = "true"
+            listener_domain = "{{ host.domain }}"
             {% else %}
-                mx = "true"
+            mx = "true"
             { % endif %}
         ]
 
@@ -107,7 +107,7 @@ Control_Listener {
   }
 }
 
-include "webui-common.conf"
+include "{{ install_dir }}/etc/conf/global/webui-common.conf"
 #########################################################
 #
 # THINGS YOU MAY CONFIGURE (BUT DONT NEED TO)
@@ -443,16 +443,16 @@ bounce_logger "bounce_logger_rt" {
 # }
 
 # For clustering, uncomment the following line:
-include "ecelerity-cluster.conf"
+include "{{ install_dir }}/etc/conf/global/ecelerity-cluster.conf"
 
 # If using MessageCentral, uncomment the following line:
 # readonly_include "/opt/msys/pe2/etc/ecelerity_logger.conf"
 
 # If using Mobile Momentum, uncomment the following line:
-# include "mobile.conf"
+# include "{{ install_dir }}/etc/conf/global/mobile.conf"
 
 # In using Message Scope, uncomment the following line:
-# include "messagescope.conf"
+# include "{{ install_dir }}/etc/conf/global/messagescope.conf"
 
 # Message validation handlers.
 mail_loop "mail_loop"
@@ -625,7 +625,7 @@ sieve "sieve1" {
     }
 }
 
-include "{{ install_dir }}/etc/conf/default/default_policy.conf"
+include "{{ install_dir }}/etc/conf/global/default_policy.conf"
 
 Binding "premig.{{ domain }}" {
     Max_Outbound_Connections = 100

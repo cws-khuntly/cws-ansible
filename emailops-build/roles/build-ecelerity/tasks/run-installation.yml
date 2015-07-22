@@ -25,4 +25,3 @@
   become_user: root
   become_method: sudo
 
-#shell: "cd {{ tmpdir }}; /usr/bin/env perl {{ tmpdir }}/ecelerity/installer --option-file {{ tmpdir }}/installer.conf"

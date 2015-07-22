@@ -1,0 +1,20 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/ssl.yml
+#   DESCRIPTION:  Variables that apply to Ecelerity Cluster managers
+#==============================================================================
+---
+##
+## ssl certs
+##
+self_signed_enabled: TRUE
+openssl_self_signed:
+  - name: '{{ server_type }}.{{ domain }}'
+    domain_name: '{{ server_type }}.{{ domain }}'
+    country: 'US'
+    state: 'New York'
+    city: 'Buffalo'
+    organization: 'Synacor, Inc.'
+    unit: 'Email Operations'
+    email: 'emailops@synacor.com'
+    days: 90
+

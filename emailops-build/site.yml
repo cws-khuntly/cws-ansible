@@ -5,10 +5,6 @@
 ---
 - hosts: ldap
   gather_facts: true
-  vars:
-    is_ldap: true
-    is_maildrop: false
-    is_pop: false
   roles:
     - build-zimbra
   tags:
@@ -16,10 +12,6 @@
 
 - hosts: maildrop
   gather_facts: true
-  vars:
-    is_ldap: false
-    is_maildrop: true
-    is_pop: false
   roles:
     - build-zimbra
   tags:
@@ -48,10 +40,6 @@
 
 - hosts: nginx
   gather_facts: true
-  vars:
-    is_ldap: false
-    is_maildrop: false
-    is_pop: true
   roles:
     - build-nginx
   tags:

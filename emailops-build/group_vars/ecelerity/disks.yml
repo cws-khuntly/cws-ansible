@@ -1,8 +1,10 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/meta/main.yml
-#   DESCRIPTION:  Entry point for the Zimbra build play
+#          NAME:  group_vars/ecelerity
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
 #==============================================================================
 ---
-dependencies:
-  - { role: system-update }
-  - { role: common }
+##
+## disks
+##
+mountpoints:
+  - name: /opt
