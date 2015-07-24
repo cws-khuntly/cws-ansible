@@ -80,14 +80,8 @@ cluster {
     Replicate "metrics" {
         parameters="gauge_cache;audit_series;connect;reception;delivery;rejection"
     }
-
-    # DuraVIP network topology hints
-    #Topology "10.1.1.0/24" {
-        #cidrmask = "32"
-        #interface = "eth1"
-    #}
 }
 
-include "/opt/msys/ecelerity/etc/conf/global/msgc_server.conf"
+include "{{ install_dir }}/etc/conf/global/msgc_server.conf"
 
 # vim:ts=2:sw=2:et:ft=conf:

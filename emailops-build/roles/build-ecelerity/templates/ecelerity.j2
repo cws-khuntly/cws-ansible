@@ -112,7 +112,7 @@ Control_Listener {
   }
 }
 
-include "{{ install_dir }}/etc/conf/global/webui-common.conf"
+include "/opt/msys/ecelerity/etc/conf/global/webui-common.conf"
 #########################################################
 #
 # THINGS YOU MAY CONFIGURE (BUT DONT NEED TO)
@@ -448,16 +448,16 @@ bounce_logger "bounce_logger_rt" {
 # }
 
 # For clustering, uncomment the following line:
-include "{{ install_dir }}/etc/conf/global/ecelerity-cluster.conf"
+include "/opt/msys/ecelerity/etc/conf/global/ecelerity-cluster.conf"
 
 # If using MessageCentral, uncomment the following line:
 # readonly_include "/opt/msys/pe2/etc/ecelerity_logger.conf"
 
 # If using Mobile Momentum, uncomment the following line:
-# include "{{ install_dir }}/etc/conf/global/mobile.conf"
+# include "/opt/msys/ecelerity/etc/conf/global/mobile.conf"
 
 # In using Message Scope, uncomment the following line:
-# include "{{ install_dir }}/etc/conf/global/messagescope.conf"
+# include "/opt/msys/ecelerity/etc/conf/global/messagescope.conf"
 
 # Message validation handlers.
 mail_loop "mail_loop"

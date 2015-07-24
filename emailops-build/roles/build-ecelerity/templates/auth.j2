@@ -5,6 +5,7 @@
 require('msys.core');
 require('msys.datasource');
 require('msys.db');
+
 -- set some local variables to use
 local success, errmsg, row;
 local cache, query, raise_error;
@@ -15,8 +16,7 @@ local q_params = {};
 local default_domain = "{{ domain }}";
 
 function auth:authenticate(filename, paramsdict, username, password)
-
--- lets take our username, which should be in a form of local-part@domain.tld and break it up into local-part and domain
+    -- lets take our username, which should be in a form of local-part@domain.tld and break it up into local-part and domain
 	local dc,localpart,domain; 
  	for st in string.gmatch(username, "[^@]+" ) do
 		if localpart == nil then
@@ -31,11 +31,11 @@ function auth:authenticate(filename, paramsdict, username, password)
 		end
  	end
         if localpart == nil then
-                return msys.core.EC_AUTH_FAIL;
+           return msys.core.EC_AUTH_FAIL;
         end
         if string.match(localpart, "\.("..default_domain..")$") then
-                lp = string.gsub(localpart, "\.("..default_domain..")$", "")
-                localpart = lp;
+            lp = string.gsub(localpart, "\.("..default_domain..")$", "")
+            localpart = lp;
         end
 	if domain == nil then
 		-- If the user hasn't entered a username with a domain, we set the domain to the default_domain
@@ -50,8 +50,6 @@ function auth:authenticate(filename, paramsdict, username, password)
 			-- every dc after the first should start with a , to seperate it from the previous
 			dc = dc .. "," .. "dc=" .. st; 
 		end
-
-
  	end
 
 	-- now we have the dc part of the bind string, lets build the full bind stiring
@@ -62,19 +60,12 @@ function auth:authenticate(filename, paramsdict, username, password)
 	cachename = "ldap_bind_auth";
 	query = "ldap:///?dn?sub?(&(zimbraMailStatus=enabled)(zimbraAccountStatus=active)(dn='$dn'))?x-ldap-version=3,bindname=$dn,x-bindpw=" .. password
 
--- log all these variables
-
+    -- log all these variables
 	local text_log_data = "cachename = " .. cachename .. "\n" .. "query = " .. query .. "\n" .. "dn = " .. q_params["dn"] .. "\n" .. "password = " .. password .. "\n";
 	print(text_log_data);
 	
 	-- issue the db.query to query the datastore to attempt to bind as the user
 	success, errmsg = msys.db.query(cachename,query,q_params,{ raise_error = false }); 
---	print(success);
---	print(errmsg);
-
---	for row in success do
---		print (row[1]);
---	end
 
 	if (success == nil) then
   		return msys.core.EC_AUTH_FAIL;
