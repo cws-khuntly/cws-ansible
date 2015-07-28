@@ -10,6 +10,8 @@
 
 - name: sync puppet
   command: puppet agent -t
+  register: command_result
+  failed_when: command_result.rc == 4
 
 - name: reload sysctl
   command: sysctl -p

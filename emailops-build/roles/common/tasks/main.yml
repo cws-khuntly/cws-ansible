@@ -58,3 +58,7 @@
     name="{{ item }}"
     state=present
   with_items: "{{ system_packages|default([]) }}"
+  notify:
+    - sync puppet
+  meta:
+    - flush_handlers

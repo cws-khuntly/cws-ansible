@@ -3,11 +3,11 @@
 #   DESCRIPTION:  Configuration file for specific target host within playbook
 #==============================================================================
 ---
-is_master_ldap: TRUE
-do_create_domain: yes
-ldap_rid: 100
-promote: FALSE
-apply_global_config: TRUE
+is_master_ldap: FALSE
+do_create_domain: no
+ldap_rid: 200
+promote: TRUE
+apply_global_config: FALSE
 
 ##
 ## LDAP host url's

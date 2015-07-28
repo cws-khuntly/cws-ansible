@@ -16,7 +16,7 @@
 ##
 ## Ensure machine configuration is set properly
 ##
-- name: Confirm (or correct) machine configuration
+- name: (POSTINSTALL) Confirm (or correct) machine configuration
   command: "{{ install_dir }}/bin/zmprov ms {{ hostvars[inventory_hostname]['ansible_fqdn'] }} zimbraMailReferMode reverse-proxied zimbraPop3SSLBindPort 7995
     zimbraPop3SSLProxyBindPort 995 zimbraPop3ProxyBindPort 110 zimbraPop3MaxConnections 600 zimbraPop3BindPort 7110 zimbraMessageCacheSize 10000
     zimbraMailboxMoveSkipBlobs TRUE zimbraMailboxMoveSkipHsmBlobs TRUE zimbraMailPurgeBatchSize 100 zimbraMailFileDescriptorCacheSize 20000

@@ -3,6 +3,19 @@
 #   DESCRIPTION:  Entry point for all plays within this playbook
 #==============================================================================
 ---
+##
+## First LDAP host to install.
+##
+- hosts: ldap_master
+  gather_facts: true
+  roles:
+    - build-zimbra
+  tags:
+    - build-ldap
+
+##
+## All others can go in parallel
+##
 - hosts: ldap
   gather_facts: true
   roles:

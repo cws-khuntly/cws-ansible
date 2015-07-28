@@ -7,8 +7,8 @@
 ## template updates
 ##
 install_dir: /opt/msys/ecelerity
-manager_hostname: "xfer01.{{ client_name }}.{{ datacenter }}.synacor.com"
-manager_ipaddr: 10.250.27.7
+manager_hostname: "ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com"
+manager_ipaddr: 10.250.22.249
 cluster_group: ec_cluster
 control_group: ec_console
 db_init: n

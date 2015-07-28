@@ -26,12 +26,12 @@ db_root: /var/db/msyspg
 
 inbound_hosts:
   - name: "mx01.{{ client_name }}.{{ datacenter }}.synacor.com"
-    address: <ipaddr>
+    address: 10.250.27.174
   - name: "mx02.{{ client_name }}.{{ datacenter }}.synacor.com"
-    address: <ipaddr>
+    address: 10.250.27.175
 
 outbound_hosts:
   - name: "smtp01.{{ client_name }}.{{ datacenter }}.synacor.com"
-    address: <ipaddr>
+    address: 10.250.27.176
   - name: "smtp02.{{ client_name }}.{{ datacenter }}.synacor.com"
-    address: <ipaddr>
+    address: 10.250.27.177

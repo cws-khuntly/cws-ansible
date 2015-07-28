@@ -3,17 +3,6 @@
 #   DESCRIPTION:  Execute Zimbra restarts post-installation
 #==============================================================================
 ---
-- name: restart service
-  service:
-    name=zimbra
-    state=restarted
-
-- name: restart ldap
-  shell: "{{ install_dir }}/bin/ldap restart"
-
-- name: restart proxy
-  shell: "{{ install_dir }}/bin/zmproxyctl restart"
-
 - name: sync puppet
   command: puppet agent -t
   ignore_errors: yes

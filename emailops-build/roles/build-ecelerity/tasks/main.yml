@@ -6,14 +6,18 @@
 - name: Run ecelerity installation steps
   include: run-installation.yml
   notify:
-    - sync-puppet
-    - restart-service
+    - sync puppet
+  meta:
+    - flush_handlers
 
 - name: Run ecelerity post-installation steps
   include: run-postinstall.yml
   notify:
-    - sync-puppet
-    - restart-service
+    - reload sysctl
+    - sync puppet
+    - restart service
+  meta:
+    - flush_handlers
 
 - name: Remove installer options file
   file:

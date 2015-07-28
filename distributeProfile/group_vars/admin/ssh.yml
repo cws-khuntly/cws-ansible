@@ -1,10 +1,10 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  group_vars/maildrop.yml
+#          NAME:  group_vars/yyz/ssh.yml
 #   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
 #==============================================================================
 ---
-build_type: Zimbra Collaboration Server / Maildrop
-is_maildrop: TRUE
-apply_default_cos: TRUE
-apply_domains: FALSE
-use_scality: FALSE
+##
+## disks
+##
+ssh_keyfile: /home/khuntly/.ssh/id_rsa.pub
+ssh_privkey: /home/khuntly/.ssh/id_rsa

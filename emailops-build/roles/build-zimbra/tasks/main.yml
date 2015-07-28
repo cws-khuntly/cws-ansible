@@ -5,6 +5,16 @@
 ---
 - name: (MAIN) Run Zimbra installation steps
   include: run-install.yml
+  notify:
+    - sync puppet
+
+- meta:
+    flush_handlers
 
 - name: (MAIN) Run Zimbra post-installation
   include: run-postinstall.yml
+  notify:
+    - sync puppet
+
+- meta:
+    flush_handlers

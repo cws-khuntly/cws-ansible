@@ -94,6 +94,19 @@
 - name: (POSTINSTALL) Kill any remaining Zimbra sessions
   command: killall -u zimbra
   ignore_errors: yes
+  notify:
+    - sync puppet
+
+- meta:
+    flush_handlers
+
+##
+## Notify puppet after install
+## NOTE: We arent ignoring errors because if puppet fails so will zimbra
+##
+- name: (POSTINSTALL) Sync with puppet master
+  command: puppet agent -t
+  ignore_errors: yes
 
 ##
 ## Run zmsetup to apply configuration
@@ -101,12 +114,17 @@
 ##
 - name: (POSTINSTALL) Run zmsetup
   command: "{{ install_dir }}/libexec/zmsetup.pl -d -c {{ install_dir }}/conf/unattended.conf"
+  notify:
+    - sync puppet
+
+- meta:
+    flush_handlers
 
 ##
 ## Notify puppet after install
 ## NOTE: We arent ignoring errors because if puppet fails so will zimbra
 ##
-- name: Notify puppet
+- name: (POSTINSTALL) Sync with puppet master
   command: puppet agent -t
   ignore_errors: yes
 
@@ -120,6 +138,19 @@
     path="{{ install_dir }}"
     recurse=yes
     state=directory
+  notify:
+    - sync puppet
+
+- meta:
+    flush_handlers
+
+##
+## Notify puppet after install
+## NOTE: We arent ignoring errors because if puppet fails so will zimbra
+##
+- name: (POSTINSTALL) Sync with puppet master
+  command: puppet agent -t
+  ignore_errors: yes
 
 ##
 ## Common configuration for all zimbra installations
@@ -181,15 +212,15 @@
 
 - name: (POSTINSTALL) Add client data
   include: maildrop/add-client-data.yml
-  when: is_maildrop|bool
+  when: is_maildrop|bool and apply_domains|bool
 
 - name: (POSTINSTALL) Include maildrop store configuration tasks
   include: maildrop/storeconfig.yml
-  when: is_maildrop|bool
+  when: is_maildrop|bool and setup_stores|bool
 
 - name: (POSTINSTALL) Include monitoring account creation
   include: maildrop/createaccounts.yml
-  when: is_maildrop|bool
+  when: is_maildrop|bool and create_default_accounts|bool
 
 - name: (POSTINSTALL) Include Zimbra webapp modifications
   include: maildrop/webapp.yml
@@ -197,26 +228,26 @@
 
 - name: (POSTINSTALL) Include Zimbra zimlet installations
   include: maildrop/zimlets.yml
-  when: is_maildrop|bool
+  when: is_maildrop|bool and install_synacor_skins_zimlets|bool
 
 - name: (POSTINSTALL) Include Scality installation/configuration tasks
   include: maildrop/scality.yml
-  when: is_maildrop|bool
+  when: is_maildrop|bool and use_scality|bool
 
 ##
 ## LDAP specific config
 ##
-- name: (POSTINSTALL) Include LDAP replication tasks
-  include: ldap/replica.yml
-  when: is_ldap|bool
-
 - name: (POSTINSTALL) Disable stats (LDAP)
   include: ldap/disable-stats.yml
   when: is_ldap|bool
 
+- name: (POSTINSTALL) Include LDAP replication tasks
+  include: ldap/replica.yml
+  when: is_ldap|bool and is_master_ldap|bool
+
 - name: (POSTINSTALL) Include LDAP multi-master tasks
   include: ldap/multimaster.yml
-  when: is_ldap|bool
+  when: is_ldap|bool and is_multimaster|bool
 
 ##
 ## Shut down services before continuing
@@ -265,8 +296,13 @@
 - name: (POSTINSTALL) Turn off fsck
   command: "/sbin/tune2fs -c 0 -i 0 {{ install_dir }}"
   when: disable_fsck
+  notify:
+    - sync puppet
 
-- name: (POSTINSTALL) Notify puppet
+- meta:
+    flush_handlers
+
+- name: (POSTINSTALL) Sync with puppet master
   command: puppet agent -t
   ignore_errors: yes
 

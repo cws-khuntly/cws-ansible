@@ -6,10 +6,16 @@
 - name: Run nginx installation steps
   include: run-installation.yml
   notify:
-    - sync-puppet
+    - sync puppet
+  meta:
+    - flush_handlers
 
 - name: Run nginx installation steps
   include: run-postinstall.yml
   notify:
-    - sync-puppet
-    - restart-service
+    - sync puppet
+    - restart nginx
+    - restart httpd
+    - restart zimbra
+  meta:
+    - flush_handlers

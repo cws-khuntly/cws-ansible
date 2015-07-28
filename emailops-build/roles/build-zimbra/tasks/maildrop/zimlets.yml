@@ -11,8 +11,7 @@
     disable_gpg_check=yes
     name="{{ item.name }}-{{ item.version }}"
     state=present
-  with_items: "{{ zimlets|default([]) }}"
-  when: install_synacor_skins_zimlets|bool
+  with_items: zimlets
 
 ##
 ## install skins
@@ -22,8 +21,7 @@
     disable_gpg_check=yes
     name="{{ item.name }}-{{ item.version }}"
     state=present
-  with_items: "{{ skins|default([]) }}"
-  when: install_synacor_skins_zimlets|bool
+  with_items: skins
 
 ##
 ## custom skins/zimlets
@@ -33,47 +31,45 @@
     disable_gpg_check=yes
     name="{{ item.name }}-{{ item.version }}"
     state=present
-  with_items: "{{ custom_zimlets|default([]) }}"
-  when: install_synacor_skins_zimlets|bool
+  with_items: custom_zimlets
 
 - name: (POSTINSTALL) Install skins (client specific)
   yum:
     disable_gpg_check=yes
     name="{{ item.name }}-{{ item.version }}"
     state=present
-  with_items: "{{ custom_skins|default([]) }}"
-  when: install_synacor_skins_zimlets|bool
+  with_items: custom_skins
 
 - name: (POSTINSTALL) Configure zimlet (standard)
   shell: "{{ install_dir }}/bin/zmzimletctl ldapDeploy {{ item.configure_zimlet }}"
-  with_items: "{{ zimlets|default([]) }}"
+  with_items: zimlets
 
 - name: (POSTINSTALL) Configure zimlets (custom)
   shell: "{{ install_dir }}/bin/zmzimletctl ldapDeploy {{ item.configure_zimlet }}"
-  with_items: "{{ custom-zimlets|default([]) }}"
+  with_items: custom-zimlets
 
 - name: (POSTINSTALL) Enable zimlets (standard)
   shell: "{{ install_dir }}/bin/zmzimletctl enable {{ item.configure_zimlet }}"
-  with_items: "{{ zimlets|default([]) }}"
+  with_items: zimlets
 
 - name: (POSTINSTALL) Enable zimlets (custom)
   shell: "{{ install_dir }}/bin/zmzimletctl enable {{ item.configure_zimlet }}"
-  with_items: "{{ zimlets|default([]) }}"
+  with_items: zimlets
 
 - name: (POSTINSTALL) Ensure there is a configuration template for the zimlet (standard)
   file:
     path="{{ install_dir }}/zimlets-deployed/{{ item.configure_zimlet }}/config_template.xml"
   register: zimlet_config_exists
-  with_items: "{{ zimlets|default([]) }}"
+  with_items: zimlets
 
 - name: (POSTINSTALL) Configure zimlet via template (standard)
   shell: "{{ install_dir }}/bin/zmzimletctl {{ install_dir }}/zimlets-deployed/{{ item.configure_zimlet }}/config_template.xml"
-  with_items: "{{ zimlets|default([]) }}"
+  with_items: zimlets
   when: zimlet_config_exists.stat.exists|bool
 
 - name: (POSTINSTALL) Configure zimlet via template (custom)
   shell: "{{ install_dir }}/bin/zmzimletctl {{ install_dir }}/zimlets-deployed/{{ item.configure_zimlet }}/config_template.xml"
-  with_items: "{{ custom-zimlets|default([]) }}"
+  with_items: custom-zimlets
   when: zimlet_config_exists.stat.exists|bool
 
 ##
@@ -103,4 +99,4 @@
   file:
     path="{{ install_dir }}/{{ item }}"
     state=absent
-  with_items: "{{ clean_skins|default([]) }}"    
+  with_items: clean_skins

@@ -3,10 +3,22 @@
 #   DESCRIPTION:  Service restart handler
 #==============================================================================
 ---
-- name: restart-service
+- name: Sync with puppet master
+  command: puppet agent -t
+  register: command_result
+  failed_when: command_result.rc == 4
+
+- name: restart nginx
   service:
     name=nginx
-    state=restarted
+    state=started
 
-- name: sync-puppet
-  command: /usr/bin/puppet agent -t
+- name: restart httpd
+  service:
+    name=httpd
+    state=started
+
+- name: restart zimbra
+  service:
+    name=zimbra
+    state=started

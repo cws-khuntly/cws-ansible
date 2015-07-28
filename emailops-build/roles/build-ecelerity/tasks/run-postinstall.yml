@@ -131,7 +131,7 @@
 ##
 ## Check in all changes
 ##
-- name: (POSTINSTALL) Check out current configuration from cluster manager (MTA)
+- name: (POSTINSTALL) Check in current configuration from cluster manager (MTA)
   shell: "cd {{ install_dir }}/etc/conf; /opt/msys/3rdparty/bin/svn commit --message 'Initial Commit, build via {uid}/Ansible' --no-auth-cache
     --non-interactive --username admin --password {{ svn_password }} --recursive"
 
@@ -152,8 +152,3 @@
     owner="root"
     group="root"
     mode=0644
-  notify:
-    - reload sysctl
-    - sync puppet
-    - restart service
-    - notify complete

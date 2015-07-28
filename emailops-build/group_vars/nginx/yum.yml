@@ -23,3 +23,7 @@ nginx_packages:
     version: 2.5.2-102.noarch
   - name: scapi-dao-zimbra8.0.7.synacor
     version: 2.5.2-102.noarch
+  - name: httpd
+    version: 2.2.15-15.el6.centos.1.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"
+  - name: httpd-tools
+    version: 2.2.15-15.el6.centos.1.{{ hostvars[inventory_hostname]['ansible_architecture'] }}"

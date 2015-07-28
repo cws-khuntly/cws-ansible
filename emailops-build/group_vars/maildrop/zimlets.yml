@@ -55,13 +55,14 @@ skins:
     version: 2015.07.09.10.45-1.noarch
 
 ##
-## custom skins/zimlets as necessary
+## custom skins/zimlets
+## uncomment and define if necessary
 ##
-custom-zimlets:
+#custom_zimlets:
   #- name:
   #  version:
   #  configure_zimlet:
 
-custom-skins:
+#custom_skins:
   #- name:
   #  version:

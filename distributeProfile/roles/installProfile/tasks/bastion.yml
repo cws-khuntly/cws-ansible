@@ -8,12 +8,10 @@
 ##
 - name: Set up authorized_keys
   authorized_key:
-    key="{{ item }}"
+    key="{{ lookup('file', ssh_keyfile) }}"
     state=present
     user=khuntly
     exclusive=yes
-  with_file:
-    - "{{ ansible_env.HOME }}/.ssh/known_hosts"
 
 - name: Remove existing known_hosts file
   file:

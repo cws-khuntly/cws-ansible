@@ -22,12 +22,12 @@ use_reverse_proxy: TRUE
 activate_license: FALSE
 blacklist_file: /opt/zimbra/conf/nginx/blacklisted_ips.txt
 hosts:
-  - domain: default.com
+  - domain: email-operations.com
     port_pop3: 110
     port_pop3s: 995
     port_imap: 143
     port_imaps: 993
 
-cos_id: b1d6a2cb-d4bb-4479-a613-c45736d7986c
+cos_id: e8651dad-0c38-4804-b7c6-7dc9d0f3dc83
 vip_listing:
   - 1.2.3.4

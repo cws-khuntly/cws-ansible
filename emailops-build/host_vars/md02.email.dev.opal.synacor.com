@@ -4,5 +4,4 @@
 #==============================================================================
 ---
 create_default_accounts: FALSE
-activate_license: TRUE
 apply_global_config: FALSE

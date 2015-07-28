@@ -9,5 +9,4 @@
   become: yes
   become_user: zimbra
   become_method: sudo
-  with_items: "{{ create_accounts|default([]) }}"
-  when: create_default_accounts|bool
+  with_items: create_accounts

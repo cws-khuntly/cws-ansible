@@ -4,5 +4,6 @@
 #==============================================================================
 ---
 create_default_accounts: TRUE
-activate_license: TRUE
 apply_global_config: TRUE
+apply_domains: TRUE
+apply_cos: TRUE

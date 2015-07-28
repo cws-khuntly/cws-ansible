@@ -89,26 +89,5 @@
   when: self_signed_enabled|bool
 
 ##
-## Start everything back up
-##
-- name: (POSTINSTALL) Restart nginx
-  service:
-    name=nginx
-    state=started
-  ignore_errors: yes
-
-- name: (POSTINSTALL) Restart Apache
-  service:
-    name=httpd
-    state=started
-  ignore_errors: yes
-
-- name: (POSTINSTALL) Restart Zimbra
-  service:
-    name=zimbra
-    state=started
-  ignore_errors: yes
-
-##
 ## POSTINSTALL COMPLETE
 ##

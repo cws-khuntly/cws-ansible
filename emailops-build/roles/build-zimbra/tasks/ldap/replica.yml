@@ -11,10 +11,8 @@
   become: yes
   become_user: zimbra
   become_method: sudo
-  when: is_master_ldap|bool
 
 - command: "{{ install_dir }}/bin/ldap restart"
   become: yes
   become_user: zimbra
   become_method: sudo
-  when: is_master_ldap|bool
