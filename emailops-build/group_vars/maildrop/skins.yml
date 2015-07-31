@@ -4,11 +4,15 @@
 #==============================================================================
 ---
 skins:
-  #- name:
-  #  version:
+  - name: zimbra-skin-synacor-synabasev8 ## zimbra 8
+    version: 2015.07.09.10.45-1.noarch
 
-custom-skins:
-  #- name:
-  #  version:
+##
+## custom skins
+## uncomment and define if necessary
+##
+#custom_skins:
+#  - name: zimbra-skin-synacor-aperture
+#    version: 2015.07.26.17.24-1.noarch
 
 zimbra_pref_skin: synabasev8

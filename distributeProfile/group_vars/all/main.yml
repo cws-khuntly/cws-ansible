@@ -5,7 +5,7 @@
 ##
 ## local vars
 ##
-username: "khuntly"
+username: khuntly
 
 ##
 ## remote vars
@@ -18,7 +18,7 @@ remote_home: "/home/{{ remote_user }}"
 ## git checkout
 ##
 checkout_to: /var/tmp/edUnIkTa
-git_ssh_key: "/home/khuntly/.ssh/id_cws-khuntly"
+git_ssh_key: "{{ ansible_env.HOME }}/.ssh/id_cws-khuntly"
 dotfiles_repo: git@github.com:cws-khuntly/dotfiles.git
 version: HEAD
 

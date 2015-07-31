@@ -3,6 +3,7 @@
 #   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
 #==============================================================================
 ---
+create_default_accounts: FALSE
 create_accounts:
   - name: "synoc{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
     password: "synoc{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
@@ -12,3 +13,5 @@ create_accounts:
     password: "synmon_md{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
   - name: "synautotest{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
     password: "synautotest{{ hostvars[inventory_hostname]['ansible_fqdn'][2:4] }}"
+
+default_account_settings: "zimbraMailHost {{ hostvars[inventory_hostname]['ansible_fqdn'] }} zimbraPrefGroupMailBy message zimbraPrefComposeFormat html"

@@ -50,19 +50,11 @@ zimlets:
     version: 2015.05.13.12.43-1.noarch
     configure_zimlet: com_synacor_spam_ecelerity
 
-skins:
-  - name: zimbra-skin-synacor-synabasev8 ## zimbra 8
-    version: 2015.07.09.10.45-1.noarch
-
 ##
-## custom skins/zimlets
+## custom zimlets
 ## uncomment and define if necessary
 ##
 #custom_zimlets:
-  #- name:
-  #  version:
-  #  configure_zimlet:
-
-#custom_skins:
-  #- name:
-  #  version:
+#  - name: zimbra-zimlet-generic-com_synacor_core_change
+#    version: 2014.06.06.09.10-1.noarch
+#    configure_zimlet: com_synacor_core_change

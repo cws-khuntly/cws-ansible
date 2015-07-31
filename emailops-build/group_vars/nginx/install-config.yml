@@ -21,6 +21,7 @@ use_scality: FALSE
 use_reverse_proxy: TRUE
 activate_license: FALSE
 blacklist_file: /opt/zimbra/conf/nginx/blacklisted_ips.txt
+
 hosts:
   - domain: email-operations.com
     port_pop3: 110

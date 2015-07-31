@@ -5,3 +5,4 @@
 ---
 create_default_accounts: FALSE
 apply_global_config: FALSE
+apply_licensing: FALSE

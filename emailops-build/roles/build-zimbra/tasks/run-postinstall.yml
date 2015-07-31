@@ -201,7 +201,11 @@
 ##
 - name: (POSTINSTALL) Include reverse proxy configuration tasks
   include: pop/proxy.yml
-  when: use_reverse_proxy|bool
+  when: is_pop|bool and use_reverse_proxy|bool
+
+- name: (POSTINSTALL) Apply logjam fix
+  include: pop/logjam.yml
+  when: is_pop|bool
 
 #
 # Maildrop-specific config
@@ -228,6 +232,10 @@
 
 - name: (POSTINSTALL) Include Zimbra zimlet installations
   include: maildrop/zimlets.yml
+  when: is_maildrop|bool and install_synacor_skins_zimlets|bool
+
+- name: (POSTINSTALL) Include Zimbra skins installations
+  include: maildrop/skins.yml
   when: is_maildrop|bool and install_synacor_skins_zimlets|bool
 
 - name: (POSTINSTALL) Include Scality installation/configuration tasks

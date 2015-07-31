@@ -12,6 +12,7 @@
     state=present
     user=khuntly
     exclusive=yes
+    key_options="{{ key_options }}"
 
 - name: Remove existing known_hosts file
   file:

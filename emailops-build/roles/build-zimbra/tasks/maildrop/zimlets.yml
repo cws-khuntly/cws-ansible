@@ -14,16 +14,6 @@
   with_items: zimlets
 
 ##
-## install skins
-##
-- name: (POSTINSTALL) Install skins
-  yum:
-    disable_gpg_check=yes
-    name="{{ item.name }}-{{ item.version }}"
-    state=present
-  with_items: skins
-
-##
 ## custom skins/zimlets
 ##
 - name: (POSTINSTALL) Install zimlets (client specific)
@@ -32,21 +22,19 @@
     name="{{ item.name }}-{{ item.version }}"
     state=present
   with_items: custom_zimlets
+  when: custom_zimlets is defined
 
-- name: (POSTINSTALL) Install skins (client specific)
-  yum:
-    disable_gpg_check=yes
-    name="{{ item.name }}-{{ item.version }}"
-    state=present
-  with_items: custom_skins
-
+##
+## zimlet configuration
+##
 - name: (POSTINSTALL) Configure zimlet (standard)
   shell: "{{ install_dir }}/bin/zmzimletctl ldapDeploy {{ item.configure_zimlet }}"
   with_items: zimlets
 
 - name: (POSTINSTALL) Configure zimlets (custom)
   shell: "{{ install_dir }}/bin/zmzimletctl ldapDeploy {{ item.configure_zimlet }}"
-  with_items: custom-zimlets
+  with_items: custom_zimlets
+  when: custom_zimlets is defined
 
 - name: (POSTINSTALL) Enable zimlets (standard)
   shell: "{{ install_dir }}/bin/zmzimletctl enable {{ item.configure_zimlet }}"
@@ -56,47 +44,19 @@
   shell: "{{ install_dir }}/bin/zmzimletctl enable {{ item.configure_zimlet }}"
   with_items: zimlets
 
-- name: (POSTINSTALL) Ensure there is a configuration template for the zimlet (standard)
-  file:
-    path="{{ install_dir }}/zimlets-deployed/{{ item.configure_zimlet }}/config_template.xml"
-  register: zimlet_config_exists
-  with_items: zimlets
+##
+## send install script
+##
+- name: (POSTINSTALL) Create zimlet installation script
+  template:
+    src=installZimlets.j2
+    dest="/var/tmp/installZimlets.sh"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0755
 
 - name: (POSTINSTALL) Configure zimlet via template (standard)
-  shell: "{{ install_dir }}/bin/zmzimletctl {{ install_dir }}/zimlets-deployed/{{ item.configure_zimlet }}/config_template.xml"
-  with_items: zimlets
-  when: zimlet_config_exists.stat.exists|bool
-
-- name: (POSTINSTALL) Configure zimlet via template (custom)
-  shell: "{{ install_dir }}/bin/zmzimletctl {{ install_dir }}/zimlets-deployed/{{ item.configure_zimlet }}/config_template.xml"
-  with_items: custom-zimlets
-  when: zimlet_config_exists.stat.exists|bool
-
-##
-## set preferred skin
-##
-- name: (POSTINSTALL) Configure Zimbra zimlets
-  command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin {{ zimbra_pref_skin }}"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-
-##
-## remove zimbra pre-installed skins
-##
-- name: (POSTINSTALL) Configure Zimbra zimlets (global config)
-  command: "{{ install_dir }}/bin/zmprov mcf -zimbraInstalledSkin bones -zimbraInstalledSkin hotrod -zimbraInstalledSkin lake -zimbraInstalledSkin lavender -zimbraInstalledSkin lemongrass
-    -zimbraInstalledSkin oasis -zimbraInstalledSkin pebble -zimbraInstalledSkin sand -zimbraInstalledSkin sky -zimbraInstalledSkin smoke -zimbraInstalledSkin steel -zimbraInstalledSkin tree
-    -zimbraInstalledSkin twilight -zimbraInstalledSkin waves -zimbraInstalledSkin beach -zimbraInstalledSkin bare"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-
-##
-## cleanup after removal
-##
-- name: (POSTINSTALL) Remove unused skins/themes
-  file:
-    path="{{ install_dir }}/{{ item }}"
-    state=absent
-  with_items: clean_skins
+  shell: "/var/tmp/installZimlets.sh {{ item.configure_zimlet }}"
+  with_together:
+    - "{{ zimlets }}"
+    - "{{ custom_zimlets }}"

@@ -8,3 +8,7 @@ is_maildrop: TRUE
 apply_default_cos: TRUE
 apply_domains: FALSE
 use_scality: FALSE
+apply_licensing: TRUE
+dhparam_output: /opt/zimbra/conf/dhparams.pem
+dhparam_keysize: 2048
+activate_license: FALSE

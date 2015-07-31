@@ -1,0 +1,42 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/maildrop/zimlets.yml
+#   DESCRIPTION:  Install and configure Zimbra zimlets
+#==============================================================================
+---
+##
+## install skins
+##
+- name: (POSTINSTALL) Install skins
+  yum:
+    disable_gpg_check=yes
+    name="{{ item.name }}-{{ item.version }}"
+    state=present
+  with_items: skins
+
+- name: (POSTINSTALL) Install skins (client specific)
+  yum:
+    disable_gpg_check=yes
+    name="{{ item.name }}-{{ item.version }}"
+    state=present
+  with_items: custom_skins
+  when: custom_skins is defined
+
+##
+## remove zimbra pre-installed skins
+##
+- name: (POSTINSTALL) Configure Zimbra skins (global config)
+  command: "{{ install_dir }}/bin/zmprov mcf -zimbraInstalledSkin bones -zimbraInstalledSkin hotrod -zimbraInstalledSkin lake -zimbraInstalledSkin lavender -zimbraInstalledSkin lemongrass
+    -zimbraInstalledSkin oasis -zimbraInstalledSkin pebble -zimbraInstalledSkin sand -zimbraInstalledSkin sky -zimbraInstalledSkin smoke -zimbraInstalledSkin steel -zimbraInstalledSkin tree
+    -zimbraInstalledSkin twilight -zimbraInstalledSkin waves -zimbraInstalledSkin beach -zimbraInstalledSkin bare"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
+##
+## cleanup after removal
+##
+- name: (POSTINSTALL) Remove unused skins/themes
+  file:
+    path="{{ install_dir }}/{{ item }}"
+    state=absent
+  with_items: clean_skins
