@@ -230,6 +230,18 @@
   include: maildrop/webapp.yml
   when: is_maildrop|bool
 
+##
+## send install script
+##
+- name: (POSTINSTALL) Create zimlet installation script
+  template:
+    src=installZimlets.j2
+    dest="/var/tmp/installZimlets.sh"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0755
+  when: is_maildrop|bool and install_synacor_skins_zimlets|bool
+
 - name: (POSTINSTALL) Include Zimbra zimlet installations
   include: maildrop/zimlets.yml
   when: is_maildrop|bool and install_synacor_skins_zimlets|bool

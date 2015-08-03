@@ -42,21 +42,14 @@
 
 - name: (POSTINSTALL) Enable zimlets (custom)
   shell: "{{ install_dir }}/bin/zmzimletctl enable {{ item.configure_zimlet }}"
-  with_items: zimlets
-
-##
-## send install script
-##
-- name: (POSTINSTALL) Create zimlet installation script
-  template:
-    src=installZimlets.j2
-    dest="/var/tmp/installZimlets.sh"
-    owner="{{ user_name }}"
-    group="{{ group_name }}"
-    mode=0755
+  with_items: custom_zimlets
+  when: custom_zimlets is defined
 
 - name: (POSTINSTALL) Configure zimlet via template (standard)
   shell: "/var/tmp/installZimlets.sh {{ item.configure_zimlet }}"
-  with_together:
-    - "{{ zimlets }}"
-    - "{{ custom_zimlets }}"
+  with_items: zimlets
+
+- name: (POSTINSTALL) Configure zimlet via template (custom)
+  shell: "/var/tmp/installZimlets.sh {{ item.configure_zimlet }}"
+  with_items: custom_zimlets
+  when: custom_zimlets is defined

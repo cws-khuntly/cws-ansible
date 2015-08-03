@@ -7,13 +7,13 @@ server
     ${core.ipboth.enabled}listen                  ${vip}:${web.https.port};
     ${core.ipv4only.enabled}listen                  ${vip}:${web.https.port};
     ${core.ipv6only.enabled}listen                  ${vip}:${web.https.port} ipv6only=on;
-    client_max_body_size    0;
-    ssl                     on;
-    ssl_prefer_server_ciphers ${web.ssl.preferserverciphers};
-    ssl_ciphers             ${web.ssl.ciphers};
-    ssl_certificate         ${ssl.crt};
-    ssl_certificate_key     ${ssl.key};
-    ssl_dhparam             {{ dhparam_output }};
+    client_max_body_size        0;
+    ssl                         on;
+    ssl_prefer_server_ciphers   ${web.ssl.preferserverciphers};
+    ssl_certificate             ${ssl.crt};
+    ssl_certificate_key         ${ssl.key};
+    ssl_dhparam                 {{ dhparam_output }};
+    ssl_ciphers                 "{{ include_ciphers }}";
 
 
     location /
