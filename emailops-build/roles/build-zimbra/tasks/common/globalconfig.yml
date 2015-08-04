@@ -19,7 +19,7 @@
   when: apply_global_config|bool
 
 - name: Apply whitelisting
-  command: "{{ install_dir }}/bin/zmprov mcf +zimbraThrottleWhitelist {{ item }}"
+  command: "{{ install_dir }}/bin/zmprov mcf +zimbraThrottleWhitelist {{ item.address }}"
   become: yes
   become_user: zimbra
   become: method
