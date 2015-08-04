@@ -18,6 +18,13 @@
   become_method: sudo
   when: apply_global_config|bool
 
+- name: Apply whitelisting
+  command: "{{ install_dir }}/bin/zmprov mcf +zimbraThrottleWhitelist {{ item }}"
+  become: yes
+  become_user: zimbra
+  become: method
+  with_items: whitelist_hosts
+
 - name: (POSTINSTALL) Update exclude cipher list (global config)
   command: "{{ install_dir }}/bin/zmprov mcf +zimbraSSLExcludeCipherSuites {{ item }}"
   with_items: "{{ exclude_ciphers|default([]) }}"

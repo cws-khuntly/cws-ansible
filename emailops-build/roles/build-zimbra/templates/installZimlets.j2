@@ -54,9 +54,13 @@ function configureZimlets
     [ ! -z "${ENABLE_DEBUG}" ] && [ "${ENABLE_DEBUG}" = "${_TRUE}" ] && printf "%s %s %s %s %s\n" "DEBUG" "${METHOD_NAME}" "${0}" "${LINENO}" "${METHOD_NAME} -> enter" >&2;
     [ ! -z "${ENABLE_DEBUG}" ] && [ "${ENABLE_DEBUG}" = "${_TRUE}" ] && printf "%s %s %s %s %s\n" "DEBUG" "${METHOD_NAME}" "${0}" "${LINENO}" "Provided arguments: ${*}" >&2;
 
-    [ ! -f "{{ install_dir }}/zimlets-deployed/{{ item.configure_zimlet }}/config_template.xml" ] && return;
+    typeset ZIMLET_NAME="${1}";
 
-    "{{ install_dir }}/bin/zmzimletctl {{ install_dir }}/zimlets-deployed/{{ item.configure_zimlet }}/config_template.xml";
+    [ ! -z "${ENABLE_DEBUG}" ] && [ "${ENABLE_DEBUG}" = "${_TRUE}" ] && printf "%s %s %s %s %s\n" "DEBUG" "${METHOD_NAME}" "${0}" "${LINENO}" "ZIMLET_NAME -> ${ZIMLET_NAME}" >&2;
+
+    [ ! -f "{{ install_dir }}/zimlets-deployed/${ZIMLET_NAME}/config_template.xml" ] && return;
+
+    "{{ install_dir }}/bin/zmzimletctl {{ install_dir }}/zimlets-deployed/${ZIMLET_NAME}/config_template.xml";
 
     [ ! -z "${ENABLE_DEBUG}" ] && [ "${ENABLE_DEBUG}" = "${_TRUE}" ] && printf "%s %s %s %s %s\n" "DEBUG" "${METHOD_NAME}" "${0}" "${LINENO}" "RETURN_CODE -> ${RETURN_CODE}" >&2;
     [ ! -z "${ENABLE_DEBUG}" ] && [ "${ENABLE_DEBUG}" = "${_TRUE}" ] && printf "%s %s %s %s %s\n" "DEBUG" "${METHOD_NAME}" "${0}" "${LINENO}" "${METHOD_NAME} -> exit" >&2;
@@ -78,7 +82,7 @@ function configureZimlets
     return ${RETURN_CODE};
 }
 
-[ ${#} -eq 1 ] && configureZimlets "${1}" || typeset -i RETURN_CODE=1;
+{%raw %}[ ${#} -eq 1 ] && configureZimlets "${1}" || typeset -i RETURN_CODE=1; {% endraw %}
 
 [ ! -z "${ENABLE_DEBUG}" ] && [ "${ENABLE_DEBUG}" = "${_TRUE}" ] && writeLogEntry "DEBUG" "${METHOD_NAME}" "${CNAME}" "${LINENO}" "RETURN_CODE -> ${RETURN_CODE}";
 [ ! -z "${ENABLE_DEBUG}" ] && [ "${ENABLE_DEBUG}" = "${_TRUE}" ] && writeLogEntry "DEBUG" "${METHOD_NAME}" "${CNAME}" "${LINENO}" "${CNAME} -> exit";

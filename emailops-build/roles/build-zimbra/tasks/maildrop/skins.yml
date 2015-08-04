@@ -32,6 +32,12 @@
   become_user: zimbra
   become_method: sudo
 
+- name: (POSTINSTALL) Set default skin
+  command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin {{ zimbra_pref_skin }}"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+
 ##
 ## cleanup after removal
 ##
