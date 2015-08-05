@@ -22,14 +22,16 @@ trap 'set +v; set +x' INT TERM EXIT;
 [ ! -z "${ENABLE_TRACE}" ] && [ "${ENABLE_TRACE}" = "${_TRUE}" ] && set -v;
 
 ## Application constants
-CNAME="$(/usr/bin/env basename "${0}")";
-SCRIPT_ABSOLUTE_PATH="$(cd "${0%/*}" 2>/dev/null; echo "${PWD}/${0##*/}")";
-SCRIPT_ROOT="$(/usr/bin/env dirname "${SCRIPT_ABSOLUTE_PATH}")";
-METHOD_NAME="${CNAME}#startup";
+typeset CNAME="$(/usr/bin/env basename "${0}")";
+typeset SCRIPT_ABSOLUTE_PATH="$(cd "${0%/*}" 2>/dev/null; echo "${PWD}/${0##*/}")";
+typeset SCRIPT_ROOT="$(/usr/bin/env dirname "${SCRIPT_ABSOLUTE_PATH}")";
+typeset METHOD_NAME="${CNAME}#startup";
 
 [ ! -z "${ENABLE_DEBUG}" ] && [ "${ENABLE_DEBUG}" = "${_TRUE}" ] && printf "%s %s %s %s %s\n" "DEBUG" "${METHOD_NAME}" "${CNAME}" "${LINENO}" "${CNAME} starting up.. Process ID ${$}" >&2;
 [ ! -z "${ENABLE_DEBUG}" ] && [ "${ENABLE_DEBUG}" = "${_TRUE}" ] && printf "%s %s %s %s %s\n" "DEBUG" "${METHOD_NAME}" "${CNAME}" "${LINENO}" "${METHOD_NAME} -> enter" >&2;
 [ ! -z "${ENABLE_DEBUG}" ] && [ "${ENABLE_DEBUG}" = "${_TRUE}" ] && printf "%s %s %s %s %s\n" "DEBUG" "${METHOD_NAME}" "${CNAME}" "${LINENO}" "Provided arguments: ${*}" >&2;
+
+typeset -i RETURN_CODE=0;
 
 #=====  FUNCTION  =============================================================
 #          NAME:  loadFilesToRemote
@@ -98,4 +100,4 @@ unset METHOD_NAME;
 [ ! -z "${ENABLE_TRACE}" ] && [ "${ENABLE_TRACE}" = "true" ] && set +v;
 [ ! -z "${ENABLE_TRACE}" ] && [ "${ENABLE_TRACE}" = "${_TRUE}" ] && set +v;
 
-[ -z "${RETURN_CODE}" ] && return 1 || return "${RETURN_CODE}";
+[ -z "${RETURN_CODE}" ] && exit 1 || exit "${RETURN_CODE}";

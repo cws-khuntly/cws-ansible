@@ -3,37 +3,37 @@
 #   DESCRIPTION:  Configure the Zimbra web application
 #==============================================================================
 ---
-- name: (POSTINSTALL) Configure Zimbra web application
+- name: (POSTINSTALL/MAILDROP) Configure Zimbra web application
   command: "/usr/local/bin/replacer.pl --indir {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/classes/messages/ --outdir {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/classes/messages/"
 
-- name: (POSTINSTALL) Configure Zimbra web application
+- name: (POSTINSTALL/MAILDROP) Configure Zimbra web application
   command: "/usr/local/bin/replacer.pl --indir {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/classes/keys/ --outdir {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/classes/keys/"
 
 ##
 ## Update zimbrastore
 ##
-- name: (POSTINSTALL) Check if zimbrastore.jar exists
+- name: (POSTINSTALL/MAILDROP) Check if zimbrastore.jar exists
   stat:
     path="{{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbrastore.jar"
     get_md5=yes
   register: zimbrastore_precopy
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar)
+- name: (POSTINSTALL/MAILDROP) Update Zimbra webapp (zimbrastore.jar)
   command: "cp {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbrastore.jar {{ install_dir }}/jetty/common/lib/"
   when: zimbrastore_precopy.stat.exists
 
-- name: (POSTINSTALL) Check if zimbrastore.jar exists
+- name: (POSTINSTALL/MAILDROP) Check if zimbrastore.jar exists
   stat:
     path="{{ install_dir }}/jetty/common/lib/zimbrastore.jar"
     get_md5=yes
   register: zimbrastore_postcopy
   when: zimbrastore_precopy.stat.exists
 
-- name: (POSTINSTALL) verify file copy (zimbrastore.jar)
+- name: (POSTINSTALL/MAILDROP) verify file copy (zimbrastore.jar)
   fail: "File copy FAILED for zimbrastore.jar"
   when: zimbrastore_precopy.stat.md5 != zimbrastore_postcopy.stat.md5
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbrastore.jar)
+- name: (POSTINSTALL/MAILDROP) Update Zimbra webapp (zimbrastore.jar)
   file:
     group="{{ group_name }}"
     mode=0644
@@ -44,28 +44,28 @@
 ##
 ## Update zimbrasoap
 ##
-- name: (POSTINSTALL) Check if zimbrasoap.jar exists
+- name: (POSTINSTALL/MAILDROP) Check if zimbrasoap.jar exists
   stat:
     path="{{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbrasoap.jar"
     get_md5=yes
   register: zimbrasoap_precopy
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbrasoap.jar)
+- name: (POSTINSTALL/MAILDROP) Update Zimbra webapp (zimbrasoap.jar)
   command: "cp {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbrasoap.jar {{ install_dir }}/jetty/common/lib/"
   when: zimbrasoap_precopy.stat.exists
 
-- name: (POSTINSTALL) Check if zimbrasoap.jar exists
+- name: (POSTINSTALL/MAILDROP) Check if zimbrasoap.jar exists
   stat:
     path="{{ install_dir }}/jetty/common/lib/zimbrasoap.jar"
     get_md5=yes
   register: zimbrasoap_postcopy
   when: zimbrasoap_precopy.stat.exists
 
-- name: (POSTINSTALL) verify file copy (zimbrasoap.jar)
+- name: (POSTINSTALL/MAILDROP) verify file copy (zimbrasoap.jar)
   fail: "File copy FAILED for zimbrasoap.jar"
   when: zimbrasoap_precopy.stat.md5 != zimbrasoap_postcopy.stat.md5
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbrasoap.jar)
+- name: (POSTINSTALL/MAILDROP) Update Zimbra webapp (zimbrasoap.jar)
   file:
     group="{{ group_name }}"
     mode=0644
@@ -76,28 +76,28 @@
 ##
 ## Update zimbraclient
 ##
-- name: (POSTINSTALL) Check if zimbraclient.jar exists
+- name: (POSTINSTALL/MAILDROP) Check if zimbraclient.jar exists
   stat:
     path="{{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbraclient.jar"
     get_md5=yes
   register: zimbraclient_precopy
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbraclient.jar)
+- name: (POSTINSTALL/MAILDROP) Update Zimbra webapp (zimbraclient.jar)
   command: "cp {{ install_dir }}/jetty/webapps/zimbra/WEB-INF/lib/zimbraclient.jar {{ install_dir }}/jetty/common/lib/"
   when: zimbraclient_precopy.stat.exists
 
-- name: (POSTINSTALL) Check if zimbraclient.jar exists
+- name: (POSTINSTALL/MAILDROP) Check if zimbraclient.jar exists
   stat:
     path="{{ install_dir }}/jetty/common/lib/zimbraclient.jar"
     get_md5=yes
   register: zimbraclient_postcopy
   when: zimbraclient_precopy.stat.exists
 
-- name: (POSTINSTALL) verify file copy (zimbraclient.jar)
+- name: (POSTINSTALL/MAILDROP) verify file copy (zimbraclient.jar)
   fail: "File copy FAILED for zimbraclient.jar"
   when: zimbraclient_precopy.stat.md5 != zimbraclient_precopy.stat.md5
 
-- name: (POSTINSTALL) Update Zimbra webapp (zimbraclient.jar)
+- name: (POSTINSTALL/MAILDROP) Update Zimbra webapp (zimbraclient.jar)
   file:
     group="{{ group_name }}"
     mode=0644

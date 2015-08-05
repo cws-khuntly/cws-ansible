@@ -6,7 +6,7 @@
 ##
 ## Add the configured domains...
 ##
-- name: (POSTINSTALL) Add client domains
+- name: (POSTINSTALL/MAILDROP) Add client domains
   command: "{{ install_dir }}/bin/zmprov cd {{ item.name }} zimbraAuthMech zimbra"
   with_items: client_domains
   become: yes
@@ -16,7 +16,7 @@
 ##
 ## ...and then set hostnames
 ##
-- name: (POSTINSTALL) Add client domains
+- name: (POSTINSTALL/MAILDROP) Add client domains
   command: "{{ install_dir }}/bin/zmprov md {{ item.name }} zimbraPublicServiceHostname {{ item.public_host_name }}"
   with_items: client_domains
   become: yes

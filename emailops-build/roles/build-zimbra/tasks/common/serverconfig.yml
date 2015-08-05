@@ -6,7 +6,7 @@
 ##
 ## server config
 ##
-- name: (POSTINSTALL) Update a couple things so we can remove them
+- name: (POSTINSTALL/COMMON) Update a couple things so we can remove them
   command: "{{ install_dir }}/bin/zmprov ms {{ hostvars[inventory_hostname]['ansible_fqdn'] }} zimbraLmtpNumThreads 20 zimbraHttpNumThreads 250
     zimbraImapNumThreads 600 zimbraPop3NumThreads 600"
   become: yes
@@ -16,7 +16,7 @@
 ##
 ## Ensure machine configuration is set properly
 ##
-- name: (POSTINSTALL) Confirm (or correct) machine configuration
+- name: (POSTINSTALL/COMMON) Confirm (or correct) machine configuration
   command: "{{ install_dir }}/bin/zmprov ms {{ hostvars[inventory_hostname]['ansible_fqdn'] }} zimbraMailReferMode reverse-proxied zimbraPop3SSLBindPort 7995
     zimbraPop3SSLProxyBindPort 995 zimbraPop3ProxyBindPort 110 zimbraPop3MaxConnections 600 zimbraPop3BindPort 7110 zimbraMessageCacheSize 10000
     zimbraMailboxMoveSkipBlobs TRUE zimbraMailboxMoveSkipHsmBlobs TRUE zimbraMailPurgeBatchSize 100 zimbraMailFileDescriptorCacheSize 20000

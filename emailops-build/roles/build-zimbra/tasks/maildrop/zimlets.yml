@@ -6,7 +6,7 @@
 ##
 ## install zimlets
 ##
-- name: (POSTINSTALL) Install zimlets
+- name: (POSTINSTALL/MAILDROP) Install zimlets
   yum:
     disable_gpg_check=yes
     name="{{ item.name }}-{{ item.version }}"
@@ -16,7 +16,7 @@
 ##
 ## custom skins/zimlets
 ##
-- name: (POSTINSTALL) Install zimlets (client specific)
+- name: (POSTINSTALL/MAILDROP) Install zimlets (client specific)
   yum:
     disable_gpg_check=yes
     name="{{ item.name }}-{{ item.version }}"
@@ -27,29 +27,29 @@
 ##
 ## zimlet configuration
 ##
-- name: (POSTINSTALL) Configure zimlet (standard)
+- name: (POSTINSTALL/MAILDROP) Configure zimlet (standard)
   shell: "{{ install_dir }}/bin/zmzimletctl ldapDeploy {{ item.configure_zimlet }}"
   with_items: zimlets
 
-- name: (POSTINSTALL) Configure zimlets (custom)
+- name: (POSTINSTALL/MAILDROP) Configure zimlets (custom)
   shell: "{{ install_dir }}/bin/zmzimletctl ldapDeploy {{ item.configure_zimlet }}"
   with_items: custom_zimlets
   when: custom_zimlets is defined
 
-- name: (POSTINSTALL) Enable zimlets (standard)
+- name: (POSTINSTALL/MAILDROP) Enable zimlets (standard)
   shell: "{{ install_dir }}/bin/zmzimletctl enable {{ item.configure_zimlet }}"
   with_items: zimlets
 
-- name: (POSTINSTALL) Enable zimlets (custom)
+- name: (POSTINSTALL/MAILDROP) Enable zimlets (custom)
   shell: "{{ install_dir }}/bin/zmzimletctl enable {{ item.configure_zimlet }}"
   with_items: custom_zimlets
   when: custom_zimlets is defined
 
-- name: (POSTINSTALL) Configure zimlet via template (standard)
+- name: (POSTINSTALL/MAILDROP) Configure zimlet via template (standard)
   shell: "/var/tmp/installZimlets.sh {{ item.configure_zimlet }}"
   with_items: zimlets
 
-- name: (POSTINSTALL) Configure zimlet via template (custom)
+- name: (POSTINSTALL/MAILDROP) Configure zimlet via template (custom)
   shell: "/var/tmp/installZimlets.sh {{ item.configure_zimlet }}"
   with_items: custom_zimlets
   when: custom_zimlets is defined

@@ -3,7 +3,17 @@
 #   DESCRIPTION:  Perform post-installation configuration
 #==============================================================================
 ---
-- name: Create symlink /opt/ecelerity => /opt/msys/ecelerity
+- name: (POSTINSTALL) Copy all files from /opt/ecelerity to /opt/msys/ecelerity
+  copy:
+    dest=/opt/msys/ecelerity
+    src=/opt/ecelerity/
+
+- name: (POSTINSTALL) Remove /opt/ecelerity
+  file:
+    path=/opt/ecelerity
+    state=absent
+
+- name: (POSTINSTALL) Create symlink /opt/ecelerity => /opt/msys/ecelerity
   file:
     group="{{ group_name }}"
     owner="{{ user_name }}"
@@ -11,7 +21,7 @@
     src="{{ install_dir }}"
     state=link
 
-- name: Change permissions on /opt/msys
+- name: (POSTINSTALL) Change permissions on /opt/msys
   file:
     group="{{ group_name }}"
     owner="{{ user_name }}"
@@ -19,7 +29,7 @@
     recurse=yes
     state=directory
 
-- name: Change permissions on /var/log/ecelerity
+- name: (POSTINSTALL) Change permissions on /var/log/ecelerity
   file:
     group="{{ group_name }}"
     owner="{{ user_name }}"
@@ -27,7 +37,7 @@
     recurse=yes
     state=directory
 
-- name: Remove files placed in global
+- name: (POSTINSTALL) Remove files placed in global
   file:
     path="{{ install_dir }}/etc/conf/default/{{ item }}"
     state=absent
@@ -47,7 +57,7 @@
   subversion:
     dest="{{ install_dir }}/conf/"
     password="{{ svn_password }}"
-    repo="{{ svn.host }}"
+    repo="{{ svn_host }}"
     revision=HEAD
     username=admin
 

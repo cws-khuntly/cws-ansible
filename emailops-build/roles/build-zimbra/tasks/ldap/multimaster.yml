@@ -6,7 +6,7 @@
 ##
 ## Set up multi-master replication
 ##
-- name: (POSTINSTALL) Promote node to master
+- name: (POSTINSTALL/LDAP) Promote node to master
   command: "{{ install_dir }}/libexec/zmldappromote-replica-mmr -s {{ ldap_rid }}"
   when: promote
   become: yes
@@ -17,13 +17,14 @@
 ##
 ## this needs to be done on EVERY host
 ##
-- name: (POSTINSTALL) Enable multi-master LDAP replication (zmldapenable-mmr)
+- name: (POSTINSTALL/LDAP) Enable multi-master LDAP replication (zmldapenable-mmr)
   command: "{{ install_dir }}/libexec/zmldapenable-mmr -s {{ ldap_rid }} -m \"ldap://{{ hostvars[inventory_hostname]['ansible_fqdn'] }}:389/\""
   become: yes
   become_user: zimbra
   become_method: sudo
 
-- command: "{{ install_dir }}/bin/ldap restart"
+- name: (POSTINSTALL/LDAP) Restart LDAP after enabling MMR
+  command: "{{ install_dir }}/bin/ldap restart"
   become: yes
   become_user: zimbra
   become_method: sudo

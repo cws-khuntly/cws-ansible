@@ -3,13 +3,13 @@
 #   DESCRIPTION:  Perform software installation
 #==============================================================================
 ---
-- name: Synchronize ecelerity installer
+- name: (INSTALL) Synchronize ecelerity installer
   unarchive:
     src=ecelerity.tar.gz
     dest="{{ tmpdir }}"
     copy=yes
 
-- name: Create script file for unattended installation
+- name: (INSTALL) Create script file for unattended installation
   template:
     src=installer.j2
     dest="{{ tmpdir }}/installer.conf"
@@ -17,7 +17,7 @@
     group="{{ group_name }}"
     mode=0644
 
-- name: Process installation
+- name: (INSTALL) Process installation
   command: "/usr/bin/env perl {{ tmpdir }}/ecelerity/installer --option-file {{ tmpdir }}/installer.conf --start-services y"
   args:
     chdir: "{{ tmpdir }}/ecelerity"

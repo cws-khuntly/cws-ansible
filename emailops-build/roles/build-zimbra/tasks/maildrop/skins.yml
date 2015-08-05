@@ -6,14 +6,14 @@
 ##
 ## install skins
 ##
-- name: (POSTINSTALL) Install skins
+- name: (POSTINSTALL/MAILDROP) Install skins
   yum:
     disable_gpg_check=yes
     name="{{ item.name }}-{{ item.version }}"
     state=present
   with_items: skins
 
-- name: (POSTINSTALL) Install skins (client specific)
+- name: (POSTINSTALL/MAILDROP) Install skins (client specific)
   yum:
     disable_gpg_check=yes
     name="{{ item.name }}-{{ item.version }}"
@@ -24,7 +24,7 @@
 ##
 ## remove zimbra pre-installed skins
 ##
-- name: (POSTINSTALL) Configure Zimbra skins (global config)
+- name: (POSTINSTALL/MAILDROP) Configure Zimbra skins (global config)
   command: "{{ install_dir }}/bin/zmprov mcf -zimbraInstalledSkin bones -zimbraInstalledSkin hotrod -zimbraInstalledSkin lake -zimbraInstalledSkin lavender -zimbraInstalledSkin lemongrass
     -zimbraInstalledSkin oasis -zimbraInstalledSkin pebble -zimbraInstalledSkin sand -zimbraInstalledSkin sky -zimbraInstalledSkin smoke -zimbraInstalledSkin steel -zimbraInstalledSkin tree
     -zimbraInstalledSkin twilight -zimbraInstalledSkin waves -zimbraInstalledSkin beach -zimbraInstalledSkin bare"
@@ -32,7 +32,7 @@
   become_user: zimbra
   become_method: sudo
 
-- name: (POSTINSTALL) Set default skin
+- name: (POSTINSTALL/MAILDROP) Set default skin
   command: "{{ install_dir }}/bin/zmprov mc default zimbraPrefSkin {{ zimbra_pref_skin }}"
   become: yes
   become_user: zimbra
@@ -41,7 +41,7 @@
 ##
 ## cleanup after removal
 ##
-- name: (POSTINSTALL) Remove unused skins/themes
+- name: (POSTINSTALL/MAILDROP) Remove unused skins/themes
   file:
     path="{{ install_dir }}/{{ item }}"
     state=absent

@@ -3,14 +3,14 @@
 #   DESCRIPTION:  Primary entry point for this play
 #==============================================================================
 ---
-- name: Run nginx installation steps
+- name: (MAIN) Run nginx installation steps
   include: run-installation.yml
   notify:
     - sync puppet
   meta:
     - flush_handlers
 
-- name: Run nginx installation steps
+- name: (MAIN) Run nginx installation steps
   include: run-postinstall.yml
   notify:
     - sync puppet

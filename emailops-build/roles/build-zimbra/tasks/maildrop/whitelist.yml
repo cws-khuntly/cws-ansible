@@ -1,0 +1,14 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  build-zimbra/tasks/maildrop/whitelist.yml
+#   DESCRIPTION:  Configure Zimbra global settings
+#==============================================================================
+---
+##
+## global config
+##
+- name: (POSTINSTALL/MAILDROP) Apply whitelisting
+  command: "{{ install_dir }}/bin/zmprov mcf +zimbraThrottleWhitelist {{ item.address }}"
+  become: yes
+  become_user: zimbra
+  become: method
+  with_items: whitelist_hosts

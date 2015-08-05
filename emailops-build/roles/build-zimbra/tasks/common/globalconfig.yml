@@ -6,7 +6,7 @@
 ##
 ## global config
 ##
-- name: (POSTINSTALL) Apply Zimbra configuration (global config)
+- name: (POSTINSTALL/COMMON) Apply Zimbra configuration (global config)
   command: "{{ install_dir }}/bin/zmprov mcf +zimbraAccountExtraObjectClass synacorEmailAccount +zimbraAccountExtraObjectClass synacorPortalAccount
     +zimbraCosExtraObjectClass synacorEmailCOS +zimbraDomainExtraObjectClass synacorEmailDomain +zimbraDomainExtraObjectClass synacorPortalDomain
     zimbraHttpDebugHandlerEnabled FALSE zimbraImapCleartextLoginEnabled TRUE zimbraPop3CleartextLoginEnabled TRUE zimbraLmtpNumThreads 250
@@ -18,14 +18,7 @@
   become_method: sudo
   when: apply_global_config|bool
 
-- name: Apply whitelisting
-  command: "{{ install_dir }}/bin/zmprov mcf +zimbraThrottleWhitelist {{ item.address }}"
-  become: yes
-  become_user: zimbra
-  become: method
-  with_items: whitelist_hosts
-
-- name: (POSTINSTALL) Update exclude cipher list (global config)
+- name: (POSTINSTALL/COMMON) Update exclude cipher list (global config)
   command: "{{ install_dir }}/bin/zmprov mcf +zimbraSSLExcludeCipherSuites {{ item }}"
   with_items: "{{ exclude_ciphers|default([]) }}"
   become: yes

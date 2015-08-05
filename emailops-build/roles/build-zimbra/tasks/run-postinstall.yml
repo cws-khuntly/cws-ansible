@@ -6,7 +6,7 @@
 ##
 ## FIRST THINGS FIRST. Correct perms on /opt/zimbra
 ##
-- name: Correct permissions on /opt/zimbra
+- name: (POSTINSTALL) Correct permissions on /opt/zimbra
   file:
     path=/opt/zimbra
     group=zimbra
@@ -229,6 +229,10 @@
 - name: (POSTINSTALL) Include Zimbra webapp modifications
   include: maildrop/webapp.yml
   when: is_maildrop|bool
+
+- name: (POSTINSTALL) Include Zimbra maildrop whitelists
+  include: maildrop/webapp.yml
+  when: is_maildrop|bool or is_pop|bool
 
 ##
 ## send install script

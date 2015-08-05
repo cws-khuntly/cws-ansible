@@ -11,5 +11,5 @@ server_type: mx
 ##
 ## subversion!
 ##
-svn.host: "https://ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com:2027/config/inbound/boot"
+svn_host: "https://ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com:2027/config/inbound/boot"
 

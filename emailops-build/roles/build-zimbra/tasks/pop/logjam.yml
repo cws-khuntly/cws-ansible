@@ -6,7 +6,7 @@
 ##
 ## Generate dhkey
 ##
-- name: (POSTINSTALL) Generate 2048 bit DH key for zimbra (logjam)
+- name: (POSTINSTALL/POP) Generate 2048 bit DH key for zimbra (logjam)
   command: "/usr/bin/openssl dhparam -out {{ dhparam_output }} {{ dhparam_keysize }}"
   args:
     creates: "{{ dhparam_output }}"
@@ -14,7 +14,7 @@
 ##
 ## Copy templates to server to apply dhparam for zimbra's nginx
 ##
-- name: (POSTINSTALL) Copy zimbra nginx configuration files to targes
+- name: (POSTINSTALL/POP) Copy zimbra nginx configuration files to targes
   copy:
     src="{{ item.src }}"
     dest="{{ item.dest }}"

@@ -4,7 +4,7 @@
 #==============================================================================
 ---
 ## create monitoring accounts
-- name: (POSTINSTALL) Create accounts
+- name: (POSTINSTALL/MAILDROP) Create accounts
   command: "{{ install_dir }}/bin/zmprov ca {{ item.name }}@{{ domain }} {{ item.password }} {{ default_account_settings }}"
   become: yes
   become_user: zimbra

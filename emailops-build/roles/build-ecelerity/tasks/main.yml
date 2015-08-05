@@ -3,14 +3,14 @@
 #   DESCRIPTION:  Primary entry point for play
 #==============================================================================
 ---
-- name: Run ecelerity installation steps
+- name: (MAIN) Run ecelerity installation steps
   include: run-installation.yml
   notify:
     - sync puppet
   meta:
     - flush_handlers
 
-- name: Run ecelerity post-installation steps
+- name: (MAIN) Run ecelerity post-installation steps
   include: run-postinstall.yml
   notify:
     - reload sysctl
@@ -19,21 +19,21 @@
   meta:
     - flush_handlers
 
-- name: Remove installer options file
+- name: (MAIN) Remove installer options file
   file:
     path="{{ tmpdir }}/installer.conf"
 
-- name: Remove installer options file (ecmgr)
+- name: (MAIN) Remove installer options file (ecmgr)
   file:
     path="{{ tmpdir }}/ecelerity"
     state=absent
 
-- name: Remove install archive
+- name: (MAIN) Remove install archive
   file:
     path="{{ tmpdir }}/ecelerity.tar.gz"
     state=absent
 
-- name: Remove post-install checkout
+- name: (MAIN) Remove post-install checkout
   file:
     path="{{ tmpdir }}/ecelerity"
     state=absent

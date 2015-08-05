@@ -6,7 +6,7 @@
 ##
 ## server config
 ##
-- name: (POSTINSTALL) Disable stats (server config (LDAP ONLY))
+- name: (POSTINSTALL/LDAP) Disable stats (server config (LDAP ONLY))
   command: "{{ install_dir }}/bin/zmprov ms {{ hostvars[inventory_hostname]['ansible_fqdn'] }} -zimbraServiceEnabled stats -zimbraServiceInstalled stats"
   become: yes
   become_user: zimbra
