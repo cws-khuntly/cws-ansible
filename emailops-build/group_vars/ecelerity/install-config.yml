@@ -6,8 +6,6 @@
 ##
 ## template updates
 ##
-user_name: ecuser
-group_name: ecuser
 install_dir: /opt/msys/ecelerity
 manager_hostname: "ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com"
 manager_ipaddr: 10.250.22.249
@@ -32,7 +30,7 @@ hosts:
     starttls: TRUE
 
 authscripts:
-  - name: auth-script
+  - name: authscript
     path: "{{ install_dir }}/etc/conf/default/lua/auth.lua"
 
 maildrops:

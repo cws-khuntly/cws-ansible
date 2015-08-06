@@ -154,18 +154,18 @@
     group="{{ group_name }}"
     mode=0644
 
-- name: (POSTINSTALL) Create ecelerity.conf
-  template:
-    src=ecelerity.j2
-    dest="{{ install_dir }}/etc/conf/global/ecelerity.conf"
-    owner="{{ user_name }}"
-    group="{{ group_name }}"
-    mode=0644
-
 - name: (POSTINSTALL) Create msgc_server.conf
   template:
     src=msgc_server.j2
     dest="{{ install_dir }}/etc/conf/global/msgc_server.conf"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+
+- name: (POSTINSTALL) Create ecelerity.conf
+  template:
+    src=ecelerity.j2
+    dest="{{ install_dir }}/etc/conf/global/ecelerity.conf"
     owner="{{ user_name }}"
     group="{{ group_name }}"
     mode=0644
@@ -175,7 +175,7 @@
 ##
 - name: (POSTINSTALL) Check in current configuration from cluster manager (MTA)
   shell: "cd {{ install_dir }}/etc/conf; /opt/msys/3rdParty/bin/svn commit --message 'Initial Commit/build via {uid}/Ansible' --no-auth-cache
-    --non-interactive --username admin --password {{ svn_passwd }} --recursive"
+    --non-interactive --username admin --password {{ svn_passwd }}"
 
 ##
 ## update sysctl
