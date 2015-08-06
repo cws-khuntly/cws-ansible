@@ -16,9 +16,9 @@
 $mailer_daemon = "postmaster@{{ domain }}";
 $postmaster = "postmaster@synacordomains.com";
 $cluster = "{{ client_name }}.{{ datacenter }}.synacor.com";
-$default_cos = "{{ default_cos }}";
-$default_biz_cos = "{{ biz_cos }}";
-$premig_cos = "{{ premig_cos }}";
+$default_cos = "{{ default_cos|default("") }}";
+$default_biz_cos = "{{ biz_cos|default("") }}";
+z$premig_cos = "{{ premig_cos|default("") }}";
 $premig_binding = "premig.{{ domain }}";
 $ldap_pass = "{{ ldap_admin_pass }}";
  

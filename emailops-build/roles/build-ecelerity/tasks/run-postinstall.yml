@@ -3,15 +3,26 @@
 #   DESCRIPTION:  Perform post-installation configuration
 #==============================================================================
 ---
-- name: (POSTINSTALL) Copy all files from /opt/ecelerity to /opt/msys/ecelerity
-  copy:
-    dest=/opt/msys/ecelerity
-    src=/opt/ecelerity/
+- name: (POSTINSTALL) Check for /opt/ecelerity
+  stat:
+    path=/opt/ecelerity
+    get_md5=no
+  register: dir_exists
+
+- name: (POSTINSTALL) Copy all files/directories under /opt/ecelerity to /opt/msys/ecelerity
+  synchronize:
+    dest=/opt/msys/ecelerity/
+    recursive=yes
+    src=/opt/ecelerity
+    rsync_opts="-qcarpt"
+  delegate_to: "{{ hostvars[inventory_hostname]['inventory_hostname'] }}"
+  when: dir_exists.stat.exists and dir_exists.stat.isdir
 
 - name: (POSTINSTALL) Remove /opt/ecelerity
   file:
     path=/opt/ecelerity
     state=absent
+  when: dir_exists.stat.exists and dir_exists.stat.isdir
 
 - name: (POSTINSTALL) Create symlink /opt/ecelerity => /opt/msys/ecelerity
   file:
@@ -37,6 +48,19 @@
     recurse=yes
     state=directory
 
+##
+## SVN checkout
+##
+- name: (POSTINSTALL) Check out current configuration
+  subversion:
+    dest="{{ install_dir }}/etc/conf/"
+    executable="{{ svn_path }}"
+    force=yes
+    password="{{ svn_passwd }}"
+    repo="{{ svn_host }}"
+    revision=HEAD
+    username=admin
+
 - name: (POSTINSTALL) Remove files placed in global
   file:
     path="{{ install_dir }}/etc/conf/default/{{ item }}"
@@ -49,17 +73,6 @@
     - ecelerity-cluster.conf
     - eccluster.conf
     - ecelerity.conf
-
-##
-## SVN checkout
-##
-- name: (POSTINSTALL) Check out current configuration
-  subversion:
-    dest="{{ install_dir }}/conf/"
-    password="{{ svn_password }}"
-    repo="{{ svn_host }}"
-    revision=HEAD
-    username=admin
 
 ##
 ## Copy updated global configuration (global)
@@ -76,14 +89,23 @@
 ## copy default configuration (MTA)
 ##
 - name: (POSTINSTALL) Apply configuration files (default)
-  synchronize:
-    delete=yes
+  copy:
+    backup=no
     dest="{{ install_dir }}/etc/conf/"
-    recursive=yes
-    rsync_timeout=0
-    rsync_opts="-avr --delete --no-motd --stats --progress"
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
     src=default
   when: not is_ecmgr|bool
+
+##
+## Create lua directory if it doesn't exit
+##
+- name: (POSTINSTALL) Create home for lua scripts
+  file:
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
+    dest="{{ install_dir }}/etc/conf/default/lua"
+    state=directory
 
 ##
 ## Copy customizations to config
@@ -96,6 +118,16 @@
     group="{{ group_name }}"
     mode=0644
   when: not is_ecmgr|bool
+
+##
+## Create siv directory if it doesn't exit
+##
+- name: (POSTINSTALL) Create home for sieve scripts
+  file:
+    group="{{ group_name }}"
+    owner="{{ user_name }}"
+    dest="{{ install_dir }}/etc/conf/default/siv"
+    state=directory
 
 - name: (POSTINSTALL) Create client_vars.siv
   template:
@@ -142,8 +174,8 @@
 ## Check in all changes
 ##
 - name: (POSTINSTALL) Check in current configuration from cluster manager (MTA)
-  shell: "cd {{ install_dir }}/etc/conf; /opt/msys/3rdparty/bin/svn commit --message 'Initial Commit, build via {uid}/Ansible' --no-auth-cache
-    --non-interactive --username admin --password {{ svn_password }} --recursive"
+  shell: "cd {{ install_dir }}/etc/conf; /opt/msys/3rdParty/bin/svn commit --message 'Initial Commit/build via {uid}/Ansible' --no-auth-cache
+    --non-interactive --username admin --password {{ svn_passwd }} --recursive"
 
 ##
 ## update sysctl

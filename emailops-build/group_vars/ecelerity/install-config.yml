@@ -6,6 +6,8 @@
 ##
 ## template updates
 ##
+user_name: ecuser
+group_name: ecuser
 install_dir: /opt/msys/ecelerity
 manager_hostname: "ecmgr01.{{ client_name }}.{{ datacenter }}.synacor.com"
 manager_ipaddr: 10.250.22.249
@@ -18,7 +20,22 @@ mta: 1
 manager: 0
 is_ecmgr: FALSE
 
+hosts:
+  - domain: smtp.emailops.com
+    port: 25
+    starttls: TRUE
+  - domain: smtp.emailops.com
+    port: 465
+    starttls: FALSE
+  - domain: smtp.emailops.com
+    port: 587
+    starttls: TRUE
+
+authscripts:
+  - name: auth-script
+    path: "{{ install_dir }}/etc/conf/default/lua/auth.lua"
+
 maildrops:
   - md01.email.dev.opal.synacor.com
   - md02.email.dev.opal.synacor.com
-
+svn_path: /opt/msys/3rdParty/bin/svn
