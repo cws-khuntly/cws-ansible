@@ -11,7 +11,7 @@ server
     ssl_prefer_server_ciphers   ${web.ssl.preferserverciphers};
     ssl_certificate             ${ssl.crt.default};
     ssl_certificate_key         ${ssl.key.default};
-    ssl_dhparam                 {{ dhparam_output }};
+    ssl_dhparam                 {{ zimbra_dhparam_output }};
     ssl_ciphers                 "{{ include_ciphers }}";
 
     location /

@@ -14,12 +14,7 @@
   notify:
     - sync puppet
 
-- meta:
-    flush_handlers
-
-- name: (INSTALL) Sync with puppet master
-  command: puppet agent -t
-  ignore_errors: yes
+- meta: flush_handlers
 
 ##
 ## INSTALLATION COMPLETE

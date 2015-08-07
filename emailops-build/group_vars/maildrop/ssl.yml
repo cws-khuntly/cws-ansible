@@ -3,10 +3,6 @@
 #   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
 #==============================================================================
 ---
-build_type: Zimbra Collaboration Server / Maildrop
-is_maildrop: TRUE
-apply_default_cos: TRUE
-apply_domains: FALSE
-use_scality: FALSE
-apply_licensing: TRUE
-activate_license: FALSE
+zimbra_ssl_dir: /opt/zimbra/ssl/zimbra
+zimbra_dhparam_output: "{{ zimbra_ssl_dir }}/dhparams.pem"
+dhparam_keysize: 2048

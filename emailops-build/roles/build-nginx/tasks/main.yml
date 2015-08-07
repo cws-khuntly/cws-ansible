@@ -7,8 +7,8 @@
   include: run-installation.yml
   notify:
     - sync puppet
-  meta:
-    - flush_handlers
+
+- meta: flush_handlers
 
 - name: (MAIN) Run nginx installation steps
   include: run-postinstall.yml
@@ -17,5 +17,5 @@
     - restart nginx
     - restart httpd
     - restart zimbra
-  meta:
-    - flush_handlers
+
+- meta: flush_handlers

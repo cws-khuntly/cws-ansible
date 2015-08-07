@@ -7,8 +7,8 @@
   include: run-installation.yml
   notify:
     - sync puppet
-  meta:
-    - flush_handlers
+
+- meta: flush_handlers
 
 - name: (MAIN) Run ecelerity post-installation steps
   include: run-postinstall.yml
@@ -16,8 +16,8 @@
     - reload sysctl
     - sync puppet
     - restart service
-  meta:
-    - flush_handlers
+
+- meta: flush_handlers
 
 - name: (MAIN) Remove installer options file
   file:

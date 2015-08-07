@@ -60,5 +60,5 @@
   with_items: "{{ system_packages|default([]) }}"
   notify:
     - sync puppet
-  meta:
-    - flush_handlers
+
+- meta: flush_handlers

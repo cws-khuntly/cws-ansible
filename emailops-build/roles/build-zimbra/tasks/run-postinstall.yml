@@ -97,16 +97,7 @@
   notify:
     - sync puppet
 
-- meta:
-    flush_handlers
-
-##
-## Notify puppet after install
-## NOTE: We arent ignoring errors because if puppet fails so will zimbra
-##
-- name: (POSTINSTALL) Sync with puppet master
-  command: puppet agent -t
-  ignore_errors: yes
+- meta: flush_handlers
 
 ##
 ## Run zmsetup to apply configuration
@@ -117,16 +108,7 @@
   notify:
     - sync puppet
 
-- meta:
-    flush_handlers
-
-##
-## Notify puppet after install
-## NOTE: We arent ignoring errors because if puppet fails so will zimbra
-##
-- name: (POSTINSTALL) Sync with puppet master
-  command: puppet agent -t
-  ignore_errors: yes
+- meta: flush_handlers
 
 ##
 ## fix permissions on install
@@ -141,16 +123,7 @@
   notify:
     - sync puppet
 
-- meta:
-    flush_handlers
-
-##
-## Notify puppet after install
-## NOTE: We arent ignoring errors because if puppet fails so will zimbra
-##
-- name: (POSTINSTALL) Sync with puppet master
-  command: puppet agent -t
-  ignore_errors: yes
+- meta: flush_handlers
 
 ##
 ## Common configuration for all zimbra installations
@@ -199,6 +172,20 @@
 ##
 ## POP-specific config
 ##
+##
+## Copy templates to server to apply dhparam for zimbra's nginx
+##
+- name: (POSTINSTALL/POP) Copy zimbra nginx configuration files to targets
+  template:
+    src="{{ item.src }}"
+    dest="{{ item.dest }}"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+  with_items:
+    - { src: nginx.conf.web.https.default.j2, dest: "{{ install_dir }}/conf/nginx/templates/nginx.conf.web.https.default.template" }
+    - { src: nginx.conf.web.https.j2, dest: "{{ install_dir }}/conf/nginx/templates/nginx.conf.web.https.template" }
+
 - name: (POSTINSTALL) Include reverse proxy configuration tasks
   include: pop/proxy.yml
   when: is_pop|bool and use_reverse_proxy|bool
@@ -212,26 +199,26 @@
 #
 - name: (POSTINSTALL) Include Zimbra CoS tasks
   include: maildrop/cos.yml
-  when: is_maildrop|bool and apply_cos|bool
+  when: is_maildrop|bool and apply_cos|bool and not is_pop|bool
 
 - name: (POSTINSTALL) Add client data
   include: maildrop/add-client-data.yml
-  when: is_maildrop|bool and apply_domains|bool
+  when: is_maildrop|bool and apply_domains|bool and not is_pop|bool
 
 - name: (POSTINSTALL) Include maildrop store configuration tasks
   include: maildrop/storeconfig.yml
-  when: is_maildrop|bool and setup_stores|bool
+  when: is_maildrop|bool and setup_stores|bool and not is_pop|bool
 
 - name: (POSTINSTALL) Include monitoring account creation
   include: maildrop/createaccounts.yml
-  when: is_maildrop|bool and create_default_accounts|bool
+  when: is_maildrop|bool and create_default_accounts|bool and not is_pop|bool
 
 - name: (POSTINSTALL) Include Zimbra webapp modifications
   include: maildrop/webapp.yml
-  when: is_maildrop|bool
+  when: is_maildrop|bool and not is_pop|bool
 
 - name: (POSTINSTALL) Include Zimbra maildrop whitelists
-  include: maildrop/webapp.yml
+  include: maildrop/whitelist.yml
   when: is_maildrop|bool or is_pop|bool
 
 ##
@@ -261,6 +248,19 @@
 ##
 ## LDAP specific config
 ##
+- name: (POSTINSTALL/LDAP) Copy SSHA LDIF to target
+  copy:
+    src=ssha.ldif
+    dest="{{ install_dir }}/ssha.ldif"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+  when: is_ldap|bool
+
+- name: (POSTINSTALL) Enable SSHA-2 (LDAP)
+  include: ldap/ssha.yml
+  when: is_ldap|bool
+
 - name: (POSTINSTALL) Disable stats (LDAP)
   include: ldap/disable-stats.yml
   when: is_ldap|bool
@@ -294,18 +294,17 @@
   command: killall -u zimbra
   ignore_errors: yes
 
-- name: (POSTINSTALL) JSP recompilation
-  command: "{{ install_dir }}/libexec/zmjsprecompile"
-  become: yes
-  become_user: zimbra
-  become_method: sudo
-  when: is_maildrop|bool and zimbra_major_version == 8
-
+##
+## Clear the Jetty work directory
+##
 - name: (POSTINSTALL) Clear the Jetty work directory
   file:
     path="{{ install_dir }}/jetty/work"
     state=absent
 
+##
+## Re-create the Jetty work directory
+##
 - name: (POSTINSTALL) Rebuild the Jetty work directory
   file:
     group="{{ group_name }}"
@@ -314,6 +313,19 @@
     path="{{ install_dir }}/jetty/work"
     state=directory
 
+##
+## Re-compile all JSPs
+##
+- name: (POSTINSTALL) JSP recompilation
+  command: "{{ install_dir }}/libexec/zmjsprecompile"
+  become: yes
+  become_user: zimbra
+  become_method: sudo
+  when: is_maildrop|bool and zimbra_major_version == 8
+
+##
+## Fix permissions as necessary
+##
 - name: (POSTINSTALL) Set Zimbra permissions
   command: "{{ install_dir }}/libexec/zmfixperms -extended"
 
@@ -323,12 +335,7 @@
   notify:
     - sync puppet
 
-- meta:
-    flush_handlers
-
-- name: (POSTINSTALL) Sync with puppet master
-  command: puppet agent -t
-  ignore_errors: yes
+- meta: flush_handlers
 
 ##
 ## Bring up zimbra
@@ -342,4 +349,3 @@
 ##
 ## POSTINSTALL COMPLETE
 ##
-

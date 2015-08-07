@@ -12,7 +12,7 @@ server
     ssl_prefer_server_ciphers   ${web.ssl.preferserverciphers};
     ssl_certificate             ${ssl.crt};
     ssl_certificate_key         ${ssl.key};
-    ssl_dhparam                 {{ dhparam_output }};
+    ssl_dhparam                 {{ zimbra_dhparam_output }};
     ssl_ciphers                 "{{ include_ciphers }}";
 
 
