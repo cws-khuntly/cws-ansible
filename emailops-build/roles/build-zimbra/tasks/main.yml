@@ -14,5 +14,6 @@
   include: run-postinstall.yml
   notify:
     - sync puppet
+    - restart service
 
 - meta: flush_handlers
