@@ -186,6 +186,19 @@
     - { src: nginx.conf.web.https.default.j2, dest: "{{ install_dir }}/conf/nginx/templates/nginx.conf.web.https.default.template" }
     - { src: nginx.conf.web.https.j2, dest: "{{ install_dir }}/conf/nginx/templates/nginx.conf.web.https.template" }
 
+- name: (POSTINSTALL) Copy zimbra nginx configuration files to targets
+  copy:
+    src="{{ item.src }}"
+    dest="{{ item.dest }}"
+    owner="{{ user_name }}"
+    group="{{ group_name }}"
+    mode=0644
+  with_items:
+    - { src: nginx.conf.web.http.template, dest: "{{ install_dir }}/conf/nginx/templates/nginx.conf.web.http.template" }
+    - { src: nginx.conf.web.http.default.template, dest: "{{ install_dir }}/conf/nginx/templates/nginx.conf.web.http.default.template" }
+    - { src: 40x.html, dest: "{{ install_dir }}/nginx/html/40x.html" }
+    - { src: 50x.html, dest: "{{ install_dir }}/nginx/html/50x.html" }
+
 - name: (POSTINSTALL) Include reverse proxy configuration tasks
   include: pop/proxy.yml
   when: is_pop|bool and use_reverse_proxy|bool
@@ -272,6 +285,10 @@
 - name: (POSTINSTALL) Include LDAP multi-master tasks
   include: ldap/multimaster.yml
   when: is_ldap|bool and is_multimaster|bool
+
+- name: (POSTINSTALL) Include LDAP cron modifications
+  include: ldap/cron.yml
+  when: is_ldap|bool
 
 ##
 ## Shut down services before continuing

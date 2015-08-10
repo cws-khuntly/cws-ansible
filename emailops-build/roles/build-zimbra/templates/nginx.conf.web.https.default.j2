@@ -2,21 +2,33 @@
 # 
 server
 {
-    ${core.ipboth.enabled}listen                  [::]:${web.https.port} default;
-    ${core.ipv4only.enabled}listen                ${web.https.port} default;
-    ${core.ipv6only.enabled}listen                [::]:${web.https.port} default ipv6only=on;
-    server_name                 ${web.server_name.default}.default;
-    client_max_body_size        0;
-    ssl                         on;
-    ssl_prefer_server_ciphers   ${web.ssl.preferserverciphers};
-    ssl_certificate             ${ssl.crt.default};
-    ssl_certificate_key         ${ssl.key.default};
-    ssl_dhparam                 {{ zimbra_dhparam_output }};
-    ssl_ciphers                 "{{ include_ciphers }}";
+    ${core.ipboth.enabled}listen        [::]:${web.https.port} default;
+    ${core.ipv4only.enabled}listen      ${web.https.port} default;
+    ${core.ipv6only.enabled}listen      [::]:${web.https.port} default ipv6only=on;
+    server_name                         ${web.server_name.default}.default;
+    client_max_body_size                0;
+    ssl                                 on;
+    ssl_prefer_server_ciphers           ${web.ssl.preferserverciphers};
+    ssl_certificate                     ${ssl.crt.default};
+    ssl_certificate_key                 ${ssl.key.default};
+    ssl_dhparam                         {{ zimbra_dhparam_output }};
+    ssl_ciphers                         "{{ include_ciphers }}";
 
     location /
     {
         include             ${core.includes}/${core.cprefix}.web.https.mode-${web.mailmode};
+
+        ## add custom error page documents
+        error_page 400 401 403 404 /40x.html
+        location = /40x.html {
+            root    html;
+            allow   all;
+        }
+
+        error_page 500 501 502 503 504 /50x.html
+        location = /50x.html {
+            root html;
+        }
 
         # Begin stray redirect hack
         # 
