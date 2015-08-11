@@ -1,8 +1,0 @@
-#=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/handlers/main.yml
-#   DESCRIPTION:  Execute Zimbra restarts post-installation
-#==============================================================================
----
-- name: sync puppet
-  command: puppet agent -t
-  ignore_errors: yes

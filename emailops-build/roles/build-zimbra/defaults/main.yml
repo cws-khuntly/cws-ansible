@@ -1,6 +1,0 @@
-#=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/default/main.yml
-#   DESCRIPTION:  Common variables that apply to this play
-#          NOTE:  Variables housed in this document are the *least* preferred
-#==============================================================================
----

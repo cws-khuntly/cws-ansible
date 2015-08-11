@@ -1,8 +1,0 @@
-#=====  ANSIBLE   =============================================================
-#          NAME:  group_vars/ldap
-#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
-#==============================================================================
----
-build_type: Zimbra Collaboration Server / LDAP
-is_ldap: TRUE
-zimbra_ldap_admin: uid=zimbra,cn=admins,cn=zimbra

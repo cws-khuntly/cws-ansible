@@ -1,5 +1,0 @@
-#=====  ANSIBLE   =============================================================
-#          NAME:  build-zimbra/vars/main.yml
-#   DESCRIPTION:  Common variables that apply to this play
-#==============================================================================
----
