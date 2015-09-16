@@ -13,6 +13,7 @@ username: khuntly
 remote_user: khuntly
 remote_group: mailadmin
 remote_home: "/home/{{ remote_user }}"
+apply_software: FALSE
 
 ##
 ## git checkout

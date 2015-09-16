@@ -10,14 +10,16 @@ Host github.com
     IdentitiesOnly              = yes
     IdentityFile                = ~/.ssh/id_cws-khuntly
 
+<% for host in hostlist %>
+Host {{ host }} {{ host}}.synacor.com
+    HostName                    = {{ host }}.synacor.com
+
+<% endfor %>
+
 Host *
     AddressFamily               = inet
-    CanonicalizeHostname        = no
-    CanonicalizeFallbackLocal   = no
     CheckHostIP                 = yes
     Compression                 = yes
-    ConnectionAttempts          = 2
-    ConnectTimeout              = 10
     EscapeChar                  = ~
     ForwardAgent                = no
     ForwardX11                  = no
@@ -35,8 +37,6 @@ Host *
     ServerAliveInterval         = 60
     StrictHostKeyChecking       = no
     TCPKeepAlive                = yes
-    VerifyHostKeyDNS            = ask
-    VisualHostKey               = yes
     XAuthLocation               = /usr/bin/xauth
     User                        = "{{ username }}"
     IdentitiesOnly              = yes

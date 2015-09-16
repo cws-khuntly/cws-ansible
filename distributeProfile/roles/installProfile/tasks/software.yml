@@ -8,3 +8,9 @@
   become: yes
   become_user: root
   become_method: sudo
+
+- name: Update desired packages
+  raw: yum -y update vim
+  become: yes
+  become_user: root
+  become_method: sudo

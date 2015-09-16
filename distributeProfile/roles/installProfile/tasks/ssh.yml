@@ -12,15 +12,11 @@
     state=present
     user=khuntly
     exclusive=yes
+    key_options="{{ key_options }}"
   with_file:
     - "{{ ssh_keyfile }}"
 
-- name: Remove existing known_hosts file
-  file:
-    path=/home/khuntly/.ssh/known_hosts
-    state=absent
-
-- name: Remove any keyfiles found
+- name: Remove any extra files found
   file:
     path="/home/khuntly/.ssh/{{ item }}"
     state=absent
@@ -31,3 +27,4 @@
     - id_dsa.pub
     - id_ecdsa
     - id_ecdsa.pub
+    - known_hosts
