@@ -10,8 +10,9 @@ username: khuntly
 ##
 ## where do we get installers from?
 ##
-named_installer:
+named_installer: https://www.isc.org/downloads/file/bind-9-10-3/?version=tar-gz
 openssl_installer: https://www.openssl.org/source/openssl-1.0.2d.tar.gz
+bind_keys: http://ftp.isc.org/isc/bind9/keys/9.8/bind.keys.v9_8
 
 ##
 ## chroot
