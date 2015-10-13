@@ -1,0 +1,76 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  tasks/main.yml
+#   DESCRIPTION:  Primary entry point for this play
+#==============================================================================
+---
+##
+## install the software
+##
+- name: Install named
+  package:
+    name=bind
+    state=latest
+
+- name: Install named
+  package:
+    name=bind-utils
+    state=latest
+
+##
+## build chroot
+##
+- name: Create chroot
+  file:
+    group=named
+    mode=755
+    owner=named
+    path="{{ chroot_dir }}"
+    recurse=yes
+    state=directory
+
+- name: Create chroot
+  file:
+    group=named
+    mode=755
+    owner=named
+    path="{{ chroot_dir}}/{{ item }}"
+    recurse=yes
+    state=directory
+  with_items: chroot_dirs
+
+##
+## TODO: these need to match what the system has!!
+##
+- name: create system devices
+  command: mknod /dev/null c 1 3
+  args:
+    chdir: /var/named
+
+- name: create system devices
+  command: mknod /dev/zero c 1 3
+  args:
+    chdir: /var/named
+
+- name: create system devices
+  command: mknod /dev/random c 1 8
+  args:
+    chdir: /var/named
+
+- name: create system devices
+  command: mknod /dev/urandom c 1 3
+  args:
+    chdir: /var/named
+
+- name: Create localtime (touch)
+  file:
+    group=named
+    mode=644
+    owner=named
+    path="{{ chroot_dir }}/etc/localtime"
+    state=file
+
+- name: Create localtime (cat)
+  command: "cat /etc/localtime {{ chroot_dir }}/etc/localtime"
+
+- name: Install OpenSSL in the chroot
+  

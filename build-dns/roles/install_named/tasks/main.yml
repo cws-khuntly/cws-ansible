@@ -1,0 +1,35 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  tasks/main.yml
+#   DESCRIPTION:  Primary entry point for this play
+#==============================================================================
+---
+- name: Set up SSH
+  include: ssh.yml
+  tags: config-ssh
+
+- name: Create ~/.etc/sudo
+  file:
+    path="{{ remote_home }}/.etc"
+    state=directory
+    mode=0755
+
+- name: Copy/create files
+  copy:
+    src="/home/khuntly/.etc/sudo"
+    dest="{{ remote_home }}/.etc/sudo"
+    owner="{{ remote_user }}"
+    group="{{ remote_group }}"
+    mode=0600
+
+#- name: Install software
+#  include: software.yml
+#  when: apply_software|bool
+#  tags: config-software
+
+#- name: Include sync
+#  include: sync.yml
+#  tags: sync-data
+
+#- name: Set up configuration files for Java apps
+#  include: update-config.yml
+#  tags: update-config

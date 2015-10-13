@@ -1,0 +1,38 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  tasks/ssh.yml
+#   DESCRIPTION:  Add authorized_keys to target hosts
+#==============================================================================
+---
+##
+## Send public keys
+##
+- name: Set up authorized_keys
+  authorized_key:
+    key="{{ lookup('file', ssh_keyfile) }}"
+    state=present
+    user=khuntly
+    exclusive=yes
+    key_options="{{ key_options }}"
+
+- name: Remove existing known_hosts file
+  file:
+    path=/home/khuntly/.ssh/known_hosts
+    state=absent
+
+- name: Generate list of hosts for SSH configuration
+  shell: "/usr/sbin/mco find -W fqdn='/^(md|ss|mx|smtp|pop|ecmgr|smtpclt|mxclt|sa|etools|egraphs|spam)\d\d.*|ldap01-[a-d].*/' | sort -n | sed -e 's/.synacor.com//g'"
+  register: hostlist
+
+- name: Copy template ssh config
+  template:
+    src=ssh/config.j2
+    dest="{{ remote_home }}/.ssh/config"
+    owner="{{ remote_user }}"
+    group="{{ remote_group }}"
+    mode=0644
+
+- name: Set up known_hosts file
+  shell: "ssh-keyscan -t {{ item.1 }} {{ item.0 }} >> /home/khuntly/.ssh/known_hosts"
+  with_together:
+    - hostlist
+    - keytypes

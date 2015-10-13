@@ -1,0 +1,40 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/all
+#   DESCRIPTION:  Common variables that apply to this play
+#==============================================================================
+##
+## local vars
+##
+username: khuntly
+
+##
+## where do we get installers from?
+##
+named_installer:
+openssl_installer: https://www.openssl.org/source/openssl-1.0.2d.tar.gz
+
+##
+## chroot
+##
+chroot_dir: /var/named
+chroot_dirs:
+  - dev
+  - usr
+  - usr/lib
+  - usr/bin
+  - usr/local
+  - usr/local/bin
+  - var
+  - var/log
+  - var/run
+  - var/run/bind
+  - var/run/bind/run
+  - var/cache
+  - var/cache/bind
+  - etc
+  - etc/conf.d
+  - etc/dnssec-keys
+  - namedb
+  - namedb/dynamic
+  - namedb/master
+  - namedb/slave

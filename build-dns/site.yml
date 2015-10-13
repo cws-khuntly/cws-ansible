@@ -1,0 +1,22 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  site.yml
+#   DESCRIPTION:  Entry point for playbook
+#==============================================================================
+---
+- hosts: all
+  gather_facts: true
+  roles:
+    - install_named
+  tags: install_named
+
+- hosts: all
+  gather_facts: true
+  roles:
+    - build_chroot
+  tags: build_chroot
+
+- hosts: masters
+  gather_facts: true
+  roles:
+    - apply_master_config
+  tags: build_master

@@ -1,0 +1,16 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  tasks/main.yml
+#   DESCRIPTION:  Primary entry point for this play
+#==============================================================================
+---
+- name: Add desired packages
+  raw: yum -y install python-simplejson htop iotop
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: Update desired packages
+  raw: yum -y update vim
+  become: yes
+  become_user: root
+  become_method: sudo
