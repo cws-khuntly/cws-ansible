@@ -20,7 +20,7 @@
     state=absent
 
 - name: Generate list of hosts for SSH configuration
-  shell: "/usr/sbin/mco find -W fqdn='/^(md|ss|mx|smtp|pop|ecmgr|smtpclt|mxclt|sa|etools|egraphs|spam)\d\d.*|ldap01-[a-d].*/' | sort -n | sed -e 's/.synacor.com//g'"
+  shell: "/usr/sbin/mco find -W fqdn='/^(bastion|jump)\d\d.*/' | sort -n | sed -e 's/.caspersbox.com//g'"
   register: hostlist
 
 - name: Copy template ssh config
