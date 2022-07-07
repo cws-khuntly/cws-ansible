@@ -5,12 +5,16 @@
 ##
 ## local vars
 ##
-username: khuntly
+username: kmhuntly
+
+## sudo
+ansible_become: yes 
+ansible_become_method: sudo
 
 ##
 ## remote vars
 ##
-remote_user: khuntly
+remote_user: kmhuntly
 remote_group: mailadmin
 remote_home: "/home/{{ remote_user }}"
 apply_software: FALSE
