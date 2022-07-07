@@ -2,5 +2,16 @@
 #          NAME:  hosts
 #   DESCRIPTION:  Host list to execute against
 #==============================================================================
-[admin]
-admin01.caspersbox.com
+[legacy]
+dca7dev1
+dca7qadb1
+dca7qaint1
+dca7qa1
+dca7prod1
+dca7prod2
+dca7proddb1
+dca7proddb2
+dca7cmp1
+
+[rebuild]
+pv-web-manage-01
