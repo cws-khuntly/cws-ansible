@@ -3,20 +3,24 @@
 #   DESCRIPTION:  Entry point for playbook
 #==============================================================================
 ---
-- hosts: all
-  gather_facts: true
-  roles:
-    - install_named
-  tags: install_named
+- name: Add DNS admin users
+  hosts: all
+  become: yes
+  become_method: sudo
 
-- hosts: all
-  gather_facts: true
-  roles:
-    - build_chroot
-  tags: build_chroot
+  tasks:
+    - name: Add dnsadm
+      ansible.builtin.user:
+        name: dnsadm
+    - name: Add dnssrv
+      ansible.builtin.user:
+        name: dnssrv
 
-- hosts: masters
-  gather_facts: true
-  roles:
-    - apply_master_config
-  tags: build_master
+- name: Install software
+  hosts: all
+
+  tasks:
+    - name: Install named
+      include_role:
+        name: install_named
+

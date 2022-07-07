@@ -3,5 +3,3 @@
 #   DESCRIPTION:  Handles installation of dotfiles after sync
 #==============================================================================
 ---
-- name: install
-  command: "{{ remote_home }}/.dotfiles/bin/install"
