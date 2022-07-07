@@ -1,5 +1,5 @@
 #=====  ANSIBLE   =============================================================
-#          NAME:  group_vars/yyz/ssh.yml
+#          NAME:  group_vars/admin/ssh.yml
 #   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
 #==============================================================================
 ---
