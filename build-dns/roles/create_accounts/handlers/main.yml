@@ -1,5 +1,5 @@
 #======  ANSIBLE  ============================================================
-#          NAME:  vars/main.yml
-#   DESCRIPTION:  Variables utilized by this play
+#          NAME:  handlers/main.yml
+#   DESCRIPTION:  Handles installation of dotfiles after sync
 #==============================================================================
 ---

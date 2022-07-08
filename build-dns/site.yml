@@ -5,22 +5,16 @@
 ---
 - name: Add DNS admin users
   hosts: all
-  become: yes
-  become_method: sudo
 
   tasks:
-    - name: Add dnsadm
-      ansible.builtin.user:
-        name: dnsadm
-    - name: Add dnssrv
-      ansible.builtin.user:
-        name: dnssrv
+    - name: Add user accounts
+      include_role:
+        name: create_accounts
 
 - name: Install software
   hosts: all
 
   tasks:
-    - name: Install named
+    - name: Install software
       include_role:
-        name: install_named
-
+        name: install_software

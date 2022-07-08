@@ -3,3 +3,5 @@
 #   DESCRIPTION:  Variables utilized by this play
 #==============================================================================
 ---
+dnsadm_user_name: dnsadm
+dnssrv_user_name: dnssrv

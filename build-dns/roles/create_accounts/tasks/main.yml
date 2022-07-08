@@ -1,0 +1,21 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  tasks/main.yml
+#   DESCRIPTION:  Primary entry point for this play
+#==============================================================================
+---
+- name: Add DNS Administrator account
+  become: true
+  become_method: sudo
+  ansible.builtin.user:
+    name: "{{ dnsadm_user_name }}"
+    comment: DNS Administrator
+    generate_ssh_key: true
+    ssh_key_type: rsa
+    ssh_key_bits: 4096
+
+- name: Add DNS Service account
+  become: true
+  become_method: sudo
+  ansible.builtin.user:
+    name: "{{ dnssrv_user_name }}"
+    comment: DNS Server Runtime
