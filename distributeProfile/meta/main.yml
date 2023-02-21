@@ -5,8 +5,8 @@
 ---
 galaxy_info:
   author: "Kevin Huntly"
-  company: "CWS, Inc."
-  description: "dotfiles installation."
+  company: "CaspersBox Web Services"
+  description: "Dotfiles install/fresh"
   license: Apache
   min_ansible_version: 1.2
   platforms:

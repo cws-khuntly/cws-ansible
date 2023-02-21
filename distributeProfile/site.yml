@@ -1,13 +1,73 @@
 #======  ANSIBLE  ============================================================
 #          NAME:  site.yml
 #   DESCRIPTION:  Entry point for playbook
-#==============================================================================
+#=============================================================================
 ---
-- name: Distribute Profile
+- name: Get facts about servers
   hosts: all
+  gather_facts: true
 
+- name: Checkout dotfiles from github
+  hosts: localhost
   tasks:
-   - name: Add user
-     ansible.builtin.user:
-       name: dnsadm
-     become: yes
+    - name: Checkout the most recent copy
+      ansible.builtin.git:
+        repo: git@github.com:Penn-Vet/dotfiles.git
+        dest: /var/tmp/.dotfiles
+        update: yes
+        umask: "022"
+
+- name: Generate dotfiles zip for distribution
+  hosts: localhost
+  tasks:
+    - name: Generate dotfiles archive
+      community.general.archive:
+        path:
+          - /var/tmp/.dotfiles
+        dest: /var/tmp/dotfiles.zip
+        format: zip
+
+- name: Push dotfiles to remote hosts
+  hosts: all
+  tasks:
+    - name: sFTP
+      copy:
+        src: /var/tmp/dotfiles.zip
+        dest: /var/tmp/dotfiles.zip
+        mode: 0644
+
+- name: Install dotfiles
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Apply dotfiles for pvansibleadmin
+      ansible.builtin.include_role:
+        name: installProfile
+      with_items:
+        - khuntly
+      loop_control:
+        loop_var: username
+
+- name: Remove the remote archive
+  hosts: all
+  tasks:
+    - ansible.builtin.file:
+        path: /var/tmp/dotfiles.zip
+        state: absent
+
+- name: Remove dotfiles pull
+  hosts: localhost
+  tasks:
+    - name: Clear dotfiles
+      ansible.builtin.file:
+        path: /var/tmp/.dotfiles
+        state: absent
+
+- name: Remove dotfiles archive
+  hosts: localhost
+  tasks:
+    - name: Remove zipfile
+      ansible.builtin.file:
+        path: /var/tmp/dotfiles.zip
+        state: absent
+
