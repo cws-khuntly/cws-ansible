@@ -12,7 +12,7 @@
   tasks:
     - name: Checkout the most recent copy
       ansible.builtin.git:
-        repo: git@github.com:Penn-Vet/dotfiles.git
+        repo: git@github.com:cws-khuntly/dotfiles.git
         dest: /var/tmp/.dotfiles
         update: yes
         umask: "022"
@@ -38,11 +38,14 @@
 
 - name: Install dotfiles
   hosts: all
-  gather_facts: true
   tasks:
     - name: Apply dotfiles for pvansibleadmin
       ansible.builtin.include_role:
         name: installProfile
+        apply:
+          become: true
+          become_method: sudo
+          become_user: "{{ username }}"
       with_items:
         - khuntly
       loop_control:
