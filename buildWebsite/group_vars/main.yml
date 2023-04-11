@@ -1,0 +1,54 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/all
+#   DESCRIPTION:  Common variables that apply to this play
+#==============================================================================
+##
+## local vars
+##
+username: khuntly
+
+##
+## remote vars
+##
+remote_user: khuntly
+remote_group: mailadmin
+remote_home: "/home/{{ remote_user }}"
+apply_software: FALSE
+
+##
+## git checkout
+##
+checkout_to: /var/tmp/edUnIkTa
+git_ssh_key: "{{ ansible_env.HOME }}/.ssh/id_cws-khuntly"
+dotfiles_repo: git@github.com:cws-khuntly/dotfiles.git
+version: HEAD
+
+## replacement variables for eSolutionsCore/ServiceConfig.xml
+##
+mail_address: kmhuntly@caspersbox.com
+proxy_required: false
+proxy_host:
+proxy_port:
+proxy_auth_required:
+proxy_auth_type:
+proxy_auth_domain:
+proxy_auth_realm:
+proxy_auth_user:
+proxy_auth_salt:
+proxy_auth_pass:
+ssh_properties: "{{ remote_home }}/.ssh/config"
+ssh_user: "{{ remote_user }}"
+ssh_key: "{{ remote_home }}/.ssh/id_rsa"
+ssh_salt:
+ssh_pass:
+ftp_account:
+
+##
+## replacement variables for eSolutionsCore/MailConfig.properties
+##
+debug_mail: false
+mail_from: esolutions@caspersbox.com
+smtp_host: smtp.caspersbox.com
+smtp_auth_user: esolutions@caspersbox.com
+smtp_auth_required: true
+smtp_starttls: true

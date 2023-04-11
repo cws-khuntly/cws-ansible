@@ -1,0 +1,83 @@
+# Config file for cwsna.ddns.net
+
+PidFile                          logs/cwsna.ddns.net/httpd.pid
+ServerName                       "cwsna.ddns.net"
+ServerSignature                  On
+ServerTokens                     Prod
+UseCanonicalName                 On
+HostnameLookups                  Double
+ContentDigest                    On
+FileETag                         MTime Size
+DocumentRoot                     "/var/www/html/cwsna.ddns.net"
+
+Include                          "conf/cwsna.ddns.net/tomcat-config.conf"
+
+<Directory />
+    Options                      +FollowSymLinks -SymLinksIfOwnerMatch -ExecCGI -Indexes
+    AllowOverride                none
+    Order                        allow,deny
+    Allow                        from all
+</Directory>
+
+<Directory "/cwsna.ddns.net/">
+    Options                      +FollowSymLinks -SymLinksIfOwnerMatch -ExecCGI -Indexes
+    AllowOverride                none
+    Order                        allow,deny
+    Allow                        from all
+</Directory>
+
+<Directory "/error/cwsna.ddns.net/">
+    Options                      +FollowSymLinks -SymLinksIfOwnerMatch -ExecCGI -Indexes
+    AllowOverride                none
+    Order                        allow,deny
+    Allow                        from all
+</Directory>
+
+<Location "/cwsna.ddns.net/WEB-INF/*">
+    Order                        allow,deny
+    Deny                         from all
+</Location>
+
+<Location "/cwsna.ddns.net/META-INF/*">
+    Order                        allow,deny
+    Deny                         from all
+</Location>
+
+<IfModule headers_module>
+    Header                       add S "ip-172-30-0-55.us-west-2.compute.internal"
+</IfModule>
+
+ErrorDocument                    400 /error/cwsna.ddns.net/errHandler.htm
+ErrorDocument                    401 /error/cwsna.ddns.net/errHandler.htm
+ErrorDocument                    403 /error/cwsna.ddns.net/errHandler.htm
+ErrorDocument                    404 /error/cwsna.ddns.net/errHandler.htm
+ErrorDocument                    500 /error/cwsna.ddns.net/errHandler.htm
+ErrorDocument                    503 /error/cwsna.ddns.net/errHandler.htm
+
+Listen                           "172.30.0.55:80"
+<VirtualHost "172.30.0.55:80">
+    RewriteLog                   "|/usr/sbin/rotatelogs 'logs/cwsna.ddns.net/rewrite.%Y%m%d.log' '86400'"
+
+    Include                      conf/cwsna.ddns.net/redirects.conf
+    Include                      conf/cwsna.ddns.net/security.conf
+
+    LogLevel                     error
+    ErrorLog                     "|/usr/sbin/rotatelogs 'logs/cwsna.ddns.net/error.%Y%m%d.log' '86400'"
+    CustomLog                    "|/usr/sbin/rotatelogs 'logs/cwsna.ddns.net/access.%Y%m%d.log' '3600'" p14
+</VirtualHost>
+
+Listen                           "172.30.0.55:443"
+<VirtualHost "172.30.0.55:443">
+    SSLEngine                    on
+    SSLCertificateFile           ssl.d/crt/cwsna.ddns.net.crt
+    SSLCertificateKeyFile        ssl.d/key/cwsna.ddns.net.key
+
+    RewriteLog                   "|/usr/sbin/rotatelogs 'logs/cwsna.ddns.net/rewrite.secure.%Y%m%d.log' '86400'"
+
+    Include                      conf/cwsna.ddns.net/redirects.conf
+    Include                      conf/cwsna.ddns.net/security.conf
+
+    LogLevel                     error
+    ErrorLog                     "|/usr/sbin/rotatelogs 'logs/cwsna.ddns.net/error.secure.%Y%m%d.log' '86400'"
+    CustomLog                    "|/usr/sbin/rotatelogs 'logs/cwsna.ddns.net/access.secure.%Y%m%d.log' '3600'" p14
+</VirtualHost>

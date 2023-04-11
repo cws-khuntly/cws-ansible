@@ -1,0 +1,18 @@
+repoType = LDAP
+isSecure = false
+trustStoreFile =
+trustStorePass =
+trustStoreType = 
+repositoryHost = {{ ldap_host_name }}
+repositoryPort = {{ ldap_host_port }}
+repositoryConnTimeout = 10000
+repositoryReadTimeout = 10000
+minConnections = 1
+maxConnections = 10
+repositoryUser = uid=AppUser,organizationalUnitName=Service Accounts,organizationName={{ organization_name }},{{ ldap_domain }}
+repositoryPass = TrUqoyr4N3KXK8Ivd9jcZ1fXPy00JRe5xNFiaOEUVQU=
+repositorySalt = OITltocOUZjW
+baseObjectClass = inetOrgPerson
+repositoryBaseDN = {{ ldap_domain }}
+repositoryUserBase = organizationalUnitName=Users,organizationName={{ organization_name }},{{ ldap_domain }}
+repositoryRoleBase = organizationalUnitName=Groups,organizationName={{ organization_name }},{{ ldap_domain }}

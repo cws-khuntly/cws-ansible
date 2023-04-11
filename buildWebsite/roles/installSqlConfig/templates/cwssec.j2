@@ -1,0 +1,30 @@
+--
+-- Create schema cwssec
+--
+CREATE DATABASE IF NOT EXISTS CWSSEC;
+COMMIT;
+
+USE CWSSEC;
+
+--
+-- Source in all the sql scripts to build the tables
+--
+SOURCE ./cwssec/cwssec.tables.sql;
+SOURCE ./cwssec/cwssec.procedures.sql;
+
+COMMIT;
+
+--
+-- add privileges
+--
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE ON CWSSEC.* TO 'appuser'@'localhost' IDENTIFIED BY PASSWORD '*ED66694310AF846C68C9FC3D430B30594837998D';
+GRANT SELECT ON `mysql`.`proc` TO 'appuser'@'localhost';
+
+<% for host in hostlist %>
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE ON CWSSEC.* TO 'appuser'@'{{ host }}' IDENTIFIED BY PASSWORD '*ED66694310AF846C68C9FC3D430B30594837998D';
+GRANT SELECT ON `mysql`.`proc` TO 'appuser'@'{{ host }}';
+
+<% endfor %>
+
+FLUSH PRIVILEGES;
+COMMIT;

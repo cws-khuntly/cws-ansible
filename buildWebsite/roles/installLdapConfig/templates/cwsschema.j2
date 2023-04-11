@@ -1,0 +1,256 @@
+version: 1
+
+dn: cn=cws,ou=schema
+objectClass: metaSchema
+objectClass: top
+cn: cws
+m-dependencies: inetorgperson
+
+dn: ou=attributeTypes,cn=cws,ou=schema
+objectClass: organizationalUnit
+objectClass: top
+ou: attributeTypes
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.1,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: User password expiration date
+m-name: cwsexpirydate
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.1
+m-singlevalue: TRUE
+m-equality: caseIgnoreMatch
+m-substr: caseIgnoreSubstringsMatch
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.15
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.2,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: User failed password count
+m-name: cwsfailedpwdcount
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.2
+m-singlevalue: TRUE
+m-equality: integerMatch
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.27
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.3,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: Provides a flag if the user is suspended
+m-name: cwsissuspended
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.3
+m-singlevalue: TRUE
+m-equality: booleanMatch
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.7
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.4,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: User offline reset flag
+m-name: cwsisolrsetup
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.4
+m-singlevalue: TRUE
+m-equality: booleanMatch
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.7
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.5,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: User security question 1
+m-name: cwssecq1
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.5
+m-singlevalue: TRUE
+m-equality: caseIgnoreMatch
+m-substr: caseIgnoreSubstringsMatch
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.15
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.6,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: User security question 2
+m-name: cwssecq2
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.6
+m-singlevalue: TRUE
+m-equality: caseIgnoreMatch
+m-substr: caseIgnoreSubstringsMatch
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.15
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.7,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: User security answer 1
+m-name: cwssecans1
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.7
+m-singlevalue: TRUE
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.15
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.8,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: User security answer 2
+m-name: cwssecans2
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.8
+m-singlevalue: TRUE
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.15
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.9,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: Date of user last login
+m-name: cwslastlogin
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.9
+m-singlevalue: TRUE
+m-equality: caseIgnoreMatch
+m-substr: caseIgnoreSubstringsMatch
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.15
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.10,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: Is the user's OLR flag locked
+m-name: cwsisolrlocked
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.10
+m-singlevalue: TRUE
+m-equality: booleanMatch
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.7
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.11,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: Is the user account locked
+m-name: cwsislocked
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.11
+m-singlevalue: TRUE
+m-equality: booleanMatch
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.7
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.12,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: User Public Key
+m-name: cwspublickey
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.12
+m-singlevalue: TRUE
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.5
+
+dn: m-oid=1.3.6.1.4.1.16316.999.3.2.13,ou=attributeTypes,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaAttributeType
+objectClass: top
+m-collective: FALSE
+m-description: SecretKey for otp auth
+m-name: cwssecretkey
+m-noUserModification: FALSE
+m-oid: 1.3.6.1.4.1.16316.999.3.2.13
+m-singlevalue: TRUE
+m-equality: caseIgnoreMatch
+m-substr: caseIgnoreSubstringsMatch
+m-syntax: 1.3.6.1.4.1.1466.115.121.1.15
+
+dn: ou=comparators,cn=cws,ou=schema
+objectClass: organizationalUnit
+objectClass: top
+ou: comparators
+
+dn: ou=ditContentRules,cn=cws,ou=schema
+objectClass: organizationalUnit
+objectClass: top
+ou: ditContentRules
+
+dn: ou=ditStructureRules,cn=cws,ou=schema
+objectClass: organizationalUnit
+objectClass: top
+ou: ditStructureRules
+
+dn: ou=matchingRules,cn=cws,ou=schema
+objectClass: organizationalUnit
+objectClass: top
+ou: matchingRules
+
+dn: ou=matchingRuleUse,cn=cws,ou=schema
+objectClass: organizationalUnit
+objectClass: top
+ou: matchingRuleUse
+
+dn: ou=nameForms,cn=cws,ou=schema
+objectClass: organizationalUnit
+objectClass: top
+ou: nameForms
+
+dn: ou=normalizers,cn=cws,ou=schema
+objectClass: organizationalUnit
+objectClass: top
+ou: normalizers
+
+dn: ou=objectClasses,cn=cws,ou=schema
+objectClass: organizationalUnit
+objectClass: top
+ou: objectClasses
+
+dn: ou=syntaxCheckers,cn=cws,ou=schema
+objectClass: organizationalUnit
+objectClass: top
+ou: syntaxCheckers
+
+dn: ou=syntaxes,cn=cws,ou=schema
+objectClass: organizationalUnit
+objectClass: top
+ou: syntaxes
+
+dn: m-oid=1.3.6.1.4.1.16316.999.1.2.32,ou=objectClasses,cn=cws,ou=schema
+objectClass: metaTop
+objectClass: metaObjectclass
+objectClass: top
+m-may: cwsexpirydate
+m-may: cwsfailedpwdcount
+m-may: cwsissuspended
+m-may: cwsisolrsetup
+m-may: cwssecq1
+m-may: cwssecq2
+m-may: cwssecans1
+m-may: cwssecans2
+m-may: cwslastlogin
+m-may: cwsisolrlocked
+m-may: cwsislocked
+m-may: cwssecretkey
+m-may: email
+m-may: cwspublickey
+m-may: cwssecretkey
+m-name: cwsperson
+m-oid: 1.3.6.1.4.1.16316.999.1.2.32
+m-supobjectclass: inetorgperson

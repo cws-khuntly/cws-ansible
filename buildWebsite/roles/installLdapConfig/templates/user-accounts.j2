@@ -1,0 +1,23 @@
+version: 1
+
+<% for user in userlist %>
+dn: uid={{ user_id }},organizationalunitname=Users,organizationname={{ organization_name }},{{ ldap_domain }}
+objectClass: top
+objectClass: cwsperson
+objectClass: inetOrgPerson
+objectClass: person
+objectClass: organizationalPerson
+cn: {{ user_cn }}
+sn: {{ user_sn }}}}
+cwsfailedpwdcount: 0
+cwsisolrlocked: false
+cwsisolrsetup: true
+cwsissuspended: false
+displayName: {{ user_display_name }}
+email: {{ user_email_addr }}
+givenName: {{ user_given_name }}
+pager: {{ user_pager_number }}
+telephoneNumber: {{ user_tel_number }}
+uid: {{ user_name }}
+
+<% endfor %>

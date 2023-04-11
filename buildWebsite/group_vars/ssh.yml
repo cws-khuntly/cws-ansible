@@ -1,0 +1,11 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  group_vars/ssh.yml
+#   DESCRIPTION:  Variables that apply to Zimbra maildrop installations
+#==============================================================================
+---
+##
+## disks
+##
+ssh_keyfile: "{{ remote_home }}/.ssh/id_rsa.pub"
+ssh_privkey: "{{ remote_home }}/.ssh/id_rsa"
+key_options: "from=172.17.35.*,172.16.6.*,172.17.40.*"

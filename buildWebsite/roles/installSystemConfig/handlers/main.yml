@@ -1,0 +1,7 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  handlers/main.yml
+#   DESCRIPTION:  Handles installation of system configuration
+#==============================================================================
+---
+- name: install
+  command: "{{ remote_home }}/.dotfiles/bin/install"

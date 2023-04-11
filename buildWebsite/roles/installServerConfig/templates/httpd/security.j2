@@ -1,0 +1,16 @@
+## Rewrite rules for cwsna.ddns.net
+RewriteCond %{HTTPS} on
+RewriteCond %{REQUEST_URI} .*(jsp|jsv|wml|chtml) [OR,NC]
+RewriteCond %{REQUEST_URI} !^.*(gif|jpg|css|js|pdf|swf|ico) [NC]
+RewriteCond %{REQUEST_URI} !^/error/cwsna.ddns.net/errHandler.htm
+RewriteCond %{REQUEST_URI} !^/error/cwsna.ddns.net/.*(gif|jpg|css|js|pdf|swf|ico) [NC]
+RewriteCond %{REQUEST_URI} !^/html/.*(htm|html|js|pdf|swf|ico|gif|jpg|css) [NC]
+RewriteCond %{REQUEST_URI} !^/cwsna.ddns.net/login.*
+RewriteCond %{REQUEST_URI} !^/cwsna.ddns.net/olr.*
+RewriteCond %{REQUEST_URI} !^/cwsna.ddns.net/userauthorization.*
+RewriteCond %{REQUEST_URI} !^/cwsna.ddns.net/error.*
+RewriteCond %{REQUEST_URI} !^/cwsna.ddns.net/help.*
+RewriteRule ^/.* https://%{HTTP_HOST}/cwsna.ddns.net/login [L,R=permanent]
+
+RewriteCond %{HTTPS} off
+RewriteRule ^/.* https://%{HTTP_HOST}/cwsna.ddns.net/login [L,R=permanent]

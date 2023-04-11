@@ -1,0 +1,8 @@
+<IfModule proxy_module>
+    ProxyRequests                off
+    ProxyVia                     block
+    ProxyTimeout                 30
+    ProxyErrorOverride           on
+    ProxyPass                    "/cwsna.ddns.net/ ajp://172.30.0.55/cwsna.ddns.net/"
+    ProxyPassReverse             "/cwsna.ddns.net/ ajp://172.30.0.55/cwsna.ddns.net/"
+</IfModule>

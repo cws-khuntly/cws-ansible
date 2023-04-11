@@ -1,0 +1,6 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  vars/sql.yml
+#   DESCRIPTION:  Common variables that apply to this play
+#==============================================================================
+---
+sql_hostname = sqlcs.caspersbox.com

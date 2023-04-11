@@ -1,0 +1,45 @@
+#======  ANSIBLE  ============================================================
+#          NAME:  site.yml
+#   DESCRIPTION:  Entry point for playbook
+#==============================================================================
+---
+#- hosts: localhost
+#  tasks:
+#    - name: check out current repository
+#      git:
+#        clone=yes
+#        dest="{{ checkout_to }}"
+#        key_file="{{ git_ssh_key }}"
+#        recursive=yes
+#        repo="{{ dotfiles_repo }}"
+#        track_submodules=yes
+#        update=yes
+#        version="{{ version }}"
+#  become: no
+#  tags: get-repo
+
+#- hosts: localhost
+#  tasks:
+#    - name: clean up git checkout
+#      file:
+#        path="{{ checkout_to }}/.git"
+#        state=absent
+#    - name: clean up git checkout
+#      file:
+#        path="{{ checkout_to }}/dotbot"
+#        state=absent
+#  become: no
+#  tags: clean-repo
+
+- hosts: all
+  gather_facts: false
+  roles:
+    - installProfile
+  tags: install-profile
+
+#- hosts: localhost
+#  tasks:
+#    - name: Remove checkout directory on completion
+#      file:
+#        path="{{ checkout_to }}"
+#        state=absent

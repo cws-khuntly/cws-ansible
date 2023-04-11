@@ -1,0 +1,32 @@
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version    5.0.51b-community-nt-log
+--
+-- Create schema esolutions
+--
+
+CREATE DATABASE IF NOT EXISTS ESOLUTIONSSVC;
+COMMIT;
+
+USE esolutionssvc;
+
+SOURCE ./eSolutions/eSolutionsService.tables.sql;
+SOURCE ./eSolutions/eSolutionsService.procedures.sql;
+
+COMMIT;
+
+--
+-- add privileges
+--
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE ON ESOLUTIONSSVC.* TO 'appuser'@'localhost' IDENTIFIED BY PASSWORD '*ED66694310AF846C68C9FC3D430B30594837998D';
+GRANT SELECT ON `mysql`.`proc` TO 'appuser'@'localhost';
+
+<% for host in hostlist %>
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE ON ESOLUTIONSSVC.* TO 'appuser'@'{{ host }}' IDENTIFIED BY PASSWORD '*ED66694310AF846C68C9FC3D430B30594837998D';
+GRANT SELECT ON `mysql`.`proc` TO 'appuser'@'{{ host }}';
+
+<% endfor %>
+
+FLUSH PRIVILEGES;
+COMMIT;

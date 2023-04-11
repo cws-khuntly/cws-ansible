@@ -10,8 +10,7 @@
 - name: Checkout dotfiles from github
   hosts: localhost
   tasks:
-    - name: Checkout the most recent copy
-      ansible.builtin.git:
+    - ansible.builtin.git:
         repo: git@github.com:cws-khuntly/dotfiles.git
         dest: /var/tmp/.dotfiles
         update: yes
@@ -20,8 +19,7 @@
 - name: Generate dotfiles zip for distribution
   hosts: localhost
   tasks:
-    - name: Generate dotfiles archive
-      community.general.archive:
+    - community.general.archive:
         path:
           - /var/tmp/.dotfiles
         dest: /var/tmp/dotfiles.zip
@@ -30,8 +28,7 @@
 - name: Push dotfiles to remote hosts
   hosts: all
   tasks:
-    - name: sFTP
-      copy:
+    - copy:
         src: /var/tmp/dotfiles.zip
         dest: /var/tmp/dotfiles.zip
         mode: 0644
@@ -39,8 +36,7 @@
 - name: Install dotfiles
   hosts: all
   tasks:
-    - name: Apply dotfiles for pvansibleadmin
-      ansible.builtin.include_role:
+    - ansible.builtin.include_role:
         name: installProfile
         apply:
           become: true
@@ -61,16 +57,14 @@
 - name: Remove dotfiles pull
   hosts: localhost
   tasks:
-    - name: Clear dotfiles
-      ansible.builtin.file:
+    - ansible.builtin.file:
         path: /var/tmp/.dotfiles
         state: absent
 
 - name: Remove dotfiles archive
   hosts: localhost
   tasks:
-    - name: Remove zipfile
-      ansible.builtin.file:
+    - ansible.builtin.file:
         path: /var/tmp/dotfiles.zip
         state: absent
 

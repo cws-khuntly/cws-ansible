@@ -1,0 +1,35 @@
+System Management
+    Create links for
+        web administration
+        dns administration
+        app administration
+
+    WebAdmin - eSolutions performs via shell scripts
+        web buildout - not started - only allowed for admins
+        cert apply - not started - only allowed for admins
+        cert renewal - not started - only allowed for admins
+        start/stop webs - not started - will be allowed for users, admins, site admins except in prod
+
+    DNS Admin - eSolutions performs via shell scripts
+        internet
+            dns information - done
+            dns failover - inprog - make this optional - can turn off in config (done) - only allowed for admins, site admins
+                this should be working
+            create/update zone - maybe - havent decided yet. the shell scripts can handle it, and maybe it should stay that way ?
+            dns role swap
+            dns decommission
+        intranet
+            dns information - done
+            dns failover - not started (global dispatch) - make this optional - can turn off in config (done sortof)
+                scripting required for this. isnt even in the dns util yet. definitely wont be like it is for internet.
+                    kill. being migrated.
+
+    App Admin - route through eSolutionsService to pass to shell scripts where necessary
+        start/stop/kill/status server - inprog - allowed for users, admins, site admins, except prod
+        create server - not started - only admins
+        update certs - not started - only admins
+
+move telnet testing to application management
+move remote date to application management
+
+finish building service requests

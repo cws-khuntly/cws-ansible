@@ -5,12 +5,12 @@
 ---
 - name: Remove dotfiles pull
   ansible.builtin.file:
-    path: /home/{{ username }}/.dotfiles
+    path: "~/.dotfiles"
     state: absent
 
 - name: Extract dotfiles zip
   ansible.builtin.unarchive:
     src: /var/tmp/dotfiles.zip
-    dest: /home/{{ username }}
+    dest: "~/"
   notify:
     - executeInstallation

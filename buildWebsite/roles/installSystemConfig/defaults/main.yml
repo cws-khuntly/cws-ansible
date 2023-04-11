@@ -1,0 +1,10 @@
+#=====  ANSIBLE   =============================================================
+#          NAME:  defaults/main.yml
+#   DESCRIPTION:  Common variables that apply to this play
+#==============================================================================
+---
+ldap_host_name = ldap.caspersbox.com
+ldap_host_port = 10636
+organization_name = CWS US
+ldap_domain = dc=caspersbox,dc=com
+sql_hostname = sqlcs.caspersbox.com

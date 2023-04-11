@@ -4,4 +4,4 @@
 #=============================================================================
 ---
 - name: executeInstallation
-  command: "/home/{{ username }}/.dotfiles/bin/installDotFiles -a installFiles"
+  command: "~/.dotfiles/bin/installDotFiles -a installFiles"
